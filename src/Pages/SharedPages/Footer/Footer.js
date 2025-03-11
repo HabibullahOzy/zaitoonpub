@@ -1,31 +1,86 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import flogo from "../../../assets/zaitoonPublication.jpg"
 
 
 const Footer = () => {
+  const [totalVisitors, setTotalVisitors] = useState(0);
+  const [monthlyVisitors, setMonthlyVisitors] = useState(0);
+  const [todaysVisitors, setTodaysVisitors] = useState(0);
+  const [onlineVisitors, setOnlineVisitors] = useState(0);
+
+  useEffect(() => {
+    const now = new Date();
+    const monthKey = `${now.getFullYear()}-${now.getMonth() + 1}`;
+    const todayKey = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+
+    if (!sessionStorage.getItem("session_active")) {
+      sessionStorage.setItem("session_active", "true");
+      setTotalVisitors((prev) => prev + 1);
+      setMonthlyVisitors((prev) => prev + 1);
+      setTodaysVisitors((prev) => prev + 1);
+
+      localStorage.setItem("totalVisitors", totalVisitors + 1);
+      localStorage.setItem(monthKey, monthlyVisitors + 1);
+      localStorage.setItem(todayKey, todaysVisitors + 1);
+    }
+
+    const updateOnlineVisitors = () => {
+      const onlineCount = parseInt(localStorage.getItem("onlineVisitors") || "0", 10);
+      localStorage.setItem("onlineVisitors", onlineCount + 1);
+      setOnlineVisitors(onlineCount + 1);
+    };
+
+    const removeOnlineVisitor = () => {
+      const onlineCount = parseInt(localStorage.getItem("onlineVisitors") || "1", 10);
+      localStorage.setItem("onlineVisitors", Math.max(onlineCount - 1, 0));
+    };
+
+    updateOnlineVisitors();
+
+    window.addEventListener("beforeunload", removeOnlineVisitor);
+
+    return () => {
+      window.removeEventListener("beforeunload", removeOnlineVisitor);
+    };
+  }, []);
+
+  useEffect(() => {
+    setTotalVisitors(parseInt(localStorage.getItem("totalVisitors") || "0", 10));
+    setMonthlyVisitors(parseInt(localStorage.getItem(`${new Date().getFullYear()}-${new Date().getMonth() + 1}`) || "0", 10));
+    setTodaysVisitors(parseInt(localStorage.getItem(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`) || "0", 10));
+    setOnlineVisitors(parseInt(localStorage.getItem("onlineVisitors") || "0", 10));
+  }, []);
+
   return (
     <div >
     
-      <footer className="footer bg-sky-500 text-slate-50 font-semibold p-10" style={{backgroundColor:'rgb(109, 218, 109)'}}>
+      <footer className="footer text-slate-50 font-semibold p-10" style={{backgroundImage:'linear-gradient(to right, green, rgb(109, 218, 109))'}}>
         <nav>
-          <h6 className="footer-title">Services</h6>
-          <a className="link link-hover">Branding</a>
-          <a className="link link-hover">Design</a>
-          <a className="link link-hover">Marketing</a>
-          <a className="link link-hover">Advertisement</a>
+         <img src={flogo} className='w-36 rounded-lg flex justify-items-center '></img>
         </nav>
         <nav>
           <h6 className="footer-title">Company</h6>
           <a className="link link-hover">About us</a>
           <a className="link link-hover">Contact</a>
-          <a className="link link-hover">Jobs</a>
-          <a className="link link-hover">Press kit</a>
+          <a className="link link-hover"></a>
+          <a className="link link-hover"></a>
         </nav>
         <nav>
           <h6 className="footer-title">Legal</h6>
           <a className="link link-hover">Terms of use</a>
-          <a className="link link-hover">Privacy policy</a>
-          <a className="link link-hover">Cookie policy</a>
+          <a className="link link-hover"></a>
+          <a className="link link-hover"></a>
+        </nav>
+
+        <nav className=' bg-gray-400 text-black'>
+          <h6 className="footer-title bg-green-500 p-3">Visitor counter</h6>
+          <div className='grid  px-3'>
+          <a className="link link-hover ">Today: {todaysVisitors} </a>
+          <a className="link link-hover">Online: {onlineVisitors} </a>
+          <a className="link link-hover">Monthly: {monthlyVisitors} </a>
+          <a className="link link-hover">All:{totalVisitors} </a>
+          
+          </div>
         </nav>
       </footer>
       <footer className="footer bg-base-200 text-base-content border-base-300 border-t px-10 py-4">
@@ -46,7 +101,7 @@ const Footer = () => {
           <p>
             Zaitoon Publication.
             <br />
-            Providing reliable tech since 2024
+            @c developed by Md.Habibullah
           </p>
         </aside>
         <nav className="md:place-self-center md:justify-self-end">

@@ -1,12 +1,29 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import img from "../../../../assets/zaitoonPublication.jpg"
 import img1 from "../../../../assets/profile.png"
 import { FaShoppingCart } from 'react-icons/fa';
 import { BsSearch } from 'react-icons/bs';
 import "./Header.css"
+import { Zaitooncontext } from '../../../../SecureContext/ContextAuth';
+import toast from 'react-hot-toast';
+import { reload } from 'firebase/auth';
 
 const Header = () => {
+    const { setLoader, logOut, user } = useContext(Zaitooncontext);
+    console.log(user)
+
+
+    const handlesignOut = () => {
+        logOut()
+            .then(() => {
+                // console.log("User logout successfully")
+                toast.error("Successfully LogOut")
+                // setLoader(true)
+                window.location.reload()
+            })
+            .catch(() => { })
+    }
     return (
         <div className=' head-color lg:px-36'>
             <div className="navbar">
@@ -34,7 +51,7 @@ const Header = () => {
 
                     <input className=' w-[500px] px-2 py-1 outline-offset-4 outline-sky-500 border border-none rounded-l-md' type='text' placeholder='Find your Products ......'></input>
 
-                    <button className='p-2 px-4 bg-green-100 rounded-r-md'><BsSearch/></button>
+                    <button className='p-2 px-4 bg-green-100 rounded-r-md'><BsSearch /></button>
                     {/* <ul className="menu menu-horizontal px-1">
                         <li><a>Item 1</a></li>
                         <li>
@@ -51,7 +68,7 @@ const Header = () => {
                 </div>
                 <div className="navbar-end">
 
-                        {/* search bar section */}
+                    {/* search bar section */}
 
                     <div className='flex dropdown dropdown-end'>
                         <div tabIndex={2}>
@@ -70,22 +87,22 @@ const Header = () => {
                         </ul>
                     </div>
 
-                        {/* cart section */}
+                    {/* cart section */}
 
                     <div className="flex space-x-5">
                         <div className="dropdown dropdown-end">
                             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
                                 <div className="indicator">
-                                    <FaShoppingCart className='w-10'/>
+                                    <FaShoppingCart className='w-10' />
                                     <span className="badge badge-sm indicator-item">0</span>
                                 </div>
                             </div>
-                            <div tabIndex={0} className="mt-3 z-[1] card card-compact dropdown-content w-52 bg-base-100 shadow">
+                            <div tabIndex={0} className="mt-3 z-[1] card card-compact dropdown-content w-52 shadow" style={{ backgroundColor: 'rgb(186, 239, 186)' }}>
                                 <div className="card-body">
-                                    <span className="font-bold text-lg">0 Items</span>
-                                    <span className="text-info">Subtotal: $000</span>
+                                    <span className="font-bold text-white text-lg">0 Items</span>
+                                    <span className="text-info">Subtotal: ৳ 000</span>
                                     <div className="card-actions">
-                                        <button onClick={""} className="btn btn-success btn-block">View cart</button>
+                                        <Link to={'/cartItem'} className="btn btn-success btn-block">View cart</Link>
                                     </div>
                                 </div>
                             </div>
@@ -96,19 +113,27 @@ const Header = () => {
                         <div className="dropdown dropdown-end">
                             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                                 <div className="w-10 rounded-full bordered ring-primary ring-offset-base-100 rounded-full ring ring-offset-2">
-                                    <img alt="Tailwind CSS Navbar component" src={img1} />
+                                    {
+                                        user?.photoURL ? <img alt="Profile Picture" src={user.photoURL} /> : <img alt="Profile" src={img1} />
+                                    }
+
                                 </div>
                             </div>
-                            <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+                            <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow rounded-box w-52" style={{ backgroundColor: 'rgb(186, 239, 186)' }}>
+
+                                <li><Link to={"/dashboard"}>DashBoard</Link></li>
                                 <li>
-                                    <a href='#' className="justify-between">
+                                    <Link to={'/profile'} className="justify-between">
                                         Profile
                                         <span className="badge">New</span>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li><a href='#'>Settings</a></li>
-                                <li><Link onClick={""}>Logout</Link></li>
-                                <li><Link to={""}>Login</Link></li>
+                                {
+                                    user?.uid ? <li><Link onClick={handlesignOut}>Logout</Link></li> : <li><Link to={"/signIn"}>Login</Link></li>
+                                }
+
+
                             </ul>
                         </div>
                     </div>

@@ -1,0 +1,91 @@
+/* #app { height: 100% }
+html,
+body {
+  position: relative;
+  height: 100%;
+}
+
+body {
+  background: #eee;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #000;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #fff;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #000;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  position: relative;
+  height: 100%;
+} */
+
+#app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper {
+  width: 240px;
+  height: 320px;
+}
+
+.swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  /* font-size: 22px; */
+  /* font-weight: bold; */
+  color: rgba(0, 0, 0, 0.958);
+}
+
+.swiper-slide:nth-child(1n) {
+  background-color: rgb(132, 226, 109);
+}
+
+.swiper-slide:nth-child(2n) {
+  background-color: rgb(237, 189, 87);
+}
+
+.swiper-slide:nth-child(3n) {
+  background-color: rgb(225, 82, 82);
+}
+
+.swiper-slide:nth-child(4n) {
+  background-color: rgb(237, 189, 87);
+}
+
+.swiper-slide:nth-child(5n) {
+  background-color: rgb(132, 226, 109);
+}
+
+.swiper-slide:nth-child(6n) {
+  background-color: rgb(186, 56, 85);
+}
+
+.swiper-slide:nth-child(7n) {
+  background-color: rgb(72, 146, 53);
+}
+
+.swiper-slide:nth-child(8n) {
+  background-color: rgb(211, 122, 7);
+}
+
+.swiper-slide:nth-child(9n) {
+  background-color: rgb(186, 56, 85);
+}
+
+.swiper-slide:nth-child(10n) {
+  background-color: rgb(119, 219, 94);
+}

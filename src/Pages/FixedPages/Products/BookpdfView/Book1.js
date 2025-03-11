@@ -17,6 +17,8 @@ const Book1 = () => {
                 src={bookf}
                 width="100%"
                 height="650px"
+                // min-height="screen"
+                className=' min-h-screen'
                 title="PDF Viewer"
                 style={{ border: 'none' }}
             />

@@ -1,3 +1,11 @@
+.App{
+  background-image: url(bg_icon.png);
+  /* background-repeat: no-repeat;
+  background-size: cover; */
+  background-color: rgb(186, 239, 186)
+  /* background-clip: padding-box; */
+}
+
 /* .App {
   text-align: center;
 }

@@ -1,10 +1,11 @@
 import React from 'react';
-import book4 from "../../../../assets/PdfFiles/rhyme demo 3.pdf"
-const Book4 = () => {
+import rahym from '../../../../assets/PdfFiles/Bangla Rhymes.pdf';
+
+const Book5 = () => {
     return (
         <div>
             <iframe
-                src={book4}
+                src={rahym}
                 width="100%"
                 height="650px"
                 title=""
@@ -14,4 +15,4 @@ const Book4 = () => {
     );
 };
 
-export default Book4;
+export default Book5;
