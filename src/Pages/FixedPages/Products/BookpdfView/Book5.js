@@ -1,5 +1,5 @@
 import React from 'react';
-import rahym from '../../../../assets/PdfFiles/Bangla Rhymes.pdf';
+import rahym from '../../../../assets/PdfFiles/banglaRhymes.pdf';
 
 const Book5 = () => {
     return (

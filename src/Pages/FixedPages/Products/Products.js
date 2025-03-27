@@ -1,22 +1,20 @@
 import React, { useState, useContext } from 'react';
 import "./Products.css";
 import { FaRegEye } from 'react-icons/fa';
-import imgbook from "../../../assets/book.jpg";
-import imgbook2 from "../../../assets/book2.jpg";
-import imgbook3 from "../../../assets/book3.jpg"
-import imgbook4 from "../../../assets/zaitbook3.png"
-import imgbook5 from "../../../assets/upcom1.jpg"
 import { FaCartFlatbed } from 'react-icons/fa6';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { Zaitooncontext } from '../../../SecureContext/ContextAuth';
 
 const Products = () => {
-    const { user, setOffer, offer } = useContext(Zaitooncontext);
+    const { user, setOffer, offer, cartdataset, setCartdataset } = useContext(Zaitooncontext);
+    const navigate = useNavigate()
 
-    const { data: users = [], refetch } = useQuery({
-        queryKey: ['users'],
+
+    console.log(cartdataset)
+    const { data: allproducts = [], refetch } = useQuery({
+        queryKey: ['allproducts'],
         queryFn: async () => {
             const res = await fetch('http://localhost:5000/allProducts');
             const data = await res.json()
@@ -25,7 +23,12 @@ const Products = () => {
         }
     })
 
-    console.log(users)
+
+
+    // console.log(cartdataset)
+
+
+    // console.log(users)
 
     const offerCalculate = (offp, pri) => {
         const offprice = (offp * pri) / 100
@@ -37,17 +40,41 @@ const Products = () => {
 
     const handleAddCart = (id) => {
         console.log(id)
-        // fetch(`http://localhost:5000/products/delete/${id}`, {
-        //     method: 'POST '
-        // })
-        //     .then(res => res.json())
-        //     .then(data => {
-        //         console.log(data)
-        //         if (data.deletedCount > 0) {
-        //             toast.success("Seller Delet successfully");
-        //             refetch();
-        //         }
-        //     })
+        const email = user.email
+        const name = cartdataset.name
+        const image = cartdataset.img
+        const productPrice = cartdataset.productPrice
+        const catagory_id = cartdataset.catagory_id
+
+        const cartProducts = {
+            id,
+            email,
+            offer,
+            name,
+            image,
+            productPrice,
+            catagory_id
+        }
+        console.log(id)
+        fetch(`http://localhost:5000/addedCart`, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(cartProducts)
+        })
+            .then(res => res.json())
+            .then(infoe => {
+                // console.log(infoe)
+                if (infoe.acknowledged) {
+                    toast.success("Your Producte added succesfully");
+                    // navigate('/dashboard/allProducts')
+                } else {
+                    toast.error("your producte can't added please try again")
+                }
+            })
+
+
     }
 
     return (
@@ -55,23 +82,28 @@ const Products = () => {
 
 
             {
-                users?.map(dataes => <div key={dataes._id} className="card glass">
-                    {
-                        dataes.offers ? <span className=" example">{dataes.offers}%</span> : ""
-                    }
+                allproducts?.map(dataes => <div key={dataes._id} className="card glass">
 
+
+                    {
+                        dataes?.offers ? <span className=" example">{dataes.offers}%</span> : ""
+                    }
                     <figure>
-                        <Link to={'/book1v1'}>
+
+                        <Link to={`/products/${dataes._id}`}>
+
                             <img
-                                src={imgbook}
+                                src={dataes.img}
                                 alt="car!" />
+
                         </Link>
                     </figure>
 
-                    <div className="flex">
-                        <button onClick={()=>handleAddCart(dataes._id)} className="p-4 w-1/2 bg-green-200"><FaCartFlatbed className='w-8' /></button>
 
-                        <Link to={'/book1v1'} className="p-4 w-1/2 bg-green-300"><FaRegEye className=' justify-center w-8' /></Link>
+                    <div className="flex">
+                        <button onClick={() => handleAddCart(dataes._id)} className="p-4 w-1/2 bg-green-200"><FaCartFlatbed className='w-8' /></button>
+
+                        <Link to={`/products/${dataes._id}`} className="p-4 w-1/2 bg-green-300"><FaRegEye className=' justify-center w-8' /></Link>
                     </div>
                     <div className="card-body">
                         <p>{dataes.name}</p>
@@ -80,11 +112,11 @@ const Products = () => {
                         <p>PLAY | الحضانة</p>
 
                         <div className="flex">
-                           
-                                {
-                                    dataes?.offers ? <p className=' text-xl font-semibold text-gray-400' style={{ textDecoration: "line-through", textDecorationColor: "red" }}>{dataes.productPrice}৳</p> : ""
-                                }
-                           
+
+                            {
+                                dataes?.offers ? <p className=' text-xl font-semibold text-gray-400' style={{ textDecoration: "line-through", textDecorationColor: "red" }}>{dataes.productPrice}৳</p> : ""
+                            }
+
 
                             {
                                 dataes?.offers ? <p className='text-2xl font-semibold text-red-400'>{offer}৳</p> : <p className=' font-semibold text-gray-400' >{dataes.productPrice}৳</p>
@@ -97,6 +129,9 @@ const Products = () => {
 
                     {
                         dataes?.offers ? offerCalculate(dataes.offers, dataes.productPrice) : ""
+                    },
+                    {
+                        dataes?._id ? setCartdataset(dataes) : ""
                     }
 
                 </div>

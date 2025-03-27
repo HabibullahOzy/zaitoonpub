@@ -1,4 +1,7 @@
 import { Carousel } from 'flowbite-react';
+import { BannerCollapseButton } from "flowbite-react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import React from 'react';
 import img2 from "../../../assets/zaitoonPublication.jpg";
 import img3 from "../../../assets/zaitonbanner.jpg";
@@ -14,8 +17,7 @@ const Banner = () => {
                 <img src={img1} alt="..." className=' h-full' />
                 <img src={img2} alt="..." className=' h-full' />
                 <img src={img3} alt="..." className=' h-full' />
-                {/* <img src={img5} alt="..." className=' h-full' />
-                <img src={img4} alt="..." className=' h-full' /> */}
+                
             </Carousel>
         </div>
     );

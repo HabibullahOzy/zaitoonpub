@@ -3,6 +3,7 @@ import './App.css';
 import { RouterProvider } from 'react-router-dom';
 import router from './PagesRouting/Routingpages';
 import { Toaster } from 'react-hot-toast';
+import '../src/Pages/Language/i18n';
 
 function App() {
   return (

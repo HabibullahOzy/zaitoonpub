@@ -6,50 +6,49 @@ const Footer = () => {
   const [totalVisitors, setTotalVisitors] = useState(0);
   const [monthlyVisitors, setMonthlyVisitors] = useState(0);
   const [todaysVisitors, setTodaysVisitors] = useState(0);
-  const [onlineVisitors, setOnlineVisitors] = useState(0);
+  const [onlineUsers, setOnlineUsers] = useState(0);
 
   useEffect(() => {
     const now = new Date();
+    const todayKey = now.toISOString().split('T')[0]; // YYYY-MM-DD format
     const monthKey = `${now.getFullYear()}-${now.getMonth() + 1}`;
-    const todayKey = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
 
-    if (!sessionStorage.getItem("session_active")) {
-      sessionStorage.setItem("session_active", "true");
-      setTotalVisitors((prev) => prev + 1);
-      setMonthlyVisitors((prev) => prev + 1);
-      setTodaysVisitors((prev) => prev + 1);
+    // Fetch stored values
+    let storedTotal = parseInt(localStorage.getItem("totalVisitors")) || 0;
+    let storedMonthly = JSON.parse(localStorage.getItem("monthlyVisitors")) || {};
+    let storedToday = JSON.parse(localStorage.getItem("todaysVisitors")) || {};
 
-      localStorage.setItem("totalVisitors", totalVisitors + 1);
-      localStorage.setItem(monthKey, monthlyVisitors + 1);
-      localStorage.setItem(todayKey, todaysVisitors + 1);
-    }
+    // Update total visitors
+    storedTotal += 1;
+    localStorage.setItem("totalVisitors", storedTotal);
+    setTotalVisitors(storedTotal);
 
-    const updateOnlineVisitors = () => {
-      const onlineCount = parseInt(localStorage.getItem("onlineVisitors") || "0", 10);
-      localStorage.setItem("onlineVisitors", onlineCount + 1);
-      setOnlineVisitors(onlineCount + 1);
+    // Update monthly visitors
+    storedMonthly[monthKey] = (storedMonthly[monthKey] || 0) + 1;
+    localStorage.setItem("monthlyVisitors", JSON.stringify(storedMonthly));
+    setMonthlyVisitors(storedMonthly[monthKey]);
+
+    // Update today's visitors
+    storedToday[todayKey] = (storedToday[todayKey] || 0) + 1;
+    localStorage.setItem("todaysVisitors", JSON.stringify(storedToday));
+    setTodaysVisitors(storedToday[todayKey]);
+
+    // Track online users using sessionStorage
+    const sessionKey = `user_${Math.random()}`;
+    sessionStorage.setItem(sessionKey, Date.now());
+    
+    const updateOnlineUsers = () => {
+      const now = Date.now();
+      const sessionEntries = Object.entries(sessionStorage);
+      const activeUsers = sessionEntries.filter(([key, value]) => now - parseInt(value) < 60000).length; // 1 min active
+      setOnlineUsers(activeUsers);
     };
 
-    const removeOnlineVisitor = () => {
-      const onlineCount = parseInt(localStorage.getItem("onlineVisitors") || "1", 10);
-      localStorage.setItem("onlineVisitors", Math.max(onlineCount - 1, 0));
-    };
-
-    updateOnlineVisitors();
-
-    window.addEventListener("beforeunload", removeOnlineVisitor);
-
-    return () => {
-      window.removeEventListener("beforeunload", removeOnlineVisitor);
-    };
+    updateOnlineUsers();
+    const interval = setInterval(updateOnlineUsers, 5000);
+    return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    setTotalVisitors(parseInt(localStorage.getItem("totalVisitors") || "0", 10));
-    setMonthlyVisitors(parseInt(localStorage.getItem(`${new Date().getFullYear()}-${new Date().getMonth() + 1}`) || "0", 10));
-    setTodaysVisitors(parseInt(localStorage.getItem(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`) || "0", 10));
-    setOnlineVisitors(parseInt(localStorage.getItem("onlineVisitors") || "0", 10));
-  }, []);
 
   return (
     <div >
@@ -76,7 +75,7 @@ const Footer = () => {
           <h6 className="footer-title bg-green-500 p-3">Visitor counter</h6>
           <div className='grid  px-3'>
           <a className="link link-hover ">Today: {todaysVisitors} </a>
-          <a className="link link-hover">Online: {onlineVisitors} </a>
+          <a className="link link-hover">Online: {onlineUsers} </a>
           <a className="link link-hover">Monthly: {monthlyVisitors} </a>
           <a className="link link-hover">All:{totalVisitors} </a>
           

@@ -10,6 +10,10 @@ const ContextAuth = ({children}) => {
     const [ user, setUser ] = useState(null)
     const [ loader, setLoader ] = useState(true)
     const [ offer, setOffer ]= useState('');
+    const [cartdataset, setCartdataset]=useState('');
+    const [prices, setPrices] = useState(0);
+    const [ident, setIdent] = useState('');
+    const [producD, setProducD]=useState('')
 
 
     const createUserWithEP = (email, password) => {
@@ -56,7 +60,15 @@ const ContextAuth = ({children}) => {
         signInwithGoogle,
         logOut,
         setOffer,
-        offer
+        offer,
+        cartdataset,
+        setCartdataset,
+        prices,
+        setPrices,
+        ident,
+        setIdent,
+        producD,
+        setProducD
     }
     return (
         <div>

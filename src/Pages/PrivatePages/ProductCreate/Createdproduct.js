@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Zaitooncontext } from '../../../SecureContext/ContextAuth';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 // import {bgim} from '../../../assets/bg_icon.png'
 
 
@@ -15,86 +16,93 @@ const Createdproduct = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
 
 
-    const handleCreatProduct = data => {
+    const handleCreatProduct = async data => {
         console.log(data)
         const image = data.image[0];
-
+        const files = data.files[0];
         const formData = new FormData();
         formData.append('image', image);
-        fetch(`https://api.imgbb.com/1/upload?key=${process.env.REACT_APP_imgbbhostkey}`, {
-            method: 'POST',
-            body: formData,
-        })
-            .then(res => res.json())
-            .then(fact => {
-                const image = fact.data.url;
-                const file = fact.data.url;
-                const email = user.email;
-                const productName = data.productName;
-                const productPrice = data.productPrice;
-                const offerprice =data.offerprice;
-                // const purchaseYear = data.purchaseYear;
-                // const condition = data.condition;
-                // const category = data.category;
-                // const resalPrice = data.resalPrice;
-                // const originalPrice = data.originalPrice;
-                const quantity = data.quantity;
-                // const usesYear = data.usesYear;
-                const postDate = data.postDate;
-                // const selerName = data.selerName;
-                // const phoneNumber = data.phoneNumber;
-                // const location = data.location;
-                const description = data.description;
+        formData.append('files', files);
+        try {
+        const response = await axios.post("http://localhost:5000/api/upload", formData, {
+            headers: { "Content-Type": "multipart/form-data" }
+        });
+        console.log(response.data.imageUrl)
+    }
+        catch(error){
+
+        }
+            // .then(res => res.json())
+            // .then(fact => {
+            //     console.log(fact)
+            //     const image = fact.data.imageUrl;
+            //     const files = fact.data.pdfUrl;
+            //     const email = user.email;
+            //     const productName = data.productName;
+            //     const productPrice = data.productPrice;
+            //     const offerprice = data.offerprice;
+            //     // const purchaseYear = data.purchaseYear;
+            //     // const condition = data.condition;
+            //     // const category = data.category;
+            //     // const resalPrice = data.resalPrice;
+            //     // const originalPrice = data.originalPrice;
+            //     const quantity = data.quantity;
+            //     // const usesYear = data.usesYear;
+            //     const postDate = data.postDate;
+            //     // const selerName = data.selerName;
+            //     // const phoneNumber = data.phoneNumber;
+            //     // const location = data.location;
+            //     const description = data.description;
 
 
-                const products = {
-                    name: productName,
-                    productPrice,
-                    // purchaseYear,
-                    img: image,
-                    file,
-                    email,
-                    // condition,
-                    catagory_id: productName,
-                    // resale_price: resalPrice,
-                    // original_price: originalPrice,
-                    offers:offerprice,
-                    quantity,
-                    // uses_year: usesYear,
-                    post_date: postDate,
-                    // seller_name: selerName,
-                    // phone: phoneNumber,
-                    // location,
-                    description
-                }
-                console.log(products)
+            //     const products = {
+            //         name: productName,
+            //         productPrice,
+            //         // purchaseYear,
+            //         img: image,
+            //         files,
+            //         email,
+            //         // condition,
+            //         catagory_id: productName,
+            //         // resale_price: resalPrice,
+            //         // original_price: originalPrice,
+            //         offers: offerprice,
+            //         quantity,
+            //         // uses_year: usesYear,
+            //         post_date: postDate,
+            //         // seller_name: selerName,
+            //         // phone: phoneNumber,
+            //         // location,
+            //         description
+            //     }
+            //     console.log(products)
 
-                fetch('http://localhost:5000/products', {
-                    method: 'POST',
-                    headers: {
-                        'content-type': 'application/json'
-                    },
-                    body: JSON.stringify(products)
-                })
-                    .then(res => res.json())
-                    .then(infoe => {
-                        console.log(infoe)
-                        if (infoe.acknowledged) {
-                            toast.success("Your Producte added succesfully");
-                            navigate('/dashboard/allProducts')
-                        } else {
-                            toast.error("your producte can't added please try again")
-                        }
-                    })
+            //     fetch('http://localhost:5000/products', {
+            //         method: 'POST',
+            //         headers: {
+            //             'content-type': 'application/json'
+            //         },
+            //         body: JSON.stringify(products)
+            //     })
+            //         .then(res => res.json())
+            //         .then(infoe => {
+            //             console.log(infoe)
+            //             if (infoe.acknowledged) {
+            //                 toast.success("Your Producte added succesfully");
+            //                 navigate('/dashboard/allProducts')
+            //             } else {
+            //                 toast.error("your producte can't added please try again")
+            //             }
+            //         })
 
-            })
+            // })
     }
 
     return (
         <div>
             <div className="hero min-h-screen ">
                 <div className="hero-content flex-col">
-                    <div className="text-center lg:text-left">
+                    <div className="text-center lg:text-left ">
                         <h1 className="text-3xl font-bold text-black mb-5">Add Your Products</h1>
                     </div>
                     <div className=" shadow-2xl">

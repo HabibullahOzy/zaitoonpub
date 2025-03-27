@@ -4,13 +4,17 @@ import img from "../../../../assets/zaitoonPublication.jpg"
 import img1 from "../../../../assets/profile.png"
 import { FaShoppingCart } from 'react-icons/fa';
 import { BsSearch } from 'react-icons/bs';
+import imgbang from "../../../../assets/bangladesh.png";
+import imgus from "../../../../assets/usa.png";
+import imgarab from "../../../../assets/flag.png";
 import "./Header.css"
 import { Zaitooncontext } from '../../../../SecureContext/ContextAuth';
 import toast from 'react-hot-toast';
 import { reload } from 'firebase/auth';
+import { useTranslation } from 'react-i18next';
 
 const Header = () => {
-    const { setLoader, logOut, user } = useContext(Zaitooncontext);
+    const { setLoader, logOut, user, prices, ident } = useContext(Zaitooncontext);
     console.log(user)
 
 
@@ -24,6 +28,15 @@ const Header = () => {
             })
             .catch(() => { })
     }
+
+
+
+
+    const { t, i18n } = useTranslation();
+
+    const changeLanguage = (lng) => {
+        i18n.changeLanguage(lng);
+    };
     return (
         <div className=' head-color lg:px-36'>
             <div className="navbar">
@@ -86,6 +99,23 @@ const Header = () => {
                             </li>
                         </ul>
                     </div>
+                    {/* language */}
+
+
+                    <label>{t("language")}: </label>
+                    <select onChange={(e) => changeLanguage(e.target.value)} defaultValue={i18n.language}>
+                        <option value="en">English</option>
+                        <option value="bn">বাংলা</option>
+                        <option value="ar">العربية</option>
+                    </select>
+
+                    {/* <div className="dropdown dropdown-end">
+                        <div tabIndex={1} role="button" className="flex"><img src={imgus} className='w-5 '/> English</div>
+                        <ul tabIndex={1} className="dropdown-content z-[1] w-28 p-2 shadow-sm mt-4 rounded" style={{ backgroundColor: 'rgb(186, 239, 186)' }}>
+                            <li ><button className='flex'><img src={imgbang} alt='' className='w-5'/>Bangla</button></li>
+                            <li ><button className='flex'><img src={imgarab} alt='' className='w-5'/>Arabic</button></li>
+                        </ul>
+                    </div> */}
 
                     {/* cart section */}
 
@@ -94,13 +124,13 @@ const Header = () => {
                             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
                                 <div className="indicator">
                                     <FaShoppingCart className='w-10' />
-                                    <span className="badge badge-sm indicator-item">0</span>
+                                    <span className="badge badge-sm bg-green-700 text-white indicator-item">{ident}</span>
                                 </div>
                             </div>
                             <div tabIndex={0} className="mt-3 z-[1] card card-compact dropdown-content w-52 shadow" style={{ backgroundColor: 'rgb(186, 239, 186)' }}>
                                 <div className="card-body">
-                                    <span className="font-bold text-white text-lg">0 Items</span>
-                                    <span className="text-info">Subtotal: ৳ 000</span>
+                                    <span className="font-bold text-white text-lg">{ident} Items</span>
+                                    <span className="text-info">Subtotal: ৳ {prices}</span>
                                     <div className="card-actions">
                                         <Link to={'/cartItem'} className="btn btn-success btn-block">View cart</Link>
                                     </div>

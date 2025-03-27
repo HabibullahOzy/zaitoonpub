@@ -16,6 +16,7 @@ import DashBody from "../Pages/PrivatePages/DashBoard/DashBody/DashBody";
 import AllUsers from "../Pages/PrivatePages/AdminUsersControl/AllUsers/AllUsers";
 import AllProducts from "../Pages/PrivatePages/AllProducts/AllProducts";
 import CartItem from "../Pages/FixedPages/CartItems/CartItem";
+import ProductsDetails from "../Pages/FixedPages/Products/ProductsDetails/ProductsDetails";
 
 const router = createBrowserRouter([
     {
@@ -40,6 +41,11 @@ const router = createBrowserRouter([
         {
             path: "/cartItem",
             element:<Secureroute><CartItem></CartItem></Secureroute>
+        },
+        {
+            path:'/products/:id',
+            element:<ProductsDetails></ProductsDetails>,
+            loader:({params})=>fetch(`http://localhost:5000/products/${params.id}`)
         }
         ]
     },

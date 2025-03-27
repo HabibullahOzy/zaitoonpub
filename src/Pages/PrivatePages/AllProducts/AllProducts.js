@@ -74,7 +74,7 @@ const AllProducts = () => {
                                     </div>
                                 </td>
                                 <td>
-                                    Zemlak, Daniel and Leannon
+                                    product offer: {informat.offers} %
                                     <br />
                                     <span className="badge badge-ghost badge-sm">Post date:{informat.post_date}</span>
                                 </td>
