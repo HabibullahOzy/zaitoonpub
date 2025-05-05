@@ -5,43 +5,139 @@ import { useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
 import { FcGoogle } from 'react-icons/fc';
 import { GoogleAuthProvider } from 'firebase/auth';
+import axios from 'axios';
 
 const SignUP = () => {
-    const { user, createUserWithEP, signInwithGoogle } = useContext(Zaitooncontext);
-    console.log(user)
+    const { user, createUserWithEP, addedUpdateUser, signInwithGoogle } = useContext(Zaitooncontext);
+    // console.log(user)
 
     const navigate = useNavigate();
     const location = useLocation();
+    // const form =useForm();
 
     const from = location.state?.from?.pathname || "/";
 
     const provider = new GoogleAuthProvider();
+    const imageHostKey = process.env.REACT_APP_imgbbhostkey;
 
     const { register, handleSubmit, formState: { errors } } = useForm();
 
-    const createuser = (data) => {
-        const email = data.email;
-        const password = data.password
-        createUserWithEP(email, password)
-        .then((result)=>{
-            const results =result.user;
-            toast.success("Successfully Login Complited");
-            navigate(from, {replace: true})
+    const createuser = async (data) => {
+        const image = data.image[0];
+
+        const formData = new FormData();
+        formData.append('image', image);
+        fetch(`https://api.imgbb.com/1/upload?key=${imageHostKey}`, {
+            method: 'POST',
+            body: formData,
         })
+            .then(res => res.json())
+            .then(fact => {
+                const image = fact.data.url;
+                const email = data.email;
+                const password = data.password;
+
+                createUserWithEP(email, password)
+
+                    .then((result) => {
+                        const user = result.user;
+                        {
+                            user && toast.success("Succesfully added you")
+
+                        }
+                        const displayName = data.name;
+                        const photoURL = image;
+
+                        addedUpdateUser(displayName, photoURL)
+                            .then(() => {
+                                const role = data.type;
+                                puteUser(email, displayName, photoURL);
+                            })
+                            .catch((error) => {
+                                console.log(error)
+                            })
+                    })
+                    .catch((error) => {
+                        {
+                            error && toast.error("firebase Error")
+                        }
+                    })
+
+
+
+            })
+        // createUserWithEP(email, password)
+
+        //     try {
+        //         const response = await axios.post("http://localhost:5000/api/upload", formData, {
+        //             headers: { "Content-Type": "multipart/form-data" }
+        //         });
+        //         console.log(response.data.imageUrl)
+        //     }
+        //     catch (error) {
+        //     }
     }
 
     const handlegoogleLogin = () => {
         signInwithGoogle(provider)
-        .then((result)=>{
-            const credential = GoogleAuthProvider.credentialFromResult(result);
-            console.log(credential)
-            toast.success("Login successfully")
-        })
-        .catch((error)=>{
+        .then((result) => {
+            const email = result.user.email;
+            const displayName = result.user.displayName;
+            const photoURL = result.user.photoURL;
+            const role= "User";
+
+            puteUser(email, displayName, photoURL, role)
+            const user = result.user;
+            {
+                user && toast.success("Succesfully added your account")
+                navigate(from, { replace: true })
+            }
 
         })
-        
+        .catch((error) => {
+            {
+                error && toast.error("firebaseError", error.message)
+            }
+        })
+
     }
+
+
+
+    const puteUser = async (email, displayName, photoURL) => {
+
+        const addingUser = {
+            email,
+            name: displayName,
+            img: photoURL,
+            // role
+        }
+
+        try {
+            const addData = await axios.post(`http://localhost:5000/users`, addingUser, {
+                headers: {
+                    'content-type': 'application/json'
+                },
+            })
+            console.log(addData)
+
+            if (addData.status == 200) {
+                navigate('/')
+                toast.success("User successfully Created")
+            }
+        }
+        catch (error) {
+            console.log(error)
+        }
+        // .then(res =>res.json())
+        // .then(data => {
+        //     // setUserEmail(email)
+        //     navigate('/')
+        // })
+
+
+    }
+
     return (
         <div className="backImage" style={{ fontFamily: 'Georgia, serif', fontSize: '20px', }}>
             <div className="hero min-h-screen ">
@@ -60,7 +156,7 @@ const SignUP = () => {
                                 <input type="text" {...register("name", {
                                     // required: "Name is required",
                                     minLength: { value: 4, message: "name mustbe meningfull" }
-                                })} placeholder="Please Enter Your Name" className="input input-bordered" />
+                                })} placeholder="Please Enter Your Full Name" className="input input-bordered" />
                                 {
                                     errors.name && <p className='text-red-500'>{errors.name?.message}</p>
                                 }
@@ -69,7 +165,7 @@ const SignUP = () => {
                             {/* Photo Section start */}
                             <div className="form-control">
                                 <label className="label">
-                                    <span className="label-text">Photo URL</span>
+                                    <span className="label-text">Image</span>
                                 </label>
                                 <input {...register("image")} type='file' placeholder="Please Enter Image" className="input input-bordered" />
                             </div>

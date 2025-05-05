@@ -17,6 +17,8 @@ import AllUsers from "../Pages/PrivatePages/AdminUsersControl/AllUsers/AllUsers"
 import AllProducts from "../Pages/PrivatePages/AllProducts/AllProducts";
 import CartItem from "../Pages/FixedPages/CartItems/CartItem";
 import ProductsDetails from "../Pages/FixedPages/Products/ProductsDetails/ProductsDetails";
+import AdminSecurPages from "../Pages/PrivatePages/PrivateRouting/AdminSecurity/AdminSecurPages";
+import SuperAdmin from "../Pages/PrivatePages/PrivateRouting/SuperAdminPage/SuperAdmin";
 
 const router = createBrowserRouter([
     {
@@ -59,15 +61,15 @@ const router = createBrowserRouter([
             },
             {
                 path: "/dashboard/addProducts",
-                element: <Secureroute><Createdproduct></Createdproduct></Secureroute>
+                element: <AdminSecurPages><Secureroute><Createdproduct></Createdproduct></Secureroute></AdminSecurPages>
             },
             {
                 path:"/dashboard/allusers",
-                element:<AllUsers></AllUsers>
+                element:<SuperAdmin><AllUsers></AllUsers></SuperAdmin>
             },
             {
                 path: "/dashboard/allProducts",
-                element: <AllProducts></AllProducts>
+                element: <AdminSecurPages><AllProducts></AllProducts></AdminSecurPages>
             }
         ]
     },

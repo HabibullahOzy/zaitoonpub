@@ -1,158 +1,122 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+// import useAdmin from '../../../../hooks/adminHooks/useAdmin';
+import { Zaitooncontext } from '../../../../SecureContext/ContextAuth';
+import { reload } from 'firebase/auth';
 
 const AllUsers = () => {
+    const { user } = useContext(Zaitooncontext);
+    // const [isAdmin]=useAdmin(user?.email);
+    const [alluser, setAlluser] = useState([])
+    useEffect(() => {
+        try {
+            axios.get('http://localhost:5000/allusers')
+                .then((res) => {
+                    const allusers = res.data
+                    console.log(allusers)
+                    setAlluser(allusers)
+                })
+        }
+        catch (error) {
+            // console.log(error)
+            toast.error(error.message)
+        }
+    }, []);
+
+    const createAdmin = (id) => {
+        try {
+            axios.put(`http://localhost:5000/users/admin/${id}`)
+                .then((res) => {
+                    toast.success('Successfully admin Created')
+                    // reload("")
+                })
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
+
+
+    const userdelete = (id) => {
+        try {
+            axios.delete(`http://localhost:5000/users/delete/${id}`)
+                .then(res => {
+                    console.log(res)
+                    if (res.data.acknowledged === true) {
+                        toast.success("User Successfully deleted")
+                        // reload('')
+                    }
+                })
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <div className="overflow-x-auto text-black min-h-screen pt-14">
 
-<h1 className=' text-center font-bold text-2xl'>Users List</h1>
-        <table className="table">
-            {/* head */}
-            <thead className='text-black text-lg font-bold'>
+            <h1 className=' text-center font-bold text-2xl'>Users List</h1>
+            <table className="table"><thead className='text-black text-lg font-bold'>
                 <tr>
                     <th>
                         Select
                     </th>
                     <th>User Name</th>
                     <th>Type</th>
-                    <th>Last SignIn date</th>
+                    <th></th>
+                    {/* Last SignIn date */}
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
-                {/* row 1 */}
-                <tr>
-                    <th>
-                        <label>
-                            <input type="checkbox" className="checkbox" />
-                        </label>
-                    </th>
-                    <td>
-                        <div className="flex items-center gap-3">
-                            <div className="avatar">
-                                <div className="mask mask-squircle h-12 w-12">
-                                    <img
-                                        src="https://img.daisyui.com/images/profile/demo/2@94.webp"
-                                        alt="Avatar Tailwind CSS Component" />
+                <tbody>
+                    {/* row 1 */}
+
+                    {
+                        alluser?.map((user, i) => (<tr key={i}>
+                            <th>
+                                <label>
+                                    <input type="checkbox" className="checkbox" />
+                                </label>
+                            </th>
+                            <td>
+                                <div className="flex items-center gap-3">
+                                    <div className="avatar">
+                                        <div className="mask mask-squircle h-12 w-12">
+                                            <img
+                                                src={user.img}
+                                                alt="Avatar Tailwind CSS Component" />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div className="font-bold">{user.name}</div>
+                                        <div className="text-sm opacity-50">{user.email}</div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div>
-                                <div className="font-bold">Hart Hagerty</div>
-                                <div className="text-sm opacity-50">United States</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        Zemlak, Daniel and Leannon
-                        <br />
-                        <span className="badge badge-ghost badge-sm">Desktop Support Technician</span>
-                    </td>
-                    <td>Purple</td>
-                    <th>
-                        <button className="btn btn-primary btn-xs">Admin</button>
-                    </th>
-                    <th>
-                        <button className="btn btn-error btn-xs">Delete</button>
-                    </th>
-                </tr>
-                {/* row 2 */}
-                <tr>
-                    <th>
-                        <label>
-                            <input type="checkbox" className="checkbox" />
-                        </label>
-                    </th>
-                    <td>
-                        <div className="flex items-center gap-3">
-                            <div className="avatar">
-                                <div className="mask mask-squircle h-12 w-12">
-                                    <img
-                                        src="https://img.daisyui.com/images/profile/demo/3@94.webp"
-                                        alt="Avatar Tailwind CSS Component" />
-                                </div>
-                            </div>
-                            <div>
-                                <div className="font-bold">Brice Swyre</div>
-                                <div className="text-sm opacity-50">China</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        Carroll Group
-                        <br />
-                        <span className="badge badge-ghost badge-sm">Tax Accountant</span>
-                    </td>
-                    <td>Red</td>
-                    <th>
-                        <button className="btn btn-ghost btn-xs">details</button>
-                    </th>
-                </tr>
-                {/* row 3 */}
-                <tr>
-                    <th>
-                        <label>
-                            <input type="checkbox" className="checkbox" />
-                        </label>
-                    </th>
-                    <td>
-                        <div className="flex items-center gap-3">
-                            <div className="avatar">
-                                <div className="mask mask-squircle h-12 w-12">
-                                    <img
-                                        src="https://img.daisyui.com/images/profile/demo/4@94.webp"
-                                        alt="Avatar Tailwind CSS Component" />
-                                </div>
-                            </div>
-                            <div>
-                                <div className="font-bold">Marjy Ferencz</div>
-                                <div className="text-sm opacity-50">Russia</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        Rowe-Schoen
-                        <br />
-                        <span className="badge badge-ghost badge-sm">Office Assistant I</span>
-                    </td>
-                    <td>Crimson</td>
-                    <th>
-                        <button className="btn btn-ghost btn-xs">details</button>
-                    </th>
-                </tr>
-                {/* row 4 */}
-                <tr>
-                    <th>
-                        <label>
-                            <input type="checkbox" className="checkbox" />
-                        </label>
-                    </th>
-                    <td>
-                        <div className="flex items-center gap-3">
-                            <div className="avatar">
-                                <div className="mask mask-squircle h-12 w-12">
-                                    <img
-                                        src="https://img.daisyui.com/images/profile/demo/5@94.webp"
-                                        alt="Avatar Tailwind CSS Component" />
-                                </div>
-                            </div>
-                            <div>
-                                <div className="font-bold">Yancy Tear</div>
-                                <div className="text-sm opacity-50">Brazil</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        Wyman-Ledner
-                        <br />
-                        <span className="badge badge-ghost badge-sm">Community Outreach Specialist</span>
-                    </td>
-                    <td>Indigo</td>
-                    <th>
-                        <button className="btn btn-ghost btn-xs">details</button>
-                    </th>
-                </tr>
-            </tbody>
-            {/* foot */}
-            {/* <tfoot>
+                            </td>
+                            <td>
+                                {user.role}
+                                {/* <br />
+                                <span className="badge badge-ghost badge-sm">Desktop Support Technician</span> */}
+                            </td>
+                            {/* <td></td> */}
+                            <th>
+                                {
+                                    user?.role === 'admin' || user?.role === 'superadmin' ? "" : <button onClick={() => createAdmin(user._id)} className="btn btn-primary btn-xs">Admin</button>
+                                }
+                            </th>
+                            <th>
+                                <button onClick={() => userdelete(user._id)} className="btn btn-error btn-xs">Delete</button>
+                            </th>
+                        </tr>))
+
+                    }
+
+                </tbody>
+                {/* foot */}
+                {/* <tfoot>
                 <tr>
                     <th></th>
                     <th>Name</th>
@@ -161,8 +125,8 @@ const AllUsers = () => {
                     <th></th>
                 </tr>
             </tfoot> */}
-        </table>
-    </div>
+            </table>
+        </div>
     );
 };
 

@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import img from "../../../../assets/zaitoonPublication.jpg"
+import useAdmin from '../../../../hooks/adminHooks/useAdmin';
+import { Zaitooncontext } from '../../../../SecureContext/ContextAuth';
+import useSuperAdmin from '../../../../hooks/superAdmin/superAdmin';
 
 const DHeader = () => {
+    const { user } = useContext(Zaitooncontext);
+
+    const [isAdmin] = useAdmin(user?.email);
+
+    const [isSuperAdmin] = useSuperAdmin(user?.email)
     return (
         <div className="navbar w-11/12 m-auto text-black">
             <div className="navbar-start">
@@ -12,9 +20,12 @@ const DHeader = () => {
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
                     </div>
                     <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                        <li><Link to={'/dashboard/addProducts'}>Add Products</Link></li>
-                        <li><Link to={'/dashboard/allusers'}>All Users</Link></li>
-                        <li><Link to={'/dashboard/allProducts'}>All Products</Link></li>
+                        {
+                            isAdmin && <>
+                                <li><Link to={'/dashboard/addProducts'}>Add Products</Link></li>
+                                <li><Link to={'/dashboard/allusers'}>All Users</Link></li>
+                                <li><Link to={'/dashboard/allProducts'}>All Products</Link></li></>
+                        }
                         <li>
                             <a>Parent</a>
                             {/* <ul className="p-2">
@@ -34,9 +45,19 @@ const DHeader = () => {
 
             <button className='p-2 px-4 bg-green-100 rounded-r-md'><BsSearch /></button> */}
                 <ul className="menu menu-horizontal px-1">
-                    <li><Link to={'/dashboard/addProducts'}>Add Products</Link></li>
-                    <li><Link to={'/dashboard/allusers'}>All Users</Link></li>
-                    <li><Link to={'/dashboard/allProducts'}>All Products</Link></li>
+                    <li><Link to={'/dashboard'}>My Order</Link></li>
+                    <li><Link to={'/dashboard'}>Wish List</Link></li>
+                    {
+                        isAdmin && <>
+                            <li><Link to={'/dashboard/addProducts'}>Add Products</Link></li>
+                            <li><Link to={'/dashboard/allProducts'}>All Products</Link></li>
+                        </>
+                    }
+                    {
+                        isSuperAdmin && <>
+                            <li><Link to={'/dashboard/allusers'}>All Users</Link></li>
+                        </>
+                    }
                     {/* <li>
                         <details>
                             <summary>Parent</summary>

@@ -102,12 +102,12 @@ const Header = () => {
                     {/* language */}
 
 
-                    <label>{t("language")}: </label>
+                    {/* <label>{t("language")}: </label>
                     <select onChange={(e) => changeLanguage(e.target.value)} defaultValue={i18n.language}>
                         <option value="en">English</option>
                         <option value="bn">বাংলা</option>
                         <option value="ar">العربية</option>
-                    </select>
+                    </select> */}
 
                     {/* <div className="dropdown dropdown-end">
                         <div tabIndex={1} role="button" className="flex"><img src={imgus} className='w-5 '/> English</div>

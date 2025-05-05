@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, signInWithPopup } from 'firebase/auth';
+import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, signInWithPopup, updateProfile } from 'firebase/auth';
 import app from '../WebAuth/firebase.config';
 
 
@@ -25,6 +25,12 @@ const ContextAuth = ({children}) => {
     const loginWithEP =(email,password)=>{
         // setLoader(true)
         return signInWithEmailAndPassword(auth, email, password)
+    }
+
+
+    const addedUpdateUser =(displayName,photoURL)=>{
+        setLoader(true)
+        return updateProfile(auth.currentUser, {displayName,photoURL})
     }
 
     const signInwithGoogle=(provider)=>{
@@ -56,6 +62,7 @@ const ContextAuth = ({children}) => {
         loader,
         setLoader,
         createUserWithEP,
+        addedUpdateUser,
         loginWithEP,
         signInwithGoogle,
         logOut,
