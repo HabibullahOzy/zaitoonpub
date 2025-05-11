@@ -6,26 +6,31 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { Zaitooncontext } from '../../../SecureContext/ContextAuth';
+import axios from 'axios';
 
 const Products = () => {
     const { user, setOffer, offer, cartdataset, setCartdataset } = useContext(Zaitooncontext);
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
 
 
-    console.log(cartdataset)
+    // console.log(cartdataset)
     const { data: allproducts = [], refetch } = useQuery({
         queryKey: ['allproducts'],
         queryFn: async () => {
+            
             const res = await fetch('http://localhost:5000/allProducts');
             const data = await res.json()
+            console.log(data)
             return data;
+            
 
         }
     })
 
 
 
-    // console.log(cartdataset)
+
+    console.log(cartdataset)
 
 
     // console.log(users)
@@ -38,12 +43,14 @@ const Products = () => {
         // console.log(finalOffer);
     }
 
-    const handleAddCart = (id) => {
+    const handleAddCart = async (id) => {
         console.log(id)
+        const response =await axios.get(`http://localhost:5000/products/${id}`)
+        console.log(response?.data[0]);
         const email = user.email
-        const name = cartdataset.name
-        const image = cartdataset.img
-        const productPrice = cartdataset.productPrice
+        const name = response?.data[0]?.nameeng
+        const image = response?.data[0]?.image
+        const productPrice = response?.data[0]?.productPrice
         const catagory_id = cartdataset.catagory_id
 
         const cartProducts = {
@@ -93,7 +100,7 @@ const Products = () => {
                         <Link to={`/products/${dataes._id}`}>
 
                             <img
-                                src={dataes.img}
+                                src={`http://localhost:5000/uploads/${dataes.image}`}
                                 alt="car!" />
 
                         </Link>

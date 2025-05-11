@@ -9,7 +9,7 @@ import axios from 'axios';
 
 const Createdproduct = () => {
 
-    const { user, } = useContext(Zaitooncontext);
+    const { user } = useContext(Zaitooncontext);
 
     const navigate = useNavigate();
 
@@ -17,86 +17,53 @@ const Createdproduct = () => {
 
 
     const handleCreatProduct = async data => {
+        console.log(data)
+        const imageFile = data.image?.[0];
+        const pdfFile = data.files?.[0];
 
-        const image = data.image;
-        const files = data.files[0];
+        if (!imageFile || !pdfFile) {
+            console.error("Image or PDF file missing");
+            return;
+        }
         const formData = new FormData();
-        formData.append('image', image);
-        formData.append('files', files);
-        console.log(image)
+        formData.append('namebn', data.productbnName);
+        formData.append('namearb', data.arbproductarName);
+        formData.append('nameeng', data.engproductName);
+        formData.append('productPrice', data.productPrice);
+        formData.append('postDate', data.postDate);
+        formData.append('numberOfpage', data.numberOfpage);
+        formData.append('authorName', data.authorName);
+        formData.append('language', data.language);
+        formData.append('offerprice', data.offerprice);
+        formData.append('quantity', data.quantity);
+        formData.append('edition', data.edition);
+        formData.append('description', data.description);
+        formData.append('category', data.category);
+        formData.append('email', user.email)
+        formData.append('image', imageFile);
+        formData.append('pdf', pdfFile);
+        // console.log(formData)
+
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}:`, value);
+        }
+
         try {
-            const response = await axios.post("http://localhost:5000/api/upload", formData, {
+            const response = await axios.post("http://localhost:5000/profile", formData,{
                 headers: { "Content-Type": "multipart/form-data" }
-            });
-            console.log(response.data.imageUrl)
+              });
+            console.log(response.data)
+            if (response.data.insertedId) {
+                toast.success("Product succesfully created")
+            }
+            else{
+                toast.error("Please try again properly, product not created")
+            }
         }
         catch (error) {
 
         }
-        // .then(res => res.json())
-        // .then(fact => {
-        //     console.log(fact)
-        //     const image = fact.data.imageUrl;
-        //     const files = fact.data.pdfUrl;
-        //     const email = user.email;
-        //     const productName = data.productName;
-        //     const productPrice = data.productPrice;
-        //     const offerprice = data.offerprice;
-        //     // const purchaseYear = data.purchaseYear;
-        //     // const condition = data.condition;
-        //     // const category = data.category;
-        //     // const resalPrice = data.resalPrice;
-        //     // const originalPrice = data.originalPrice;
-        //     const quantity = data.quantity;
-        //     // const usesYear = data.usesYear;
-        //     const postDate = data.postDate;
-        //     // const selerName = data.selerName;
-        //     // const phoneNumber = data.phoneNumber;
-        //     // const location = data.location;
-        //     const description = data.description;
-
-
-        //     const products = {
-        //         name: productName,
-        //         productPrice,
-        //         // purchaseYear,
-        //         img: image,
-        //         files,
-        //         email,
-        //         // condition,
-        //         catagory_id: productName,
-        //         // resale_price: resalPrice,
-        //         // original_price: originalPrice,
-        //         offers: offerprice,
-        //         quantity,
-        //         // uses_year: usesYear,
-        //         post_date: postDate,
-        //         // seller_name: selerName,
-        //         // phone: phoneNumber,
-        //         // location,
-        //         description
-        //     }
-        //     console.log(products)
-
-        //     fetch('http://localhost:5000/products', {
-        //         method: 'POST',
-        //         headers: {
-        //             'content-type': 'application/json'
-        //         },
-        //         body: JSON.stringify(products)
-        //     })
-        //         .then(res => res.json())
-        //         .then(infoe => {
-        //             console.log(infoe)
-        //             if (infoe.acknowledged) {
-        //                 toast.success("Your Producte added succesfully");
-        //                 navigate('/dashboard/allProducts')
-        //             } else {
-        //                 toast.error("your producte can't added please try again")
-        //             }
-        //         })
-
-        // })
+       
     }
 
     return (
@@ -106,7 +73,7 @@ const Createdproduct = () => {
                     <div className="text-center lg:text-left ">
                         <h1 className="text-3xl font-bold text-black mb-5">Add Your Products</h1>
                     </div>
-                    <div className=" shadow-2xl">
+                    <div className=" shadow-xl shadow-green-500">
                         <form onSubmit={handleSubmit(handleCreatProduct)} className="card-body">
 
                             <div className='flex'>
@@ -116,8 +83,8 @@ const Createdproduct = () => {
                                         <label className="label">
                                             <span className="label-text text-black">Producte BN Name</span>
                                         </label>
-                                        <input {...register("productName", { required: true })} type="text" placeholder="Please Enter Your Bangla Producte Name" className="input input-bordered sm:w-16 lg:w-96 mr-4" />
-                                        {errors.productName && <span className=' text-red-500'>This section is required</span>}
+                                        <input {...register("productbnName", { required: true })} type="text" placeholder="Please Enter Your Bangla Producte Name" className="input input-bordered sm:w-16 lg:w-96 mr-4" />
+                                        {errors.productbnName && <span className=' text-red-500'>This section is required</span>}
 
                                     </div>
 
@@ -125,10 +92,20 @@ const Createdproduct = () => {
                                     {/*Product Name section arabic start */}
                                     <div className="form-control">
                                         <label className="label">
-                                            <span className="label-text text-black">Producte Name</span>
+                                            <span className="label-text text-black">Producte Arabic Name</span>
                                         </label>
-                                        <input {...register("productName", { required: true })} type="text" placeholder="Please Enter Your arabic Producte Name" className="input input-bordered sm:w-16 lg:w-96 mr-4" />
-                                        {errors.productName && <span className=' text-red-500'>This section is required</span>}
+                                        <input {...register("arbproductarName", { required: true })} type="text" placeholder="Please Enter Your arabic Producte Name" className="input input-bordered sm:w-16 lg:w-96 mr-4" />
+                                        {errors.arbproductarName && <span className=' text-red-500'>This section is required</span>}
+
+                                    </div>
+
+                                    {/*Product Name section english start */}
+                                    <div className="form-control">
+                                        <label className="label">
+                                            <span className="label-text text-black">Producte EN Name</span>
+                                        </label>
+                                        <input {...register("engproductName", { required: true })} type="text" placeholder="Please Enter Your arabic Producte Name" className="input input-bordered sm:w-16 lg:w-96 mr-4" />
+                                        {errors.engproductName && <span className=' text-red-500'>This section is required</span>}
 
                                     </div>
 
@@ -155,7 +132,7 @@ const Createdproduct = () => {
                                             <span className="label-text text-black">Number of Pages</span>
                                         </label>
                                         <input {...register("numberOfpage", { required: true })} type="text" placeholder="Please Enter Your Producte Name" className="input input-bordered sm:w-16 lg:w-96 mr-4" />
-                                        {errors.productName && <span className=' text-red-500'>This section is required</span>}
+                                        {errors.numberOfpage && <span className=' text-red-500'>This section is required</span>}
 
                                     </div>
 
@@ -164,20 +141,20 @@ const Createdproduct = () => {
                                     {/*Author Name section start */}
                                     <div className="form-control">
                                         <label className="label">
-                                            <span className="label-text text-black">Producte Name</span>
+                                            <span className="label-text text-black">Author Name</span>
                                         </label>
                                         <input {...register("authorName", { required: true })} type="text" placeholder="Please Enter Your Producte Name" className="input input-bordered sm:w-16 lg:w-96 mr-4" />
-                                        {errors.productName && <span className=' text-red-500'>This section is required</span>}
+                                        {errors.authorName && <span className=' text-red-500'>This section is required</span>}
 
                                     </div>
 
                                     {/*Language section start */}
                                     <div className="form-control">
                                         <label className="label">
-                                            <span className="label-text text-black">Producte Name</span>
+                                            <span className="label-text text-black">Language</span>
                                         </label>
-                                        <input {...register("productName", { required: true })} type="text" placeholder="Select Language" className="input input-bordered sm:w-16 lg:w-96 mr-4" />
-                                        {errors.productName && <span className=' text-red-500'>This section is required</span>}
+                                        <input {...register("language", { required: true })} type="text" placeholder="Enter Language" className="input input-bordered sm:w-16 lg:w-96 mr-4" />
+                                        {errors.language && <span className=' text-red-500'>This section is required</span>}
 
                                     </div>
 
@@ -204,10 +181,10 @@ const Createdproduct = () => {
                                     {/*Edition section start */}
                                     <div className="form-control">
                                         <label className="label">
-                                            <span className="label-text text-black">Producte Name</span>
+                                            <span className="label-text text-black">Producte Edition</span>
                                         </label>
-                                        <input {...register("edition", { required: true })} type="text" placeholder="Please Enter Your Producte Name" className="input input-bordered sm:w-16 lg:w-96 mr-4" />
-                                        {errors.productName && <span className=' text-red-500'>This section is required</span>}
+                                        <input {...register("edition", { required: true })} type="text" placeholder="Please Enter Your Producte Edition" className="input input-bordered sm:w-16 lg:w-96 mr-4" />
+                                        {errors.edition && <span className=' text-red-500'>This section is required</span>}
 
                                     </div>
 
@@ -245,7 +222,7 @@ const Createdproduct = () => {
                                         <label className="label">
                                             <span className="label-text text-black">Producte Picture</span>
                                         </label>
-                                        <input {...register("image")} type="file" placeholder="Please Enter Producte price" className="input input-bordered lg:w-96 mr-4" />
+                                        <input {...register("image")} type="file" accept='image/*' placeholder="Please Enter Producte picture" className="input input-bordered lg:w-96 mr-4" />
                                     </div>
 
 
@@ -254,7 +231,7 @@ const Createdproduct = () => {
                                         <label className="label">
                                             <span className="label-text text-black">Upload PDF file</span>
                                         </label>
-                                        <input {...register("files")} type="file" placeholder="Please Enter Producte price" className="input input-bordered lg:w-96" />
+                                        <input {...register("files")} type="file" accept='application/pdf' placeholder="Please Enter Producte PDF file" className="input input-bordered lg:w-96" />
                                     </div>
                                 </div>
                             </div>
