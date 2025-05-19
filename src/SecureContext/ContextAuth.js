@@ -14,6 +14,7 @@ const ContextAuth = ({children}) => {
     const [prices, setPrices] = useState(0);
     const [ident, setIdent] = useState('');
     const [producD, setProducD]=useState('')
+    const [cashonprodata,setCashonprodata]=useState(null)
 
 
     const createUserWithEP = (email, password) => {
@@ -75,7 +76,9 @@ const ContextAuth = ({children}) => {
         ident,
         setIdent,
         producD,
-        setProducD
+        setProducD,
+        cashonprodata,
+        setCashonprodata
     }
     return (
         <div>

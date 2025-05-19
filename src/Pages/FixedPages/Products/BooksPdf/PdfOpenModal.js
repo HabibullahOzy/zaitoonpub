@@ -4,8 +4,8 @@ import React from 'react';
 
 
 
-const PdfOpenModal = () => {
-    
+const PdfOpenModal = (pdf) => {
+console.log(pdf.pdf)
     return (
         <div>
             {/* You can open the modal using document.getElementById('ID').showModal() method */}
@@ -22,10 +22,10 @@ const PdfOpenModal = () => {
                             <div className="w-full max-w-2xl bg-white shadow-lg p-2 rounded-md">
                                 
                                 <iframe
-                                    src={`http://localhost:5000/uploads/1746865729687-cgq3 213-15-4628.pdf`}
+                                    src={`http://localhost:5000/uploads/${pdf.pdf}`}
                                     width="100%"
                                     height="650px"
-                                    title="PDF Viewer"
+                                    title="PDF View"
                                     style={{ border: 'none' }}>
 
                                 </iframe>

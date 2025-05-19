@@ -15,7 +15,7 @@ const Home = () => {
 
             {/* <img src={image} alt='' className=' h-96 w-full'></img> */}
 
-            <CustomerReview></CustomerReview>
+            {/* <CustomerReview></CustomerReview> */}
         </div>
     );
 };

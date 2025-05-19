@@ -2,18 +2,15 @@ import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Zaitooncontext } from '../../../SecureContext/ContextAuth';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-// import {bgim} from '../../../assets/bg_icon.png'
 
 
 const Createdproduct = () => {
 
     const { user } = useContext(Zaitooncontext);
 
-    const navigate = useNavigate();
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
 
     const handleCreatProduct = async data => {
@@ -38,10 +35,12 @@ const Createdproduct = () => {
         formData.append('quantity', data.quantity);
         formData.append('edition', data.edition);
         formData.append('description', data.description);
+        formData.append('productCode', data.pcode);
         formData.append('category', data.category);
-        formData.append('email', user.email)
+        formData.append('email', user.email);
         formData.append('image', imageFile);
         formData.append('pdf', pdfFile);
+
         // console.log(formData)
 
         for (let [key, value] of formData.entries()) {
@@ -49,41 +48,42 @@ const Createdproduct = () => {
         }
 
         try {
-            const response = await axios.post("http://localhost:5000/profile", formData,{
+            const response = await axios.post("http://localhost:5000/profile", formData, {
                 headers: { "Content-Type": "multipart/form-data" }
-              });
+            });
             console.log(response.data)
             if (response.data.insertedId) {
                 toast.success("Product succesfully created")
+                reset()
             }
-            else{
+            else {
                 toast.error("Please try again properly, product not created")
             }
         }
         catch (error) {
 
         }
-       
+
     }
 
     return (
         <div>
             <div className="hero min-h-screen ">
                 <div className="hero-content flex-col">
-                    <div className="text-center lg:text-left ">
+                    <div className="text-center lg:text-left">
                         <h1 className="text-3xl font-bold text-black mb-5">Add Your Products</h1>
                     </div>
-                    <div className=" shadow-xl shadow-green-500">
+                    <div className=" shadow-xl shadow-green-500 bg-[#baefba]">
                         <form onSubmit={handleSubmit(handleCreatProduct)} className="card-body">
 
-                            <div className='flex'>
+                            <div className='lg:flex'>
                                 <div className=' '>
                                     {/*Product Name section start */}
                                     <div className="form-control">
                                         <label className="label">
                                             <span className="label-text text-black">Producte BN Name</span>
                                         </label>
-                                        <input {...register("productbnName", { required: true })} type="text" placeholder="Please Enter Your Bangla Producte Name" className="input input-bordered sm:w-16 lg:w-96 mr-4" />
+                                        <input {...register("productbnName", { required: true })} type="text" placeholder="Please Enter Your Bangla Producte Name" className="input input-bordered mr-4" />
                                         {errors.productbnName && <span className=' text-red-500'>This section is required</span>}
 
                                     </div>
@@ -104,7 +104,7 @@ const Createdproduct = () => {
                                         <label className="label">
                                             <span className="label-text text-black">Producte EN Name</span>
                                         </label>
-                                        <input {...register("engproductName", { required: true })} type="text" placeholder="Please Enter Your arabic Producte Name" className="input input-bordered sm:w-16 lg:w-96 mr-4" />
+                                        <input {...register("engproductName", { required: true })} type="text" placeholder="Please Enter English Producte Name" className="input input-bordered sm:w-16 lg:w-96 mr-4" />
                                         {errors.engproductName && <span className=' text-red-500'>This section is required</span>}
 
                                     </div>
@@ -114,7 +114,8 @@ const Createdproduct = () => {
                                         <label className="label">
                                             <span className="label-text text-black">Producte Price</span>
                                         </label>
-                                        <input {...register("productPrice")} type="text" placeholder="Please Enter Resal price" className="input input-bordered lg:w-96" />
+                                        <input {...register("productPrice", { required: true })} type="text" placeholder="Please Enter Resal price" className="input input-bordered lg:w-96" />
+                                        {errors.productPrice && <span className=' text-red-500'>This section is required</span>}
                                     </div>
 
                                     {/* Post date section start */}
@@ -123,6 +124,7 @@ const Createdproduct = () => {
                                             <span className="label-text text-black">Post Date</span>
                                         </label>
                                         <input {...register("postDate", { required: true })} type="datetime-local" placeholder="Please Enter post date" className="input input-bordered lg:w-96 mr-4" />
+                                        {errors.postDate && <span className=' text-red-500'>This section is required</span>}
                                     </div>
 
 
@@ -131,7 +133,7 @@ const Createdproduct = () => {
                                         <label className="label">
                                             <span className="label-text text-black">Number of Pages</span>
                                         </label>
-                                        <input {...register("numberOfpage", { required: true })} type="text" placeholder="Please Enter Your Producte Name" className="input input-bordered sm:w-16 lg:w-96 mr-4" />
+                                        <input {...register("numberOfpage", { required: true })} type="text" placeholder="Please Enter Number of pages" className="input input-bordered sm:w-16 lg:w-96 mr-4" />
                                         {errors.numberOfpage && <span className=' text-red-500'>This section is required</span>}
 
                                     </div>
@@ -143,7 +145,7 @@ const Createdproduct = () => {
                                         <label className="label">
                                             <span className="label-text text-black">Author Name</span>
                                         </label>
-                                        <input {...register("authorName", { required: true })} type="text" placeholder="Please Enter Your Producte Name" className="input input-bordered sm:w-16 lg:w-96 mr-4" />
+                                        <input {...register("authorName", { required: true })} type="text" placeholder="Please Enter Author Name" className="input input-bordered sm:w-16 lg:w-96 mr-4" />
                                         {errors.authorName && <span className=' text-red-500'>This section is required</span>}
 
                                     </div>
@@ -194,12 +196,24 @@ const Createdproduct = () => {
                                         <label className="label">
                                             <span className="label-text text-black">Description</span>
                                         </label>
-                                        <textarea {...register("description")} className="textarea textarea-bordered h-24 lg:w-96" placeholder="Pease Enter Description"></textarea>
+                                        <textarea {...register("description", { required: true })} className="textarea textarea-bordered h-24 lg:w-96" placeholder="Pease Enter Description"></textarea>
+                                        {errors.description && <span className=' text-red-500'>This section is required</span>}
                                     </div>
                                 </div>
 
 
                                 <div className=''>
+
+                                    {/*Product code section start */}
+                                    <div className="form-control">
+                                        <label className="label">
+                                            <span className="label-text text-black">Producte Code</span>
+                                        </label>
+                                        <input {...register("pcode", { required: true })} type="text" placeholder="Please Enter Producte Code" className="input input-bordered sm:w-16 lg:w-96 mr-4" />
+                                        {errors.pcode && <span className=' text-red-500'>This section is required</span>}
+
+                                    </div>
+
                                     {/* Category Select Type of Users */}
                                     <div className="form-control">
                                         <div className="input-group grid">
@@ -222,7 +236,8 @@ const Createdproduct = () => {
                                         <label className="label">
                                             <span className="label-text text-black">Producte Picture</span>
                                         </label>
-                                        <input {...register("image")} type="file" accept='image/*' placeholder="Please Enter Producte picture" className="input input-bordered lg:w-96 mr-4" />
+                                        <input {...register("image", { required: true })} type="file" accept='image/*' placeholder="Please Enter Producte picture" className="input input-bordered lg:w-96 mr-4" />
+                                        {errors.image && <span className=' text-red-500'>This section is required</span>}
                                     </div>
 
 
@@ -231,7 +246,8 @@ const Createdproduct = () => {
                                         <label className="label">
                                             <span className="label-text text-black">Upload PDF file</span>
                                         </label>
-                                        <input {...register("files")} type="file" accept='application/pdf' placeholder="Please Enter Producte PDF file" className="input input-bordered lg:w-96" />
+                                        <input {...register("files", {required: true})} type="file" accept='application/pdf' placeholder="Please Enter Producte PDF file" className="input input-bordered lg:w-96" />
+                                    {errors.files && <span className=' text-red-500'>This section is required</span>}
                                     </div>
                                 </div>
                             </div>

@@ -6,6 +6,9 @@ import useAdmin from '../../../../hooks/adminHooks/useAdmin';
 import { Zaitooncontext } from '../../../../SecureContext/ContextAuth';
 import useSuperAdmin from '../../../../hooks/superAdmin/superAdmin';
 
+
+
+
 const DHeader = () => {
     const { user } = useContext(Zaitooncontext);
 
@@ -24,8 +27,17 @@ const DHeader = () => {
                             isAdmin && <>
                                 <li><Link to={'/dashboard/addProducts'}>Add Products</Link></li>
                                 <li><Link to={'/dashboard/allusers'}>All Users</Link></li>
-                                <li><Link to={'/dashboard/allProducts'}>All Products</Link></li></>
+                                <li><Link to={'/dashboard/allProducts'}>All Products</Link></li>
+                                <li>
+                                    <a>Placed Order Summery</a>
+                                    <ul className="p-2" style={{ backgroundColor: "rgb(186, 239, 186)" }}>
+                                        <li><Link to={'/dashboard/cashonplaced'}>CashOn Order</Link></li>
+                                        <li><Link to={''}>Paid Order</Link></li>
+                                    </ul>
+                                </li>
+                            </>
                         }
+
                         <li>
                             <a>Parent</a>
                             {/* <ul className="p-2">
@@ -45,29 +57,28 @@ const DHeader = () => {
 
             <button className='p-2 px-4 bg-green-100 rounded-r-md'><BsSearch /></button> */}
                 <ul className="menu menu-horizontal px-1">
-                    <li><Link to={'/dashboard'}>My Order</Link></li>
-                    <li><Link to={'/dashboard'}>Wish List</Link></li>
                     {
                         isAdmin && <>
                             <li><Link to={'/dashboard/addProducts'}>Add Products</Link></li>
                             <li><Link to={'/dashboard/allProducts'}>All Products</Link></li>
-                        </>
+                            <li>
+                                <details>
+                                    <summary>Placed Order Summery</summary>
+                                    <ul className="p-2 z-[1]" style={{ backgroundColor: "rgb(186, 239, 186)" }}>
+                                        <li><Link to={'/dashboard/cashonplaced'}>CashOn Order List</Link></li>
+                                        <li><Link to={''}>Paid Order List</Link></li>
+                                    </ul>
+                                </details>
+                            </li>
+                            </>
                     }
                     {
                         isSuperAdmin && <>
                             <li><Link to={'/dashboard/allusers'}>All Users</Link></li>
                         </>
                     }
-                    {/* <li>
-                        <details>
-                            <summary>Parent</summary>
-                            <ul className="p-2">
-                                <li><a>Submenu 1</a></li>
-                                <li><a>Submenu 2</a></li>
-                            </ul>
-                        </details>
-                    </li>
-                    <li><a>Item 3</a></li> */}
+
+                    {/* <li><a>Item 3</a></li> */}
                 </ul>
             </div>
             <div className="navbar-end">

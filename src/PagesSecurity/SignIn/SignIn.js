@@ -56,7 +56,7 @@ const SignIn = () => {
                     <div className="text-center lg:text-left">
                         <h1 className="text-5xl font-bold text-black mb-5">Login now</h1>
                     </div>
-                    <div className="card flex-shrink-0  shadow-2xl" style={{ backgroundImage: 'linear-gradient(to right, green, rgb(109, 218, 109))' }}>
+                    <div className="card flex-shrink-0  shadow-md shadow-lime-300 w-96" style={{backgroundColor:"rgb(186, 239, 186)"}}>
                         <form onSubmit={handleSubmit(loginHandle)} className="card-body">
                             <div className="form-control">
                                 <label className="label">
@@ -82,6 +82,9 @@ const SignIn = () => {
                                     <a href="#" className="label-text-alt link link-hover text-black">Forgot password?</a>
                                 </label>
                             </div>
+
+
+                            
                             <div className="form-control mt-6">
                                 <button className="btn btn-success">Login</button>
                             </div>

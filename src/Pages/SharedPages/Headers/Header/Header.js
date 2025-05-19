@@ -152,6 +152,8 @@ const Header = () => {
                             <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow rounded-box w-52" style={{ backgroundColor: 'rgb(186, 239, 186)' }}>
 
                                 <li><Link to={"/dashboard"}>DashBoard</Link></li>
+                                <li><Link to={`/dashboard/myorder/${user?.email}`}>My Order</Link></li>
+                                <li><Link to={'/dashboard'}>Wish List</Link></li>
                                 <li>
                                     <Link to={'/profile'} className="justify-between">
                                         Profile

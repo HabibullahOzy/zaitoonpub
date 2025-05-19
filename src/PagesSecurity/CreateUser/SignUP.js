@@ -41,16 +41,16 @@ const SignUP = () => {
 
                     .then((result) => {
                         const user = result.user;
-                        {
+                        
                             user && toast.success("Succesfully added you")
 
-                        }
+                        
                         const displayName = data.name;
                         const photoURL = image;
 
                         addedUpdateUser(displayName, photoURL)
                             .then(() => {
-                                const role = data.type;
+                                // const role = data.type;
                                 puteUser(email, displayName, photoURL);
                             })
                             .catch((error) => {
@@ -58,9 +58,9 @@ const SignUP = () => {
                             })
                     })
                     .catch((error) => {
-                        {
+                        
                             error && toast.error("firebase Error")
-                        }
+                    
                     })
 
 
@@ -86,18 +86,17 @@ const SignUP = () => {
             const photoURL = result.user.photoURL;
             const role= "User";
 
-            puteUser(email, displayName, photoURL, role)
+            puteUser(email, displayName, photoURL)
             const user = result.user;
-            {
+            
                 user && toast.success("Succesfully added your account")
                 navigate(from, { replace: true })
-            }
 
         })
         .catch((error) => {
-            {
+            
                 error && toast.error("firebaseError", error.message)
-            }
+            
         })
 
     }
@@ -121,7 +120,7 @@ const SignUP = () => {
             })
             console.log(addData)
 
-            if (addData.status == 200) {
+            if (addData.status === 200) {
                 navigate('/')
                 toast.success("User successfully Created")
             }
@@ -143,9 +142,9 @@ const SignUP = () => {
             <div className="hero min-h-screen ">
                 <div className="hero-content flex-col">
                     <div className="text-center lg:text-left">
-                        <h1 className="text-5xl font-bold text-white mb-5">Sign Up</h1>
+                        <h1 className="text-3xl font-bold  mb-5">Welcome for Sign Up</h1>
                     </div>
-                    <div className="card flex-shrink-0  shadow-2xl" style={{ backgroundImage: 'linear-gradient(to right, green, rgb(215, 215, 141))' }}>
+                    <div className="card flex-shrink-0 lg:w-11/12  shadow-md shadow-lime-300 w-96" style={{backgroundColor:"rgb(186, 239, 186)"}}>
                         <form onSubmit={handleSubmit(createuser)} className="card-body">
 
                             {/* Name section start */}
@@ -154,9 +153,9 @@ const SignUP = () => {
                                     <span className="label-text">Name</span>
                                 </label>
                                 <input type="text" {...register("name", {
-                                    // required: "Name is required",
-                                    minLength: { value: 4, message: "name mustbe meningfull" }
-                                })} placeholder="Please Enter Your Full Name" className="input input-bordered" />
+                                    required: "Name is required",
+                                    minLength: { value: 3, message: "name mustbe meningfull" }
+                                })}  placeholder="Please Enter Your Full Name" className="input input-bordered" />
                                 {
                                     errors.name && <p className='text-red-500'>{errors.name?.message}</p>
                                 }
@@ -183,7 +182,13 @@ const SignUP = () => {
                                 <label className="label">
                                     <span className="label-text">Password</span>
                                 </label>
-                                <input {...register("password")} type="password" placeholder="******" className="input input-bordered" />
+                                <input {...register("password")}
+                                type="password"
+                                placeholder="******"
+                                className="input input-bordered"
+                                //  message="Password must be at least 8 characters long and include uppercase, lowercase, number, and special character",
+                                //     pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()\-_=+{}[\]|;:'\",.<>\/\\]).{8,}$",
+                                />
 
                                 {/* Select Type of Users */}
                                 {/* <div className="form-control">
@@ -205,7 +210,7 @@ const SignUP = () => {
                                 </label>
                             </div>
                             <div className="form-control mt-6">
-                                <button className="btn btn-success">Signup</button>
+                                <button className="btn btn-success">Sign up</button>
                                 <Toaster />
                             </div>
                         </form>

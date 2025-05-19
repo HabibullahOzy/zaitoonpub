@@ -19,6 +19,10 @@ import CartItem from "../Pages/FixedPages/CartItems/CartItem";
 import ProductsDetails from "../Pages/FixedPages/Products/ProductsDetails/ProductsDetails";
 import AdminSecurPages from "../Pages/PrivatePages/PrivateRouting/AdminSecurity/AdminSecurPages";
 import SuperAdmin from "../Pages/PrivatePages/PrivateRouting/SuperAdminPage/SuperAdmin";
+import CashOnpurch from "../Pages/FixedPages/Purchages/CashOnpurch";
+import CashonPlaced from "../Pages/PrivatePages/OrderSummery/CashonPlaced/CashonPlaced";
+import Myorder from "../Pages/PrivatePages/DashBoard/Myorder/Myorder";
+import PmUpdate from "../Pages/PrivatePages/AllProducts/ProductUpdateModal/PmUpdate";
 
 const router = createBrowserRouter([
     {
@@ -40,15 +44,26 @@ const router = createBrowserRouter([
             path: "/profile",
             element: <Secureroute><Profile></Profile></Secureroute>
         },
-        {
-            path: "/cartItem",
-            element:<Secureroute><CartItem></CartItem></Secureroute>
+         {
+            path:'/productsupdate/:id',
+            element:<PmUpdate></PmUpdate>,
+            loader:({params})=>fetch(`http://localhost:5000/products/${params.id}`)
         },
         {
             path:'/products/:id',
             element:<ProductsDetails></ProductsDetails>,
             loader:({params})=>fetch(`http://localhost:5000/products/${params.id}`)
+        },
+        {
+            path: "/cartItem",
+            element:<Secureroute><CartItem></CartItem></Secureroute>
+        },
+        {
+            path: "/cashOnpurc",
+            element:<Secureroute><CashOnpurch></CashOnpurch></Secureroute>,
+            // loader:({params})=>fetch(`http://localhost:5000/cashOnpurc/${params.email}`)
         }
+       
         ]
     },
     {
@@ -58,6 +73,11 @@ const router = createBrowserRouter([
             {
                 path: "/dashboard/",
                 element: <Secureroute><DashBody></DashBody></Secureroute>
+            },
+            {
+                path: "/dashboard/myorder/:email",
+                element:<Secureroute><Myorder></Myorder></Secureroute>,
+                loader:({params})=>fetch(`http://localhost:5000/ordercheck/${params.email}`)
             },
             {
                 path: "/dashboard/addProducts",
@@ -70,6 +90,11 @@ const router = createBrowserRouter([
             {
                 path: "/dashboard/allProducts",
                 element: <AdminSecurPages><AllProducts></AllProducts></AdminSecurPages>
+            },
+            {
+                path: "/dashboard/cashonplaced",
+                element:<AdminSecurPages><CashonPlaced></CashonPlaced></AdminSecurPages>
+                // loader:({params})=>fetch(`http://localhost:5000/dashbaord/cashonplaced/${params.role}`)
             }
         ]
     },

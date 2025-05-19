@@ -8,7 +8,7 @@ import './CustomerReview.css';
 
 import { Autoplay, EffectCards, Navigation, Pagination } from 'swiper/modules';
 
-const CustomerReview = () => {
+const CustomerReview = ({ rinfo }) => {
     return (
         <div>
             <h1 className='text-center text-2xl text-black font-semibold mt-10 pb-10'>Customer Feedback</h1>
@@ -23,7 +23,8 @@ const CustomerReview = () => {
                 }}
                 navigation={true}
                 className="mySwiper"
-            ><SwiperSlide><div className="card w-96">
+            ><SwiperSlide>
+                <div className="card w-96">
                 <div className="card-body">
 
                     <div className=" flex justify-between">
@@ -31,19 +32,19 @@ const CustomerReview = () => {
                             <img src="https://cdn1.iconfinder.com/data/icons/user-pictures/101/malecostume-512.png" />
                         </div>
                         <div className='pl-3'>
-                            <p className='text-sm font-semibold'>Md. Hassan Mahmud</p>
+                            <p className='text-sm font-semibold'>{rinfo.rname}</p>
                             <p className='text-gray-500'>Engineer</p>
                         </div>
                     </div>
 
-                    <p className='text-sm'>"Zaitoon Publication stands out as a trusted name in the world of educational books. Their collection is well-curated, offering a broad spectrum of subjects that cater to students, teachers, and lifelong learners alike. The content is well-researched and tailored to meet the needs of modern education. !!!"</p>
+                    <p className='text-sm'>{rinfo.dreview}</p>
 
                 </div>
             </div>
-            </SwiperSlide>
+                </SwiperSlide>
 
 
-                <SwiperSlide>
+                {/* <SwiperSlide>
                     <div className="card ">
                         <div className="card-body">
 
@@ -61,10 +62,10 @@ const CustomerReview = () => {
 
                         </div>
                     </div>
-                </SwiperSlide>
+                </SwiperSlide> */}
 
 
-                <SwiperSlide><div className="card">
+                {/* <SwiperSlide><div className="card">
                     <div className="card-body">
 
                         <div className=" flex justify-between">
@@ -80,8 +81,8 @@ const CustomerReview = () => {
                         <p className='text-sm'>"Zaitoon Publication has proven time and again that they are committed to providing high-quality educational resources that are both valuable and impactful. !!!"</p>
 
                     </div>
-                </div></SwiperSlide>
-                <SwiperSlide><div className="card">
+                </div></SwiperSlide> */}
+                {/* <SwiperSlide><div className="card">
                     <div className="card-body">
 
                         <div className=" flex justify-between">
@@ -98,10 +99,10 @@ const CustomerReview = () => {
 
                     </div>
                 </div>
-                </SwiperSlide>
+                </SwiperSlide> */}
 
 
-                <SwiperSlide><div className="card">
+                {/* <SwiperSlide><div className="card">
                     <div className="card-body">
 
                         <div className=" flex justify-between">
@@ -118,11 +119,11 @@ const CustomerReview = () => {
 
                     </div>
                 </div>
-                </SwiperSlide>
+                </SwiperSlide> */}
 
 
 
-                <SwiperSlide><div className="card ">
+                {/* <SwiperSlide><div className="card ">
                     <div className="card-body">
 
                         <div className=" flex justify-between">
@@ -139,10 +140,10 @@ const CustomerReview = () => {
 
                     </div>
                 </div>
-                </SwiperSlide>
+                </SwiperSlide> */}
 
 
-                <SwiperSlide><div className="card ">
+                {/* <SwiperSlide><div className="card ">
                     <div className="card-body">
 
                         <div className=" flex justify-between">
@@ -159,10 +160,10 @@ const CustomerReview = () => {
 
                     </div>
                 </div>
-                </SwiperSlide>
+                </SwiperSlide> */}
 
 
-                <SwiperSlide><div className="card ">
+                {/* <SwiperSlide><div className="card ">
                     <div className="card-body">
 
                         <div className=" flex justify-between">
@@ -179,11 +180,11 @@ const CustomerReview = () => {
 
                     </div>
                 </div>
-                </SwiperSlide>
+                </SwiperSlide> */}
 
 
 
-                <SwiperSlide><div className="card ">
+                {/* <SwiperSlide><div className="card ">
                     <div className="card-body">
 
                         <div className=" flex justify-between">
@@ -199,7 +200,7 @@ const CustomerReview = () => {
                         <p className='text-sm'>"Dr. Hoque’s approach is both educational and entertaining, ensuring that children not only learn the shapes and sounds of the Arabic letters but also develop a love for the language. !!!"</p>
 
                     </div>
-                </div></SwiperSlide>
+                </div></SwiperSlide> */}
             </Swiper>
         </div>
     );
