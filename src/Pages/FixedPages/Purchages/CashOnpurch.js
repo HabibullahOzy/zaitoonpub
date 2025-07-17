@@ -6,132 +6,224 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
-const CashOnpurch = ({cartItems}) => {
-    const { user } = useContext(Zaitooncontext);
-    const navigate =useNavigate()
-    const dataes = cartItems
-    console.log(dataes)
-
-    const { register, handleSubmit, formState: { errors } } = useForm();
-
-    const orderDate = new Date().toLocaleString("en-BD", {
-  timeZone: "Asia/Dhaka",
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-  hour: "numeric",
-  minute: "2-digit",
-  second: "2-digit",
-  hour12: true,
-});
+const CashOnpurch = ({ cartItems, setShowModal }) => {
+  const { user, prices, localDeviceId } = useContext(Zaitooncontext);
+  const navigate = useNavigate()
+  const dataes = cartItems
 
 
-    const orderConfirmation = async (data) => {
 
-        console.log(data)
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
-        const name = data.name;
-        const email = data.email;
-        const phonenumber = data.phonenum;
-        const alphonenumber = data.alphonenum;
-        const nationality = data.nationality;
-        const city = data.city;
-        const area = data.area;
-        const dlocation = data.dlocation;
-        const productdata= dataes;
-        const role = "cashOnpurchages";
-        // console.log(productdata)
+  const orderDate = new Date().toLocaleString("en-BD", {
+    timeZone: "Asia/Dhaka",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  });
 
-        const cashOndata = {
-            name,
-            email,
-            phonenumber,
-            alphonenumber,
-            nationality,
-            city,
-            area,
-            dlocation,
-            productdata,
-            orderDate,
-            role
-        }
 
-        try {
-            const response = await axios.post("http://localhost:5000/purchage", cashOndata)
+  const emaile = user?.email || localDeviceId()
 
-            if (response?.data?.insertedId) {
-                toast.success("Order Successfully Placed!!");
-                navigate(`/dashboard/myorder/${user.email}`)
-            } else {
-                toast.error("Order NOT Placed, Please Try again")
-            }
+  const orderConfirmation = async (data) => {
 
-            console.log(response.data);
-        }
-        catch (error) {
-            console.log(error.massage)
-        }
+    // console.log(emaile)
 
+    const name = data.name;
+    const email = emaile;
+    const phonenumber = data.phonenum;
+    // const alphonenumber = data.alphonenum;
+    // const nationality = data.nationality;
+    // const city = data.city;
+    const ordnote = data.ornote;
+    const dlocation = data.dlocation;
+    const productdata = dataes;
+    const totalPrice = prices;
+    // const role = "cashOnpurchages";
+    const status = "pending"
+    // console.log(productdata)
+
+    const cashOndata = {
+      name,
+      email,
+      phonenumber,
+      // alphonenumber,
+      // nationality,
+      // city,
+      // area,
+      dlocation,
+      ordnote,
+      totalPrice,
+      productdata,
+      orderDate,
+      // role,
+      status
+    }
+
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_backendurl}/purchage`, cashOndata)
+
+      if (response?.data?.insertedId) {
+        toast.success("Order Successfully Placed!!");
+        setShowModal(false)
+        navigate(`/myorder/${emaile}`)
+      } else {
+        toast.error("Order NOT Placed, Please Try again")
+      }
 
     }
-    return (
-        <div className='w-full'>
-            <div className='' >
-                <h1 className='text-center font-bold text-xl m-10'>Shiping Address for CashOn Purchages</h1>
-                <form onSubmit={handleSubmit(orderConfirmation)} className='pl-16'>
-                    <div className="container ">
-                        <input required type="text" {...register("name", { required: true })} className="input"></input>
-                        <label className="label">Username</label>
-                    </div>
-
-                    <div className='lg:flex lg:gap-7'>
-                        <div className="container mt-8">
-                            <input required type="text" {...register("phonenum", { required: true })} className="input"></input>
-                            <label className="label">Phone Number</label>
-                        </div>
+    catch (error) {
+      console.log(error.massage)
+    }
 
 
-                        <div className="container mt-8">
-                            <input required type="text" {...register("alphonenum", { required: true })} className="input"></input>
-                            <label className="label">Alternative Phone Number</label>
-                        </div>
-                    </div>
+  }
+  return (
+    <div className="w-full bg-[#baefba]">
+      <h1 className="text-center font-bold text-xl text-gray-800">অর্ডার করুন ~ ক্যাশ অন ডেলিভারিতে</h1>
+      <hr className="border-2 border-gray-300 w-full mx-auto my-4" />
+      <div className="max-w-5xl mx-auto">
+        <form
+          onSubmit={handleSubmit(orderConfirmation)}
+          className=" p-6 rounded-xl shadow-lg grid grid-cols-1 md:grid-cols-2 gap-6"
+        >
+          {/* Name */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              নাম <span className="text-red-600">*</span>
+            </label>
+            <input
+              required
+              type="text"
+              {...register("name")}
+              className="w-full input border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+              placeholder='আপনার নাম'
+            />
+          </div>
+
+          {/* Phone Number */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              মোবাইল নাম্বার <span className="text-red-600">*</span>
+            </label>
+            <input
+              required
+              type="text"
+              {...register("phonenum")}
+              className="w-full border input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+              placeholder='১১ ডিজিট মোবাইল নাম্বার'
+            />
+          </div>
+
+          {/* Alt Phone */}
+          {/* <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Alternative Phone Number <span className="text-red-600">*</span>
+            </label>
+            <input
+              required
+              type="text"
+              {...register("alphonenum")}
+              className="w-full border input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+            />
+          </div> */}
+
+          {/* Email */}
+          {/* <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input
+              type="email"
+              value={emaile}
+              readOnly
+              className="w-full input bg-gray-100 border rounded-lg px-3 py-2 text-gray-600"
+            />
+          </div> */}
+
+          {/* Nationality */}
+          {/* <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Nationality <span className="text-red-600">*</span>
+            </label>
+            <input
+              required
+              type="text"
+              {...register("nationality")}
+              className="w-full border input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+            />
+          </div> */}
+
+          {/* City */}
+          {/* <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              City <span className="text-red-600">*</span>
+            </label>
+            <input
+              required
+              type="text"
+              {...register("city")}
+              className="w-full border input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+            />
+          </div> */}
+
+          {/* Area */}
+          {/* <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Area <span className="text-red-600">*</span>
+            </label>
+            <input
+              required
+              type="text"
+              {...register("area")}
+              className="w-full border input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+            />
+          </div> */}
+
+          {/* Full Address */}
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              ঠিকানা <span className="text-red-600">*</span>
+            </label>
+            <textarea
+              required
+              {...register("dlocation")}
+              className="w-full border input rounded-lg px-3 py-2 h-24 focus:outline-none focus:ring-2 focus:ring-green-400"
+              placeholder="আপনার বাসার সম্পূর্ণ ঠিকানা দিন"
+            ></textarea>
+          </div>
 
 
-                    <div className="container mt-8">
-                        <input required type="email" {...register("email", { required: true })} className="input" value={user.email}></input>
-                        <label className="label">email</label>
-                    </div>
 
-                    <div className='lg:flex lg:gap-7'>
-                        <div className="container mt-8">
-                            <input required type="text" {...register("nationality", { required: true })} className="input" ></input>
-                            <label className="label">Nationality</label>
-                        </div>
+          {/* Full Address */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              অর্ডার নোট
+            </label>
+            <textarea
+              {...register("ornote")}
+              className="w-full border input rounded-lg px-3 py-2 h-24 focus:outline-none focus:ring-2 focus:ring-green-400"
+              placeholder="বিশেষ কিছু বলতে চাইলে লিখুন............"
+            ></textarea>
+          </div>
 
-                        <div className="container mt-8">
-                            <input required type="text" {...register("city", { required: true })} className="input" ></input>
-                            <label className="label">City</label>
-                        </div>
-                    </div>
-
-                    <div className="container mt-8">
-                        <input required type="text" {...register("area")} className="input" ></input>
-                        <label className="label">Area</label>
-                    </div>
-
-                    <div className="container mt-8 lg:tooltip tooltip-neutral" data-tip="বাসা/ফ্লাট নাম্বার, মহল্লা নাম, পরিচিত এলাকা উল্লেখ করুন">
-                        <textarea required type="text" {...register("dlocation", { required: true })} className="input h-11" ></textarea>
-                        <label className="label" >Address</label>
-                    </div>
-
-                    <div className="form-control mt-6">
-                        <button className="btn btn-success">Order Confirm</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    );
+          {/* Submit button full width below the form */}
+          <div className="md:col-span-2">
+            <button
+              type="submit"
+              className="w-full bg-green-600 hover:bg-green-700 text-white text-lg font-semibold py-3 rounded-lg transition-all duration-300"
+            >
+              অর্ডার কনফার্ম করুন ৳{prices}
+            </button>
+            <p className='text-center text-gray-500 p-3'>আমাদের একজন কাস্টমার প্রতিনিধি আপনাকে কল করে আবার কনফার্ম হবে</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 };
 
 export default CashOnpurch;

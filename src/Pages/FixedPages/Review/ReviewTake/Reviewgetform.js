@@ -1,28 +1,31 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { FaStar } from 'react-icons/fa';
+import { Zaitooncontext } from '../../../../SecureContext/ContextAuth';
 
 
 const Reviewgetform = ({ rdata }) => {
+
+    const {user}=useContext(Zaitooncontext)
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const [rating, setRating] = useState(0);
     const [hover, setHover] = useState(null);
 
     const reviewData = rdata;
-    console.log(reviewData)
-
+  
     const onSubmit = async (data) => {
-        console.log(data, rating)
         const rname = data.rname
+        const email = user?.email || "Anonymous";
         const dreview = data.dreview
         const pdata = reviewData._id
-        const pdatacode = reviewData?.productCode
+        const pdatacode = reviewData?.ProductCode
         const review = {
             dreview,
             rname,
+            email,
             pdatacode,
             pdata,
             rating,
@@ -40,8 +43,7 @@ const Reviewgetform = ({ rdata }) => {
 
 
 
-        const response = await axios.post(`http://localhost:5000/review`, review)
-        console.log(response)
+        const response = await axios.post(`${process.env.REACT_APP_backendurl}/review`, review)
         if (response?.data?.insertedId) {
             toast.success("Review successfully added!!")
             reset();

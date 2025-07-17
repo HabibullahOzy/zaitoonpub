@@ -1,0 +1,40 @@
+.header {
+    width: 100%;
+    padding: 7px 0;
+    background: #b1f3ab;
+    color: white;
+    transition: all 0.3s ease;
+    z-index: 1000;
+
+}
+
+.header.scrolled {
+    position: fixed;
+    top: 0;
+    background: transparent;
+    /* background: #2da922; */
+    color: #333;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px 0;
+}
+
+.container {
+    max-width: 100%;
+    margin: 0 auto;
+    height: 80px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav a {
+    margin-left: 20px;
+    color: inherit;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+nav a:hover {
+    color: #007bff;
+}

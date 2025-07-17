@@ -4,17 +4,22 @@ import { RouterProvider } from 'react-router-dom';
 import router from './PagesRouting/Routingpages';
 import { Toaster } from 'react-hot-toast';
 import '../src/Pages/Language/i18n';
+import { PrimeReactProvider } from 'primereact/api';
+import "primereact/resources/themes/lara-light-cyan/theme.css";
+import React from 'react';
 
 function App() {
   return (
-    <div className="App" style={{ fontFamily: 'Times New Roman, Times, serif', fontStyle: '' }}>
+    <div className="App" >
 
       <Toaster
         position="top-center"
-      reverseOrder={false}
+        reverseOrder={false}
       />
+      <PrimeReactProvider>
+        <RouterProvider router={router} ></RouterProvider>
+      </PrimeReactProvider>
 
-      <RouterProvider router={router}></RouterProvider>
     </div>
   );
 }

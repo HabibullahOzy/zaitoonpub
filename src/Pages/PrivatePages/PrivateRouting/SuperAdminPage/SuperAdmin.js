@@ -7,7 +7,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 const SuperAdmin = ({children}) => {
     const {user, loader}=useContext(Zaitooncontext)
     const [isSuperAdmin, adminLoading]=useSuperAdmin(user?.email)
-    console.log(isSuperAdmin)
+    // console.log(isSuperAdmin)
     let location =useLocation();
 
 

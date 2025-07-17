@@ -9,7 +9,7 @@ const Profile = () => {
     return (
         <div className='w-10/12 m-auto min-h-screen'>
             <div className='flex align-middle justify-center m-10'>
-                <figure><img src={user?.photoURL} alt="" className='rounded-md' /></figure>
+                <figure><img src={user?.photoURL} alt="" className='rounded-md w-40' /></figure>
             </div>
             <div >
                 <p className='p-3 text-black font-semibold'>Name: {user?.displayName}</p>

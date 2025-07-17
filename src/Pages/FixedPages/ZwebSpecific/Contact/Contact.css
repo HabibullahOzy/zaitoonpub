@@ -1,0 +1,49 @@
+.help-card {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 24px;
+  border-radius: 12px;
+  background: #f9f9ff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+}
+
+.help-title {
+  font-size: 24px;
+  margin-bottom: 12px;
+  color: #2a2a72;
+}
+
+.help-text {
+  font-size: 14px;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.contact-method {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.contact-label {
+  font-weight: 600;
+  color: #444;
+}
+
+.contact-link {
+  color: #2a2a72;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.contact-link:hover {
+  text-decoration: underline;
+}

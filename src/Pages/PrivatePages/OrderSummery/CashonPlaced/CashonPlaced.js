@@ -5,117 +5,182 @@ import { useQuery } from '@tanstack/react-query';
 import { Zaitooncontext } from '../../../../SecureContext/ContextAuth';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import CODInvoice from './CODInvoice';
 
 
 const CashonPlaced = () => {
 
 
-    const { data: cashonprod = [], refetch } = useQuery({
-        queryKey: ['cashonprod'],
-        queryFn: async () => {
-            const res = await fetch('http://localhost:5000/cashonpurchage/cashOnpurchages');
-            const data = await res.json()
-            return data;
-
-        }
-    })
-
-
-
-    const handleUpdateOrder =async (id) => {
-       const response=await axios.put(`http://localhost:5000/orderStatus/${id}`)
-       response?.statusText ? toast.success("Order Placed !!!") : toast.error("Order not placed, please try again")
+const { data: cashonprod = [], refetch } = useQuery({
+    queryKey: ['cashonprod'],
+    queryFn: async () => {
+      const res = await fetch(`${process.env.REACT_APP_backendurl}/cashonPaypurchage/cashOnpurchages`);
+      return res.json();
     }
+  });
 
-    console.log(cashonprod)
+  // const handleUpdateOrder = async (id) => {
+  //   const response = await axios.put(`${process.env.REACT_APP_backendurl}/orderStatus/${id}`);
+  //   response?.statusText
+  //     ? toast.success("Order Placed !!!")
+  //     : toast.error("Order not placed, please try again");
+  //   refetch();
+  // };
+const [showCODInvoice, setShowCODInvoice] = useState(false);
+const [invoiceCODData, setInvoiceCODData] = useState(null);
 
-    return (
-        <div className="" style={{ backgroundColor: "rgb(186, 239, 186)" }}>
-            <div className="overflow-x-auto text-black min-h-screen pt-14">
-
-                <h1 className=' text-center font-bold text-2xl'>Products List</h1>
-                <table className="table overflow-x-auto table-zebra-zebra">
-                    {/* head */}
-
-
-                    <thead className='text-black text-lg font-bold'>
-                        <tr>
-                            <th></th>
-                            <th>Product name</th>
-                            <th>Product Code</th>
-                            <th>Category</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Total Price</th>
-                            <th className='table-pin-cols'>Customer Name</th>
-                            <th>phone Number</th>
-                            <th>alt:phone Number</th>
-                            <th>Location</th>
-                            <th>Status</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {/* row 1 */}
-
-                        {
-                            cashonprod?.map((cashdata, i) =>
-
-                                cashdata?.productdata?.map((prodata, j) => <tr key={`${cashdata._id}-${j}`}>
-
-                                    <th>
-                                        {i + 1}
-                                    </th>
-                                    <td>
-                                        <div className="avatar">
-                                            <div className="mask mask-squircle h-12 w-12">
-                                                <img
-                                                    src={`http://localhost:5000/uploads/${prodata.image}`}
-                                                    alt="Avatar" />
-                                            </div>
-                                            <span className='pl-1'>{prodata.name}</span>
-                                        </div>
-                                    </td>
-                                    <td>{prodata?.productCode}</td>
-                                    <td>{prodata?.category}</td>
-                                    <td>{prodata.quantity}</td>
-                                    <td>
-                                        {prodata.offer}
-                                    </td>
-                                    <td>{`${prodata?.total}`}</td>
-                                    <td>{cashdata.name}</td>
-                                    <td>{cashdata.phonenumber}</td>
-                                    <td>{cashdata.alphonenumber}</td>
-                                    <td>{cashdata?.dlocation}<br />{cashdata.nationality}<br />{cashdata.city}<br />{cashdata.area}</td>
-
-                                    <td>
-                                        {
-                                            cashdata?.status ? <p className='bg-green-300 text-white p-3 text-xl text-center rounded-md'>Order placed</p> : <button onClick={() => { handleUpdateOrder(cashdata._id) }} className="btn btn-sm font-medium text-cyan-600 hover:underline dark:text-cyan-500">
-                                            Update
-                                        </button>
-                                        }
-                                    </td>
-                                </tr>)
-                            )
-
-                        }
+  const handleOrderInvoice = async (cashdata) => {
+    setShowCODInvoice(true);
+    setInvoiceCODData(cashdata);
+  }
 
 
-                    </tbody>
-                    {/* foot */}
-                    {/* <tfoot>
-                        <tr>
-                            <th></th>
-                            <th>Name</th>
-                            <th>Job</th>
-                            <th>Favorite Color</th>
-                            <th></th>
-                        </tr>
-                    </tfoot> */}
-                </table>
+
+  // Pagination logic
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+  const totalPages = Math.ceil(cashonprod.length / itemsPerPage);
+
+  const paginatedData = cashonprod.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const goToPage = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  return (
+    <div style={{ backgroundColor: "rgb(186, 239, 186)" }}>
+      <div className="overflow-x-auto text-black min-h-screen pt-14 px-4">
+        <h1 className="text-center font-bold text-2xl mb-6">CashOn Orders List</h1>
+
+        <table className="table table-zebra w-full">
+          <thead className="text-black text-lg font-bold">
+            <tr>
+              <th>SL</th>
+              <th>Product</th>
+              <th>Code</th>
+              <th>Category</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th>Total</th>
+              <th>Customer</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Alt Phone</th>
+              <th>Location</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {paginatedData.map((cashdata, i) =>
+              cashdata?.productdata?.map((prodata, j) => (
+                <tr key={`${cashdata._id}-${j}`} className="text-stone-600">
+                  <td>{(currentPage - 1) * itemsPerPage + i + 1}</td>
+                  <td>
+                    <div className="flex items-center gap-2">
+                      <div className="avatar">
+                        <div className="mask mask-squircle h-12 w-12">
+                          <img src={prodata.image} alt="Product" />
+                        </div>
+                      </div>
+                      <span>{prodata.name}</span>
+                    </div>
+                  </td>
+                  <td>{prodata?.ProductCode}</td>
+                  <td>{prodata?.category}</td>
+                  <td>{prodata.quantity}</td>
+                  <td>{prodata.offer}</td>
+                  <td>{prodata?.total}</td>
+                  <td>{cashdata.name}</td>
+                  <td>{cashdata.email}</td>
+                  <td>{cashdata.phonenumber}</td>
+                  <td>{cashdata.alphonenumber}</td>
+                  <td>
+                    {cashdata?.dlocation},<br />
+                    {cashdata.nationality},<br />
+                    {cashdata.city},<br />
+                    {cashdata.area}
+                  </td>
+                  <td>
+                    {cashdata?.status==='placed' ? (
+                      <p className="bg-green-300 text-white p-2 text-center rounded-md">
+                        Order Placed
+                      </p>
+                    ) : (
+                      // <button
+                      //   onClick={() => handleUpdateOrder(cashdata._id)}
+                      //   className="btn btn-sm font-medium btn-success text-white hover:underline"
+                      // >
+                      //   CODpayment
+                      // </button>
+                      ""
+                    )}
+                  </td>
+                  <td>
+                    {
+                      cashdata?.status === 'placed' ? (
+                        <button onClick={() => handleOrderInvoice(cashdata)} className="btn btn-sm font-medium btn-success text-white hover:underline">
+                          Invoice
+                          </button>
+                      ) : (<p className="bg-red-300 text-white p-2 text-center rounded-md">
+                        Please at first confirm this Order</p>)
+                    }
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="flex justify-center mt-6 space-x-2">
+            <button
+              className="btn btn-sm"
+              onClick={() => goToPage(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              Prev
+            </button>
+            {[...Array(totalPages)].map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToPage(index + 1)}
+                className={`btn btn-sm ${currentPage === index + 1 ? 'btn-primary' : ''}`}
+              >
+                {index + 1}
+              </button>
+            ))}
+            <button
+              className="btn btn-sm"
+              onClick={() => goToPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </button>
+          </div>
+        )}
+      </div>
+
+      {
+        showCODInvoice && (
+          <div className="modal modal-open">
+            <div className="modal-box max-w-4xl w-full" style={{ backgroundColor: "#baefba" }}>
+              <div className="modal-action">
+                <button className="btn" onClick={() => setShowCODInvoice(false)}>✕</button>
+              </div>
+              <CODInvoice codInvdata={invoiceCODData} />
             </div>
-        </div>
-    );
+          </div>
+        )
+      }
+    </div>
+  );
 };
 
 export default CashonPlaced;

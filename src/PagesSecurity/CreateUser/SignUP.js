@@ -69,7 +69,7 @@ const SignUP = () => {
         // createUserWithEP(email, password)
 
         //     try {
-        //         const response = await axios.post("http://localhost:5000/api/upload", formData, {
+        //         const response = await axios.post(`${process.env.REACT_APP_backendurl}/api/upload`, formData, {
         //             headers: { "Content-Type": "multipart/form-data" }
         //         });
         //         console.log(response.data.imageUrl)
@@ -113,12 +113,12 @@ const SignUP = () => {
         }
 
         try {
-            const addData = await axios.post(`http://localhost:5000/users`, addingUser, {
+            const addData = await axios.post(`${process.env.REACT_APP_backendurl}/users`, addingUser, {
                 headers: {
                     'content-type': 'application/json'
                 },
             })
-            console.log(addData)
+            // console.log(addData)
 
             if (addData.status === 200) {
                 navigate('/')
@@ -144,7 +144,7 @@ const SignUP = () => {
                     <div className="text-center lg:text-left">
                         <h1 className="text-3xl font-bold  mb-5">Welcome for Sign Up</h1>
                     </div>
-                    <div className="card flex-shrink-0 lg:w-11/12  shadow-md shadow-lime-300 w-96" style={{backgroundColor:"rgb(186, 239, 186)"}}>
+                    <div className="card flex-shrink-0 shadow-md shadow-lime-300 md:w-96 lg:w-96" style={{backgroundColor:"rgb(186, 239, 186)"}}>
                         <form onSubmit={handleSubmit(createuser)} className="card-body">
 
                             {/* Name section start */}

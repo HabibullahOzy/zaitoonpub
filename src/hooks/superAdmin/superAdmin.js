@@ -5,10 +5,9 @@ const useSuperAdmin =email =>{
     const [adminLoading, setAdminLoading]=useState(true);
     useEffect(()=>{
         if(email) {
-            fetch(`http://localhost:5000/users/superadmin/${email}`)
+            fetch(`${process.env.REACT_APP_backendurl}/users/superadmin/${email}`)
             .then(res => res.json())
             .then(data => {
-                console.log(isSuperAdmin)
                 setIsSuperAdmin(data.isSuperAdmin)
                 setAdminLoading(false)
             })

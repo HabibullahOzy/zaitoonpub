@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useLoaderData } from 'react-router-dom';
+import { Link, useLoaderData, useNavigate } from 'react-router-dom';
 import { Zaitooncontext } from '../../../../SecureContext/ContextAuth';
-import { FaCartFlatbed } from 'react-icons/fa6';
+import { FaCartFlatbed, FaHeartCirclePlus } from 'react-icons/fa6';
 import toast from 'react-hot-toast';
 import PdfOpenModal from '../BooksPdf/PdfOpenModal';
 import axios from 'axios';
@@ -10,11 +10,21 @@ import { useQuery } from '@tanstack/react-query';
 import PSummer from './PSummer';
 import Pspecifica from './Pspecifica';
 import Pauthor from './Pauthor';
-import { FaStar } from 'react-icons/fa';
-import CustomerReview from '../../Review/CustomerReview';
+import rearrow from '../../../../assets/redo-arrow.png';
+import { HiShare } from 'react-icons/hi';
+import { PiArrowBendDownLeftFill } from 'react-icons/pi';
+// import { FcReading } from 'react-icons/fc'
+// import { FaStar } from 'react-icons/fa';
+// import CustomerReview from '../../Review/CustomerReview';
+import img from '../../../../assets/wppBuy.png';
+import './ProductsDetails.css';
+import { FaShoppingBag } from 'react-icons/fa';
+import BuyNowpdModa from './BuyNowpdModal/BuyNowpdModa';
+import SharebookSocialModal from './ShareBook/SharebookSocialModal';
+import RelatedPShow from './RelatedProducts/RelatedPShow';
 
 const ProductsDetails = () => {
-    const { user, producD, setProducD } = useContext(Zaitooncontext);
+    const { user, producD, setProducD, localDeviceId } = useContext(Zaitooncontext);
     const dataes = useLoaderData();
     const [modalOpen, setModalOpen] = useState(null)
     const [rating, setRating] = useState(0);
@@ -22,19 +32,25 @@ const ProductsDetails = () => {
     const [reviewinfo, setReviewinfo] = useState()
     const [activeTab, setActiveTab] = useState('summary');
     const [redata, setRedata] = useState()
-    console.log(redata)
+    const navigate = useNavigate();
+    // console.log(redata)
+
+
+    const emaile = user?.email || localDeviceId()
+
 
     const handleAddCart = async (id, offerPrice) => {
         try {
-
-            const response = await axios.get(`http://localhost:5000/products/${id}`)
-            console.log(response?.data[0]);
-            const email = user.email
-            const name = response?.data[0]?.nameeng
+            const response = await axios.get(`${process.env.REACT_APP_backendurl}/products/${id}`)
+            const email = emaile
+            console.log(email)
+            const nameeng = response?.data[0]?.nameeng
+            const namebn = response?.data[0]?.namebn
+            const namearb = response?.data[0]?.namearb
             const image = response?.data[0]?.image
             const productPrice = response?.data[0]?.productPrice
             const category = response?.data[0]?.category
-            const productCode = response?.data[0]?.productCode
+            const ProductCode = response?.data[0]?.ProductCode
             const authorName = response?.data[0]?.authorName
             const edition = response?.data[0]?.edition
             const offer = offerPrice
@@ -45,18 +61,19 @@ const ProductsDetails = () => {
                 id,
                 email,
                 offer,
-                name,
+                nameeng,
+                namebn,
+                namearb,
                 image,
                 productPrice,
                 category,
-                productCode,
+                ProductCode,
                 authorName,
                 edition,
                 postDate,
                 rating
             }
-            console.log(id)
-            fetch(`http://localhost:5000/addedCart`, {
+            fetch(`${process.env.REACT_APP_backendurl}/addedCart`, {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
@@ -89,89 +106,240 @@ const ProductsDetails = () => {
 
 
 
-
+    // for Reting show section
 
     useEffect(() => {
         dataes.map(async (info) => {
-            const res = await axios.get(`http://localhost:5000/review/${info.productCode}`);
-            console.log(res)
+            const res = await axios.get(`${process.env.REACT_APP_backendurl}/review/${info?.ProductCode}`);
             setRedata(res.data)
 
         })
     }, [dataes])
 
+    // console.log(redata)
     const totalRatings = redata?.reduce((sum, rinfo) => sum + rinfo.rating, 0);
-    const averageRating = redata?.length ? (totalRatings / redata.length).toFixed(2) : 0;
+    const averageRating = redata?.length ? (totalRatings / redata.length) : 0;
 
-    console.log("Average Rating:", averageRating);
+    // console.log("Average Rating:", averageRating);
+    const fullStars = Math.floor(averageRating);
+    const halfStar = averageRating % 1 >= 0.5;
+    const totalStars = 5;
+
+
+
+    // Buy now purchase section
+
+    const [showbuyModal, setShowbuyModal] = useState(false);
+    const [buyNowProduct, setBuyNowProduct] = useState('');
+
+    const openBuyNownPurchase = (produc) => {
+        // if (!user) {
+        //     toast.error("Please login first to buy now");
+        //     return;
+        // }
+
+        setShowbuyModal(true);
+        setBuyNowProduct(produc);
+    }
+
+
+    // Wish list section
+
+    const addpdWishList = async (product) => {
+        if (!user) {
+            toast.error("Please login first to add to wishlist");
+            return;
+        }
+
+        const wishlistItem = {
+            email: user?.email,
+            product
+        };
+
+        try {
+            const response = await fetch(`${process.env.REACT_APP_backendurl}/wishList`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(wishlistItem)
+            });
+
+            const data = await response.json();
+            if (data.acknowledged) {
+                toast.success("Product added to wishlist successfully");
+                navigate(`/wishList/${user?.email}`);
+                // refetch();
+            } else {
+                toast.error("Failed to add product to wishlist");
+            }
+        } catch (error) {
+            console.error("Error adding to wishlist:", error);
+            toast.error("An error occurred while adding to wishlist");
+        }
+    }
+
+
+    // Share with social media section
+    const [showShareModal, setShowShareModal] = useState(false);
+    const [shareProduct, setShareProduct] = useState('');
+
+
+    const handleShareProduct = (product) => {
+        // if (!user) {
+        //     toast.error("Please login first to share product");
+        //     return;
+        // }
+
+        setShowShareModal(true);
+        setShareProduct(product);
+    }
+
     return (
-        <div>
+        <div className='grid '>
             {
                 dataes?.map((data, i) => {
 
                     const offerPrice = data?.offerprice
                         ? Math.round(data.productPrice - (data.offerprice * data.productPrice) / 100)
                         : data.productPrice;
-                    return (<div className="lg:flex text-black w-10/12 m-auto mt-12 min-h-screen">
-                        <div key={i}>
-                            <figure className="border border-spacing-2 shadow-md shadow-lime-400 border-emerald-400 p-5">
-                                <img src={`http://localhost:5000/uploads/${data.image}`} alt="" className='lg:w-60' srcset="" />
-                            </figure>
-                        </div>
-                        <div className="p-10 w-full">
-                            <div>
-                                <h1 className="font-semibold p-2">{data.namebn}</h1>
+                    return (
+                        <div className="text-black lg:w-10/12 md:w-10/12 w-full lg:mx-auto md:mx-auto p-5 mt-12 min-h-screen" key={i}>
 
-                                <div className="rating  rating-half p-2">
-                                    {/* <input type="radio" name="rating-11" className="rating-hidden" /> */}
-                                    {[...Array(10)].map((_, index) => {
-                                        const half = index % 2 !== 0;
-                                        const starValue = (index + 1) * 0.5;
 
-                                        return (
-                                            <input
-                                                key={index}
-                                                type="radio"
-                                                name="rating"
-                                                className={`mask mask-star-2 ${half ? 'mask-half-2' : 'mask-half-1'} bg-orange-400`}
-                                                aria-label={`${starValue} star`}
-                                                checked={rating === starValue}
-                                                onChange={() => setRating(starValue)}
-                                            />
-                                        );
-                                    })}
+                            <div className='lg:flex '>
+                                <div className='lg:w-1/2 grid justify-center'>
+                                    <button onClick={() => document.getElementById('my_modal_3').showModal()}>
+                                        <figure className="border border-spacing-2 flex flex-grow shadow-md shadow-lime-400 border-emerald-400 p-5">
+                                            <img src={data.image} alt="" className='lg:w-80 object-contain transition-transform duration-300 hover:scale-105' />
+                                            <p className='p-tex font-semibold'>একটু পড়ে দেখুন</p>
+                                        </figure>
+                                    </button>
+                                </div>
+
+                                <div className='lg:w-1/2'>
+                                    <div>
+                                        <h1 className="font-semibold text-2xl p-2">{data.namebn} | {data.nameeng} | {data.namearb}</h1>
+
+                                        {/* upper star rating */}
+
+                                        <div className="flex items-center gap-1">
+                                            {[...Array(totalStars)].map((_, index) => {
+                                                if (index < fullStars) {
+                                                    return (
+                                                        <div
+                                                            key={index}
+                                                            className="mask mask-star-2 bg-yellow-500 w-4 h-4"
+                                                        />
+                                                    );
+                                                } else if (index === fullStars && halfStar) {
+                                                    return (
+                                                        <div
+                                                            key={index}
+                                                            className="relative w-6 h-6">
+                                                            <div className="mask mask-star-2 bg-yellow-500 w-2 h-4 absolute left-0 top-0" />
+                                                            <div className="mask mask-star-2 bg-gray-300 w-full h-full" />
+                                                        </div>
+                                                    );
+                                                } else {
+                                                    return (
+                                                        <div
+                                                            key={index}
+                                                            className="mask mask-star-2 bg-gray-300 w-4 h-4"
+                                                        />
+                                                    );
+                                                }
+                                            })}
+                                            {/* <span className="text-sm text-gray-600 ml-2">({averageRating.toFixed(1)})</span> */}
+                                        </div>
+
+
+                                        {/* Upper star rating */}
+
+
+                                    </div>
+
+
+                                    <h1 className="flex justify-evently p-5">
+                                        {data?.offerprice ? (
+                                            <>
+                                                <p className='text-xl font-semibold text-green-600 line-through' style={{ textDecorationColor: "red" }}>
+                                                    Tk {data.productPrice}৳
+                                                </p>
+                                                <p className='text-2xl font-semibold text-red-400'>
+                                                    Tk {offerPrice}৳
+                                                </p>
+                                            </>
+                                        ) : (
+                                            <p className='font-semibold text-xl text-green-600'>Tk {data?.productPrice}৳</p>
+                                        )}
+                                    </h1>
+
+
+                                    {/* products action button */}
+                                    <div className=" p-2">
+
+                                        <div className='flex gap-5'>
+
+                                            <button
+                                                onClick={() => openBuyNownPurchase(data)}
+                                                className="p-4 w-1/2 rounded-md bg-green-500 text-white flex items-center justify-center bounce-button"
+                                            >
+                                                <FaShoppingBag className="w-10" />
+                                                অর্ডার করুন
+                                            </button>
+
+                                            <button
+                                                onClick={() => handleAddCart(data?._id, offerPrice)}
+                                                className="p-4 w-1/2 bg-green-600 rounded-md text-white flex items-center justify-center vibrate-button"
+                                            >
+                                                <FaCartFlatbed className="w-8" />
+                                                কার্টে যোগ করুন
+                                            </button>
+                                        </div>
+
+                                        {/* <button
+                                                onClick={() => addpdWishList(data)}
+                                                className="p-4 w-1/2 bg-green-50 text-green-500 flex items-center justify-center tooltip tooltip-success"
+                                                data-tip="Add to Wishlist পছন্দের তালিকায় যুক্ত করুন"
+                                            >
+                                                <FaHeartCirclePlus className="w-10" />
+                                            </button> */}
+
+                                        <a
+                                            href="https://wa.me/message/PARTY6QIOII2E1"
+                                            target="_blank"
+                                            className="p-4 mt-5 rounded-lg bg-green-700 text-white flex items-center justify-center swing-button"
+                                        >
+                                            <img src={img} className="w-5" />
+                                            হোয়াটসঅ্যাপ এ অর্ডার করুন +8801748-806492
+                                        </a>
+
+
+
+
+                                        {/* <button onClick={() => document.getElementById('my_modal_3').showModal()} className="p-4 w-1/2 bg-green-500 text-white text-green-600 flex items-center justify-center tooltip tooltip-success" data-tip="Some Read একটু পড়ে দেখুন"><FcReading /></button> */}
+
+
+
+                                        <button onClick={() => handleShareProduct(data)} className="p-4 mt-5 w-full rounded-lg bg-green-500 text-white text-green-600 flex items-center justify-center animate-pulse"><HiShare className='w-8' />
+                                            বন্ধুদের সাথে শেয়ার করুন
+                                        </button>
+
+                                        {/* <button type="button" className="btn btn-outline btn-success shadow-md shadow-lime-400" ><FaCartFlatbed className='w-8' />Add to cart</button> */}
+
+                                        {/* <button onClick={() => document.getElementById('my_modal_3').showModal()} className="btn btn-outline btn-sm btn-success shadow-md shadow-lime-400">Some Read</button> */}
+
+                                    </div>
+
                                 </div>
                             </div>
-                            <hr className="bg-gray-300 h-1" />
 
-                            <p className="p-2">{data.description}</p>
 
-                            <hr className="bg-gray-300 h-1" />
 
-                            <h1 className="flex justify-evently p-5">
-                                {data?.offerprice ? (
-                                    <>
-                                        <p className='text-xl font-semibold text-gray-400 line-through' style={{ textDecorationColor: "red" }}>
-                                            {data.productPrice}৳
-                                        </p>
-                                        <p className='text-2xl font-semibold text-red-400'>
-                                            Tk {offerPrice}৳
-                                        </p>
-                                    </>
-                                ) : (
-                                    <p className='font-semibold text-gray-400'>{data.productPrice}৳</p>
-                                )}
-                            </h1>
-
-                            <div className="flex justify-around p-2">
-                                <button type="button" className="btn btn-outline btn-success shadow-md shadow-lime-400" onClick={() => handleAddCart(data?._id, offerPrice)}><FaCartFlatbed className='w-8' />Add to cart</button>
-                                <button onClick={() => document.getElementById('my_modal_3').showModal()} className="btn btn-outline btn-success shadow-md shadow-lime-400">Some Read</button>
-                            </div>
-
-                            <div className='bg-green-200 p-5 mt-10'>
+                            {/* Products Detaails section */}
+                            <div className='bg-green-200 p-5 mt-10 shadow-xl shadow-lime-200 rounded-lg'>
 
                                 <h1 className='text-xl font-semibold mb-6'>Product Specification</h1>
-                                <div className="flex gap-3 border-b pb-2 mb-4">
+                                <div className="lg:flex md:flex grid grid-cols-1 gap-3 border-b pb-2 mb-4">
                                     <button
                                         onClick={() => setActiveTab('summary')}
                                         className={`pb-2 ${activeTab === 'summary' ? 'border-b-2 border-green-500 text-green-600 font-semibold' : 'text-gray-600'}`}
@@ -192,52 +360,78 @@ const ProductsDetails = () => {
                                     </button>
                                 </div>
 
-                                {/* Tab Content */}
+                                {/*specific products details show Tab Content */}
                                 <div className="text-gray-800 leading-relaxed">
                                     {activeTab === 'summary' && <PSummer data={data} />}
                                     {activeTab === 'specification' && <Pspecifica data={data} />}
                                     {activeTab === 'author' && <Pauthor data={data} />}
                                 </div>
                             </div>
+                            <div className='mt-10'>
+                                <RelatedPShow categorys={data?.category}></RelatedPShow>
+                            </div>
 
-
-                            <div className='bg-green-200 p-5 mt-5'>
+                            {/* Products Review and Reting section */}
+                            <div className='bg-green-200 p-5 mt-10 shadow-lg shadow-lime-200 rounded-lg '>
 
                                 <h1 className='text-xl'>Review And Retings</h1>
-                                <button className='btn btn-success btn-sm' onClick={() => handleReview(data?._id, data)}>
-                                    review
-                                </button>
+                                <div className='flex justify-end'>
 
-
-                                <div className="rating  rating-half p-2">
-                                    {/* <input type="radio" name="rating-11" className="rating-hidden" /> */}
-                                    <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-1 bg-orange-400 w-2" aria-label={`${averageRating} star`} />
-                                    {/* <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-2 bg-orange-400" aria-label="1 star" />
-                                    <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-1 bg-orange-400" aria-label="1.5 star" defaultChecked />
-                                    <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-2 bg-orange-400" aria-label="2 star" />
-                                    <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-1 bg-orange-400" aria-label="2.5 star" />
-                                    <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-2 bg-orange-400" aria-label="3 star" />
-                                    <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-1 bg-orange-400" aria-label="3.5 star" />
-                                    <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-2 bg-orange-400" aria-label="4 star" />
-                                    <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-1 bg-orange-400" aria-label="4.5 star" />
-                                    <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-2 bg-orange-400" aria-label="5 star" /> */}
+                                    {
+                                        user ? <button className='btn btn-success btn-sm' onClick={() => handleReview(data?._id, data)}>
+                                            review
+                                        </button> : <div className='flex '><p className='text-xl'>Please at first login, then write review</p> <Link className='ml-5 text-sky-600 text-xl hover:font-semibold' to={'/signIn'}>Login</Link> </div>
+                                    }
                                 </div>
-                                <p>Total Review: {redata?.length}</p> ||
+                                {/* star reting section start */}
 
-                                <p>Total Rating: {totalRatings}</p>
+                                <div className="flex items-center gap-1">
+                                    {[...Array(totalStars)].map((_, index) => {
+                                        if (index < fullStars) {
+                                            return (
+                                                <div
+                                                    key={index}
+                                                    className="mask mask-star-2 bg-green-500 w-6 h-6"
+                                                />
+                                            );
+                                        } else if (index === fullStars && halfStar) {
+                                            return (
+                                                <div
+                                                    key={index}
+                                                    className="relative w-6 h-6">
+                                                    <div className="mask mask-star-2 bg-green-500 w-3 h-6 absolute left-0 top-0" />
+                                                    <div className="mask mask-star-2 bg-gray-300 w-full h-full" />
+                                                </div>
+                                            );
+                                        } else {
+                                            return (
+                                                <div
+                                                    key={index}
+                                                    className="mask mask-star-2 bg-gray-300 w-6 h-6"
+                                                />
+                                            );
+                                        }
+                                    })}
+                                    <span className="text-sm text-gray-600 ml-2">({averageRating.toFixed(1)})</span>
+                                </div>
+
+                                {/* star rating section end  */}
+                                <div className='flex'> <p>Total Review: {redata?.length}</p> ||
+
+                                    <p>Total Rating: {totalRatings}</p></div>
 
                             </div>
-                        </div>
 
-                        {/* 
 
-                        {
-                            setProducD(data)
-                        } */}
-                    </div>)
+                            {
+                                setProducD(data)
+                            }
+                        </div>)
                 }
                 )
             }
+
+
 
 
             <PdfOpenModal pdf={producD.pdf}>
@@ -248,7 +442,7 @@ const ProductsDetails = () => {
 
 
 
-
+            {/* REview and Reting section */}
             {showModal && (
                 <div className="modal modal-open ">
 
@@ -262,6 +456,43 @@ const ProductsDetails = () => {
                     </div>
                 </div>
             )}
+
+
+
+            {/* Buy Now Purchase Modal */}
+
+            {showbuyModal && (
+                <div className="modal modal-open">
+                    <div className="modal-box max-w-4xl bg-green-50" style={{ backgroundColor: "#baefba" }}>
+                        <div className="modal-action">
+                            <button className="text-black" onClick={() => setShowbuyModal(false)}>✕</button>
+                        </div>
+                        <BuyNowpdModa dataes={buyNowProduct} />
+                    </div>
+                </div>
+            )}
+
+
+
+
+
+            {/* Book share Modal */}
+
+            {showShareModal && (
+                <div className="modal modal-open">
+                    <div className="modal-box max-w-4xl bg-green-50" style={{ backgroundColor: "#baefba" }}>
+                        <div className="modal-action">
+                            <button className="btn" onClick={() => setShowShareModal(false)}>✕</button>
+                        </div>
+                        <SharebookSocialModal Shdataes={shareProduct} />
+                    </div>
+                </div>
+            )}
+
+
+
+
+
 
         </div>
     );

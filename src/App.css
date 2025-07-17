@@ -1,9 +1,32 @@
 .App{
-  background-image: url(bg_icon.png);
+  /* background-image: url(bg_icon.png); */
   /* background-repeat: no-repeat;
   background-size: cover; */
-  background-color: rgb(186, 239, 186);
+  background-color: rgb(205, 246, 205);
+  /* background-color: #b2f3b2; */
+  /* font-family: Georgia, 'Times New Roman', Times, serif; */
+
+  /* font-family: Arial, Helvetica, sans-serif; */
+  /* font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; */
+
+
+   font-family: "Work Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  
   /* background-clip: padding-box; */
+}
+
+
+
+@keyframes marquee {
+  0%   { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
 }
 
 /* .App {

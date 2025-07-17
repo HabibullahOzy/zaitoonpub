@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, signInWithPopup, updateProfile } from 'firebase/auth';
 import app from '../WebAuth/firebase.config';
 
@@ -12,9 +13,20 @@ const ContextAuth = ({children}) => {
     const [ offer, setOffer ]= useState('');
     const [cartdataset, setCartdataset]=useState('');
     const [prices, setPrices] = useState(0);
-    const [ident, setIdent] = useState('');
+    const [ident, setIdent] = useState(0);
     const [producD, setProducD]=useState('')
     const [cashonprodata,setCashonprodata]=useState(null)
+
+
+    // device id data pass
+  const localDeviceId = () => {
+  let deviceId = localStorage.getItem('device_id');
+  if (!deviceId) {
+    deviceId = uuidv4();
+    localStorage.setItem('device_id', deviceId);
+  }
+  return deviceId;
+};
 
 
     const createUserWithEP = (email, password) => {
@@ -78,7 +90,8 @@ const ContextAuth = ({children}) => {
         producD,
         setProducD,
         cashonprodata,
-        setCashonprodata
+        setCashonprodata,
+        localDeviceId
     }
     return (
         <div>

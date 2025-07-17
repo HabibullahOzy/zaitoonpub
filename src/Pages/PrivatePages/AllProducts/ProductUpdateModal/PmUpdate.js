@@ -37,7 +37,7 @@ const PmUpdate = () => {
             quantity
         }
 
-        const response = await axios.put(`http://localhost:5000/productUpdate/${data.id}`, updatedata, {
+        const response = await axios.put(`${process.env.REACT_APP_backendurl}/productUpdate/${data.id}`, updatedata, {
             headers: {
                 'Content-Type': 'application/json'
             }

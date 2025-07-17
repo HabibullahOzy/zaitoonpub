@@ -1,63 +1,38 @@
 import React from 'react';
+import ViewPdfsecond from './ViewPdfsecond';
 
 
 
 
 
 const PdfOpenModal = (pdf) => {
-console.log(pdf.pdf)
+  
     return (
         <div>
-            {/* You can open the modal using document.getElementById('ID').showModal() method */}
-            {/* <button className="btn" >open modal</button> */}
             <dialog id="my_modal_3" className="modal">
-                <div className="modal-box">
+                <div className="modal-box" style={{
+                    maxWidth: 650,
+                    maxHeight: '100vh',
+                    overflowY: 'auto',
+                    padding: 4,
+                    borderRadius: 12,
+                    backgroundColor: 'white',
+                    boxShadow: '0 8px 20px rgba(0,0,0,0.2)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}>
                     <form method="dialog">
-                        {/* if there is a button in form, it will close the modal */}
-                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                        <button className="btn btn-sm btn-circle btn-ghost bg-[rgb(8, 130, 8)] absolute right-2 top-2">✕</button>
                     </form>
-                    <div>
-
-                        <div className="flex flex-col items-center bg-gray-100">
-                            <div className="w-full max-w-2xl bg-white shadow-lg p-2 rounded-md">
-                                
-                                <iframe
-                                    src={`http://localhost:5000/uploads/${pdf.pdf}`}
-                                    width="100%"
-                                    height="650px"
-                                    title="PDF View"
-                                    style={{ border: 'none' }}>
-
-                                </iframe>
-
-
-                                {/* <Document file={`http://localhost:5000/uploads/1746865729687-cgq3 213-15-4628.pdf`} onLoadSuccess={onDocumentLoadSuccess}>
-                                    {Array.from(new Array(numPages), (el, index) => (
-                                        <Page
-                                            key={`page_${index + 1}`}
-                                            pageNumber={index + 1}
-                                            className="custom-pdf-page"
-                                        />
-                                    ))}
-                                </Document> */}
-
-
-
-                                {/* <div>
-                                    <Document file={`http://localhost:5000/uploads/1746865729687-cgq3 213-15-4628.pdf`} onLoadSuccess={onDocumentLoadSuccess}>
-                                    <Page pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false}/>
-                                </Document>
-                                <p>
-                                    Page {pageNumber} of {numPages}
-                                </p>
-                                </div> */}
-                            </div>
-
+                    <div className="flex flex-col items-center bg-gray-100">
+                        <div className="w-full max-w-2xl bg-white shadow-lg p-2 rounded-md">
+                            <ViewPdfsecond pdfUrl={pdf.pdf} />
                         </div>
                     </div>
                 </div>
-            </dialog >
-        </div >
+            </dialog>
+        </div>
     );
 };
 

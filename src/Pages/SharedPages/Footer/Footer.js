@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import flogo from "../../../assets/zaitoonPublication.jpg"
+import { Link } from 'react-router-dom';
+import { RiWhatsappFill } from 'react-icons/ri';
+import VisitorCount from './VisitorCount';
+
+
 
 
 const Footer = () => {
+
+  
   const [totalVisitors, setTotalVisitors] = useState(0);
   const [monthlyVisitors, setMonthlyVisitors] = useState(0);
   const [todaysVisitors, setTodaysVisitors] = useState(0);
@@ -36,7 +43,7 @@ const Footer = () => {
     // Track online users using sessionStorage
     const sessionKey = `user_${Math.random()}`;
     sessionStorage.setItem(sessionKey, Date.now());
-    
+
     const updateOnlineUsers = () => {
       const now = Date.now();
       const sessionEntries = Object.entries(sessionStorage);
@@ -52,15 +59,14 @@ const Footer = () => {
 
   return (
     <div >
-    
-      <footer className="footer text-slate-50 font-semibold p-10" style={{backgroundImage:'linear-gradient(to right, green, rgb(109, 218, 109))'}}>
+      <footer className="footer text-slate-50 font-semibold p-10" style={{ backgroundImage: 'linear-gradient(to right, green, rgb(109, 218, 109))' }}>
         <nav>
-         <img src={flogo} className='w-36 rounded-lg flex justify-items-center '></img>
+          <img src={flogo} className='w-36 rounded-lg flex justify-items-center '></img>
         </nav>
         <nav>
           <h6 className="footer-title">Company</h6>
           <a className="link link-hover">About us</a>
-          <a className="link link-hover">Contact</a>
+          <Link to={'/contactus'} className="link link-hover">Contact US</Link>
           <a className="link link-hover"></a>
           <a className="link link-hover"></a>
         </nav>
@@ -71,15 +77,20 @@ const Footer = () => {
           <a className="link link-hover"></a>
         </nav>
 
-        <nav className=' bg-gray-400 text-black'>
-          <h6 className="footer-title bg-green-500 p-3">Visitor counter</h6>
+        <nav className=' bg-gray-400 text-black' >
+
+          <VisitorCount></VisitorCount>
+          {/* <h6 className="footer-title bg-green-500 p-3">Visitor counter</h6>
           <div className='grid  px-3'>
-          <a className="link link-hover ">Today: {todaysVisitors} </a>
-          <a className="link link-hover">Online: {onlineUsers} </a>
-          <a className="link link-hover">Monthly: {monthlyVisitors} </a>
-          <a className="link link-hover">All:{totalVisitors} </a>
-          
-          </div>
+            <a className="link link-hover ">Today: {todaysVisitors} </a>
+            <a className="link link-hover">Online: {onlineUsers} </a>
+            <a className="link link-hover">Monthly: {monthlyVisitors} </a>
+            <a className="link link-hover">All:{totalVisitors} </a>
+
+          </div> */}
+
+          {/* <script type="text/javascript" src="https://www.free-counters.org/count/i532"></script><br/>
+ <a href='https://www.versicherungen.at/'>Versicherungen</a> <script type='text/javascript' src='https://www.whomania.com/ctr?id=5db42ab2e447643288701264f9b0c62974097b8e'></script> */}
         </nav>
       </footer>
       <footer className="footer bg-base-200 text-base-content border-base-300 border-t px-10 py-4">
@@ -141,7 +152,10 @@ const Footer = () => {
           </div>
         </nav>
       </footer>
+
     </div>
+
+    
   );
 };
 
