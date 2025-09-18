@@ -34,7 +34,7 @@ const Createdproduct = () => {
 
 
     const handleCreatProduct = async data => {
-        // console.log(data)
+        console.log(data)
         const imageFile = data.image?.[0];
         const pdfFile = data.files?.[0];
 
@@ -57,6 +57,7 @@ const Createdproduct = () => {
         formData.append('description', data.description);
         formData.append('ProductCode', data.pcode);
         formData.append('category', data.category);
+        formData.append('subCategory', data.subcategory);
         formData.append('email', user.email);
         formData.append('image', imageFile);
         formData.append('pdf', pdfFile);
@@ -64,7 +65,7 @@ const Createdproduct = () => {
         // console.log(formData)
 
         for (let [key, value] of formData.entries()) {
-            // console.log(`${key}:`, value);
+            console.log(`${key}:`, value);
         }
 
         try {
@@ -283,13 +284,15 @@ const Createdproduct = () => {
                                         <span className="label-text text-black">Product Code</span>
                                     </label>
                                     <input
-                                        {...register("pcode")}
+                                        {...register("pcode", { required: true })}
                                         type="text"
                                         defaultValue={productCode}
-                                        readOnly
-                                        // placeholder="Enter product code"
+                                        
                                         className="input input-bordered w-full"
                                     />
+                                    {errors.pcode && (
+                                        <span className="text-red-500">This field is required</span>
+                                    )}
 
                                 </div>
 
@@ -306,7 +309,7 @@ const Createdproduct = () => {
                                         >
                                             {/* <option value="">Select a category</option> */}
                                             {allcategory.map((category) => (
-                                                <option key={category._id} value={category._id}>
+                                                <option key={category._id} value={category.categname}>
                                                     {category.categname}
                                                 </option>
                                             ))}

@@ -1,174 +1,198 @@
-
-// import React, { useState, useEffect } from 'react';
-// import { Button } from 'primereact/button';
-// import { Carousel } from 'primereact/carousel';
-// import { Tag } from 'primereact/tag';
-// import { useQuery } from '@tanstack/react-query';
-
-// const RelatedPShow = ({categorys}) => {
-
-// const category = categorys || 'KG';
-
-//   const { data: relatedProducts = [], isLoading } = useQuery({
-//     queryKey: ['relatedProducts', category],
-//     queryFn: async () => {
-//       const res = await fetch(`${process.env.REACT_APP_backendurl}/categoryproducts/${category}`);
-//       if (!res.ok) throw new Error('Network response was not ok');
-//       return res.json();
-//     },
-//   });
-
-
-//   // Responsive carousel options
-//   const responsiveOptions = [
-//     { breakpoint: '1400px', numVisible: 4, numScroll: 1 },
-//     { breakpoint: '1199px', numVisible: 3, numScroll: 1 },
-//     { breakpoint: '767px', numVisible: 2, numScroll: 1 },
-//     { breakpoint: '575px', numVisible: 1, numScroll: 1 },
-//   ];
-
-//   // Stock status
-//   const getSeverity = (product) => {
-//     const quantity = parseInt(product.quantity);
-//     if (quantity > 20) return 'success';
-//     if (quantity > 0) return 'warning';
-//     return 'danger';
-//   };
-
-//   // Product card template
-//   const productTemplate = (product) => (
-//     <div className="bg-white border rounded-2xl shadow hover:shadow-md transition duration-300 overflow-hidden flex flex-col items-center text-center p-4 h-full">
-//       <img
-//         src={product.image}
-//         alt={product.nameeng}
-//         className="h-48 w-auto object-contain mb-4"
-//       />
-//       <h4 className="text-lg font-semibold text-gray-800 mb-1">{product.nameeng}</h4>
-//       <p className="text-sm text-gray-500 mb-2">{product.authorName}</p>
-//       <h6 className="text-xl font-bold text-green-600 mb-2">৳ {product.productPrice}</h6>
-//       <Tag value={product.quantity > 0 ? 'In Stock' : 'Out of Stock'} severity={getSeverity(product)} className="mb-3" />
-//       <div className="flex gap-3 mt-auto">
-//         <Button icon="pi pi-search" className="p-button-rounded p-button-info" />
-//         <Button icon="pi pi-heart-fill" className="p-button-rounded p-button-warning" />
-//       </div>
-//     </div>
-//   );
-
-//   if (isLoading) return <div className="text-center py-10">Loading related products...</div>;
-
-//   return (
-//     <div className="my-8 px-2 md:px-8">
-//       <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">Related Products</h2>
-//       <Carousel
-//         value={relatedProducts}
-//         numVisible={4}
-//         numScroll={1}
-//         responsiveOptions={responsiveOptions}
-//         itemTemplate={productTemplate}
-//         circular
-//         autoplayInterval={4000}
-//         className="custom-carousel"
-//       />
-//     </div>
-//   );
-// };
-
-  
-// export default RelatedPShow;
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Carousel } from 'primereact/carousel';
-import { Button } from 'primereact/button';
-import { Tag } from 'primereact/tag';
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+import { Card, Button } from 'flowbite-react';
+import './Relatedshow.css';
+import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { Zaitooncontext } from '../../../../../SecureContext/ContextAuth';
+import axios from 'axios';
+import { FcViewDetails } from 'react-icons/fc';
+import { FaCartFlatbed } from 'react-icons/fa6';
 
 const RelatedPShow = ({ categorys }) => {
+  const { user, producD, setProducD, localDeviceId } = useContext(Zaitooncontext);
   const [products, setProducts] = useState([]);
+  const scrollRef = useRef(null);
+  const backendURL = process.env.REACT_APP_backendurl;
 
-  const relcategory = categorys;
-  console.log(relcategory, "categoryName in RelatedPShow");
-
-  // Fetching related products from API
   const { data: nursproduct = [], isLoading } = useQuery({
-    queryKey: ['nursproduct', relcategory],
+    queryKey: ['nursproduct', categorys],
     queryFn: async () => {
-      const res = await fetch(`${process.env.REACT_APP_backendurl}/categoryproducts/${relcategory}`);
+      const res = await fetch(`${backendURL}/categoryproducts/${categorys}`);
       return res.json();
     },
   });
 
   useEffect(() => {
     if (Array.isArray(nursproduct)) {
-      // Optional: filter by category match
-      const filtered = nursproduct.filter((item) => item?.category === relcategory);
-      setProducts(filtered.slice(0, 9)); // show max 9
-    } else {
-      console.warn('Invalid data format for nursproduct:', nursproduct);
-      setProducts([]);
+      const filtered = nursproduct.filter(p => p?.category === categorys);
+      setProducts(filtered.slice(0, 20));
     }
-  }, [nursproduct]);
+  }, [nursproduct, categorys]);
 
-  const responsiveOptions = [
-    { breakpoint: '1400px', numVisible: 2, numScroll: 1 },
-    { breakpoint: '1199px', numVisible: 3, numScroll: 1 },
-    { breakpoint: '767px', numVisible: 2, numScroll: 1 },
-    { breakpoint: '575px', numVisible: 1, numScroll: 1 },
-  ];
+  // Auto-scroll loop
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (scrollRef.current) {
+        scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' });
 
-  const getSeverity = (product) => {
-    if (Number(product.quantity) === 0) return 'danger';
-    if (Number(product.quantity) <= 10) return 'warning';
-    return 'success';
+        const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+        if (scrollLeft + clientWidth >= scrollWidth - 5) {
+          scrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+        }
+      }
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const scrollLeft = () => {
+    scrollRef.current?.scrollBy({ left: -300, behavior: 'smooth' });
   };
 
-  const productTemplate = (product) => {
-    return (
-      <div className="border-1 bg-slate-100 surface-border border-round m-2 text-center py-5 px-3">
-        <div className="mb-3">
-          <img
-            src={product.image}
-            alt={product.nameeng}
-            className="w-64 h-40 object-contain shadow-2 mx-auto"
-          />
-        </div>
-        <div>
-          <h4 className="mb-1">{product.nameeng}</h4>
-          <h6 className="mt-0 mb-3">৳ {product.productPrice}</h6>
-          <Tag
-            value={
-              Number(product.quantity) === 0
-                ? 'OUT OF STOCK'
-                : Number(product.quantity) <= 10
-                ? 'LOW STOCK'
-                : 'IN STOCK'
+  const scrollRight = () => {
+    scrollRef.current?.scrollBy({ left: 300, behavior: 'smooth' });
+  };
+
+  const emaile = user?.email || localDeviceId()
+
+
+
+  const handleAddCart = async (id) => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_backendurl}/products/${id}`)
+            const email = emaile
+            console.log(email)
+            const nameeng = response?.data[0]?.nameeng
+            const namebn = response?.data[0]?.namebn
+            const namearb = response?.data[0]?.namearb
+            const image = response?.data[0]?.image
+            const productPrice = response?.data[0]?.productPrice
+            const category = response?.data[0]?.category
+            const ProductCode = response?.data[0]?.ProductCode
+            const authorName = response?.data[0]?.authorName
+            const edition = response?.data[0]?.edition
+            // const offer = offerPrice
+            const offer = response?.data[0]?.offerprice
+                        ? Math.round(response?.data[0]?.productPrice - (response?.data[0]?.offerprice * response?.data[0]?.productPrice) / 100)
+                        : response?.data[0]?.productPrice;
+            const postDate = response?.data[0]?.postDate
+
+
+            const cartProducts = {
+                id,
+                email,
+                offer,
+                nameeng,
+                namebn,
+                namearb,
+                image,
+                productPrice,
+                category,
+                ProductCode,
+                authorName,
+                edition,
+                postDate
             }
-            severity={getSeverity(product)}
-          />
-          <div className="mt-5 flex  flex-wrap gap-2 justify-content-center align-items-center">
-            <Button icon="pi pi-star-fill" className="p-button-success p-button-rounded bg-green-600 px-2">Buy now</Button>
-            <Button icon="pi pi-search" className="p-button p-button-rounded bg-green-600 px-2" >Add to cart</Button>
-          </div>
-        </div>
-      </div>
-    );
-  };
+            fetch(`${process.env.REACT_APP_backendurl}/addedCart`, {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(cartProducts)
+            })
+                .then(res => res.json())
+                .then(infoe => {
+                    // console.log(infoe)
+                    if (infoe.acknowledged) {
+                        toast.success("Producte added to cart succesfully!!");
+                        // navigate('/dashboard/allProducts')
+                    } else {
+                        toast.error("producte can't added please try again")
+                    }
+                })
+
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
 
   return (
-    <div className="card">
+    <div className="relative py-10">
+      <h2 className="text-2xl font-semibold  mb-6 text-gray-800">Related Products</h2>
+
       {isLoading ? (
-        <p>Loading related products...</p>
-      ) : products.length > 0 ? (
-        <Carousel
-          value={products}
-          numVisible={3}
-          numScroll={2}
-          responsiveOptions={responsiveOptions}
-          className="custom-carousel"
-          // circular
-          autoplayInterval={5000}
-          itemTemplate={productTemplate}
-        />
+        <p className="text-center text-gray-500">Loading...</p>
       ) : (
-        <p className="text-center text-gray-500">No related products found.</p>
+        <div className="relative">
+          {/* Arrow Buttons */}
+          <button
+            onClick={scrollLeft}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100"
+          >
+            <FaArrowLeft />
+          </button>
+          <button
+            onClick={scrollRight}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100"
+          >
+            <FaArrowRight />
+          </button>
+
+          {/* Scrollable Product Container */}
+          <div
+            ref={scrollRef}
+            className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4 no-scrollbar"
+          > 
+            {products.map((product) => (
+              <div
+                key={product._id}
+                className="snap-start shrink-0 w-[85%] sm:w-[45%] md:w-[30%] lg:w-[22%] transition-all duration-300 grid grid-cols-1 place-items-center"
+              >
+                <Card
+                  className="h-full flex flex-col justify-between border border-gray-200 shadow"
+                >
+                  <img
+                    src={product.image}
+                    alt={product.nameeng}
+                    className="w-full object-cover mb-4 rounded-lg"
+                  />
+                  <div className="md:flex lg:flex xl:flex flex justify-center gap-2 mt-auto place-items-center hover:shadow-lg transition-shadow duration-300">
+                    <button
+                      onClick={() => window.open(`/products/${product?._id}`, '_blank')}
+                      className="px-8 py-2 tooltip rounded-full bg-green-400 hover:bg-green-600 text-white tooltip-top tooltip-success"
+                      data-tip="Show Details"
+                    >
+                      <FcViewDetails className="w-5 h-5" />
+                    </button>
+
+
+
+                    <button
+                    onClick={() => handleAddCart(product?._id)}
+                    className='px-8 py-2 rounded-full bg-green-500 hover:bg-green-700 text-white tooltip tooltip-top tooltip-success' data-tip="Add to Cart"> <FaCartFlatbed className="w-8" /></button>
+                  </div>
+                  <h5 className="text-md font-bold text-gray-900 text-center">{product.nameeng}</h5>
+                  <p className="text-green-700 text-sm text-center font-semibold">
+                    ৳ {product.productPrice}
+                  </p>
+                  {/* <p className="text-xs text-center">
+                    {Number(product.quantity) === 0 ? (
+                      <span className="text-red-500 font-semibold">OUT OF STOCK</span>
+                    ) : Number(product.quantity) <= 10 ? (
+                      <span className="text-yellow-500 font-semibold">LOW STOCK</span>
+                    ) : (
+                      <span className="text-green-600 font-semibold">IN STOCK</span>
+                    )}
+                  </p> */}
+
+                </Card>
+              </div>
+            ))}
+          </div>
+        </div>
       )}
     </div>
   );

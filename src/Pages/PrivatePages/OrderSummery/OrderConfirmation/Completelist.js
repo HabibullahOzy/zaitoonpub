@@ -34,7 +34,7 @@ const Completelist = () => {
 
   // Pagination logic
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 15;
   const totalPages = Math.ceil(confirmprod.length / itemsPerPage);
 
   const paginatedData = confirmprod.slice(
@@ -70,6 +70,7 @@ const Completelist = () => {
               <th className="border px-2 py-2 text-center">Phone</th>
               {/* <th className="border px-2 py-2 text-center">Alt Phone</th> */}
               <th className="border px-2 py-2 text-center">Location</th>
+              <th className="border px-2 py-2 text-center">Or:Note</th>
               <th className="border px-2 py-2 text-center">Pay Method</th>
               <th className="border px-2 py-2 text-center">Pay Amount</th>
               <th className="border px-2 py-2 text-center">Transaction ID</th>
@@ -96,6 +97,7 @@ const Completelist = () => {
                       <span>{prodata.name}</span>
                     </div>
                   </td>
+                  
                   <td className="border px-2 py-1 text-center">{prodata?.ProductCode}</td>
                   <td className="border px-2 py-1 text-center">{prodata?.category}</td>
                   <td className="border px-2 py-1 text-center">{prodata.quantity}</td>
@@ -107,11 +109,12 @@ const Completelist = () => {
                   <td className="border px-2 py-1 text-center">{cashdata.phonenumber}</td>
                   {/* <td>{cashdata.alphonenumber}</td> */}
                   <td className="border px-2 py-1 text-center">
-                    {cashdata?.dlocation},<br />
-                    {cashdata.nationality},<br />
+                    {cashdata?.dlocation}<br />
+                    {/* {cashdata.nationality},<br />
                     {cashdata.city},<br />
-                    {cashdata.area}
+                    {cashdata.area} */}
                   </td>
+                  <td className="border px-2 py-1 text-center">{prodata?.ordnote}</td>
                   <td className="border px-2 py-1 text-center">{cashdata?.payMethod}</td>
                   <td className="border px-2 py-1 text-center">{cashdata?.amount}</td>
                   <td className="border px-2 py-1 text-center">{cashdata?.transactionId}</td>

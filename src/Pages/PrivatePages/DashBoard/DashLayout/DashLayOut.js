@@ -4,9 +4,11 @@ import { Outlet } from 'react-router-dom';
 
 const DashLayOut = () => {
     return (
-        <div className='flex'>
+        <div className=''>
             <DHeader></DHeader>
-            <Outlet></Outlet>
+            <div className='w-11/12 mx-auto'>
+                <Outlet></Outlet>
+            </div>
         </div>
     );
 };

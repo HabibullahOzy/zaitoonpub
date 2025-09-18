@@ -191,6 +191,10 @@ const router = createBrowserRouter([
                 element: <AdminSecurPages><Marqsetup></Marqsetup></AdminSecurPages>
             },
             {
+                path: "/dashboard/superadmin/marqsetup",
+                element: <SuperAdmin><Marqsetup></Marqsetup></SuperAdmin>
+            },
+            {
                 path: "/dashboard/allcategory",
                 element: <AdminSecurPages><AllCategory></AllCategory></AdminSecurPages>,
             },

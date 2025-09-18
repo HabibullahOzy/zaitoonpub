@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { FaStar } from 'react-icons/fa';
+import { FcMoneyTransfer } from 'react-icons/fc';
 
 const OrderPaymentmodal = ({ paydata }) => {
 
@@ -43,8 +44,9 @@ const OrderPaymentmodal = ({ paydata }) => {
   onSubmit={handleSubmit(onSubmit)}
   className="max-w-lg mx-auto bg-white p-8 rounded-2xl shadow-2xl space-y-6"
 >
-  <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">
-    💸 Payment Submission Form
+  <h2 className="text-2xl font-bold text-center text-gray-700 mb-6 flex">
+    {/* 💸  */}
+    <FcMoneyTransfer />Payment Data Submission Form
   </h2>
 
   {/* Name Field */}

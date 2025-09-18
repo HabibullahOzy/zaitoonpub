@@ -84,7 +84,7 @@ const DHeader = () => {
         return () => clearInterval(interval); // cleanup on unmount
     }, []);
     return (
-        <div className=''>
+        <div className='flex flex-col md:flex-row w-11/12 m-auto justify-between items-center'>
 
 
             {/* // <div className="navbar w-11/12 m-auto text-black">
@@ -171,12 +171,12 @@ const DHeader = () => {
         //     </div>
         // </div> */}
 
-            <div className="flex min-h-10  justify-center">
+            <div className="flex min-h-10 items-center justify-center">
                 <button className='btn btn-success mt-10' onClick={() => setIsOpen(true)}><ImMenu2 className='w-10' /></button>
             </div>
-            <Drawer backdrop={false} open={isOpen} onClose={handleClose} style={{ backgroundColor: "rgb(179, 255, 179)" }}>
+            <Drawer backdrop={true} open={isOpen} onClose={handleClose} style={{ backgroundColor: "rgb(179, 255, 179)" }}>
                 <DrawerHeader title="" titleIcon={() => <><Link to={'/'} className="btn btn-circle"><img className=' w-20 rounded-full' src={img} alt=''></img></Link>
-                    <h1 className='colortext px-2 font-extrabold logowrihidden'>ZAIT<span className='text-yellow-300'>OO</span>N PUBLICATION</h1></>} />
+                    <h1 className='colortext px-2 font-bold text-xl logowrihidden'>ZAIT<span className='text-yellow-400'>OO</span>N PUBLICATION</h1></>} />
                 <DrawerItems>
                     <Sidebar
                         aria-label="Sidebar with multi-level dropdown example"
@@ -298,7 +298,7 @@ const DHeader = () => {
                                                     </Link>
 
 
-                                                    <Link to={'/dashboard/marqsetup'}>
+                                                    <Link to={'/dashboard/superadmin/marqsetup'}>
                                                         <SidebarItem icon={BsFillMenuButtonWideFill}>
                                                             Marq Setup
                                                         </SidebarItem>

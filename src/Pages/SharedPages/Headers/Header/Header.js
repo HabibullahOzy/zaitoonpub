@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import img from "../../../../assets/zaitoonPublication.jpg"
 import img1 from "../../../../assets/profile.png"
@@ -117,12 +117,28 @@ const Header = () => {
     //     },
     // });
 
+
+
+
+     const [scrolled, setScrolled] = useState(false);
+    
+      const handleScroll = () => {
+        const offset = window.scrollY;
+        setScrolled(offset > 50);
+      };
+    
+      useEffect(() => {
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+      }, []);
+
     return (
+        <header className={`header ${scrolled ? "scrolled" : ""}`}>
         <div className=' head-color lg:px-36'>
             <div className="navbar">
                 <div className="navbar-start">
                     <Link to={'/'} className="btn btn-circle"><img className=' w-20 rounded-full' src={img} alt=''></img></Link>
-                    <h1 className='colortext px-2 font-extrabold sm:block hidden'>ZAIT<span className='text-yellow-300'>OO</span>N PUBLICATION</h1>
+                    <h1 className='colortext px-2 font-bold sm:block hidden text-2xl'>ZAIT<span className='text-yellow-500'>OO</span>N PUBLICATION</h1>
                 </div>
 
 
@@ -416,6 +432,8 @@ const Header = () => {
                 </DrawerItems>
             </Drawer>
         </div >
+
+        </header>
     );
 };
 

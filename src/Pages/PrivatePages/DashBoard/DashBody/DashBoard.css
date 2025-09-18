@@ -12,3 +12,54 @@
 
 
 
+.cardb {
+      background: linear-gradient(to right, #4ade80, #22c55e);
+      color: white;
+      /* padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); */
+      /* text-align: center;
+      width: 90%;
+      max-width: 250px;
+      margin: 2rem auto;
+      font-family: sans-serif;
+      transition: transform 0.3s ease-in-out; */
+    }
+
+    .cardb:hover {
+      transform: translateY(-5px);
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-count {
+      font-size: 2.5rem;
+      font-weight: bold;
+      transition: all 0.3s ease-in-out;
+    }
+
+    /* Responsive text scaling */
+    @media (max-width: 400px) {
+      .card-title {
+        font-size: 1rem;
+      }
+      .card-count {
+        font-size: 2rem;
+      }
+    }
+
+
+     @media (max-width: 400px) {
+      .cardb {
+        display: grid;
+      }
+      .card-count {
+        font-size: 2rem;
+      }
+    }
+
+
+

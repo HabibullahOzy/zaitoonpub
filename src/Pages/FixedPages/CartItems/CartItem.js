@@ -20,19 +20,19 @@ const CartItem = () => {
   const [paidmodalData, setPaidModalData] = useState([]);
   const [paidshowModal, setPaidShowModal] = useState(false);
 
-  const navigate =useNavigate();
+  const navigate = useNavigate();
 
-  const email =user?.email || localDeviceId()
+  const email = user?.email || localDeviceId()
 
 
-     const { data: cartItems = [] , refetch } = useQuery({
-        queryKey: ['cartItems'],
-        queryFn: async () => {
-          const res = await fetch(`${process.env.REACT_APP_backendurl}/cashOnpurc/${email}`);
-          return await res.json();
-        },
-      });
- 
+  const { data: cartItems = [], refetch } = useQuery({
+    queryKey: ['cartItems'],
+    queryFn: async () => {
+      const res = await fetch(`${process.env.REACT_APP_backendurl}/cashOnpurc/${email}`);
+      return await res.json();
+    },
+  });
+
 
   useEffect(() => {
     if (cartItems.length > 0) {
@@ -66,12 +66,12 @@ const CartItem = () => {
 
 
   const [openModal, setOpenModal] = useState(false);
-   const [dataforWish, setdataforWish] = useState();
+  const [dataforWish, setdataforWish] = useState();
 
-   const deleteOpenModal=(item)=>{
+  const deleteOpenModal = (item) => {
     setOpenModal(true)
     setdataforWish(item)
-   }
+  }
 
 
 
@@ -90,40 +90,40 @@ const CartItem = () => {
   };
 
 
-   // Wish list section
+  // Wish list section
 
-    const addpdWishList = async (product) => {
-        if (!user) {
-            toast.error("Please login first to add to wishlist");
-            return;
-        }
-
-        const wishlistItem = {
-            email: user?.email,
-            product
-        };
-
-        try {
-            const response = await fetch(`${process.env.REACT_APP_backendurl}/wishList`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(wishlistItem)
-            });
-
-            const data = await response.json();
-            if (data.acknowledged) {
-                toast.success("Product added to wishlist successfully");
-                setOpenModal(false)
-                navigate(`/wishList/${user?.email}`);
-                // refetch();
-            } else {
-                toast.error("Failed to add product to wishlist");
-            }
-        } catch (error) {
-            console.error("Error adding to wishlist:", error);
-            toast.error("An error occurred while adding to wishlist");
-        }
+  const addpdWishList = async (product) => {
+    if (!user) {
+      toast.error("Please login first to add to wishlist");
+      return;
     }
+
+    const wishlistItem = {
+      email: user?.email,
+      product
+    };
+
+    try {
+      const response = await fetch(`${process.env.REACT_APP_backendurl}/wishList`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(wishlistItem)
+      });
+
+      const data = await response.json();
+      if (data.acknowledged) {
+        toast.success("Product added to wishlist successfully");
+        setOpenModal(false)
+        navigate(`/wishList/${user?.email}`);
+        // refetch();
+      } else {
+        toast.error("Failed to add product to wishlist");
+      }
+    } catch (error) {
+      console.error("Error adding to wishlist:", error);
+      toast.error("An error occurred while adding to wishlist");
+    }
+  }
 
   const openCashOnPurchase = () => {
     const withQuantities = cartItems.map(item => ({
@@ -147,12 +147,11 @@ const CartItem = () => {
 
 
 
-   
+
 
   return (
     <div
       className="min-h-screen pt-20 w-full mx-auto rounded-lg"
-      
     >
       <h1 className="text-center text-3xl font-bold mb-6 text-green-900">🛒 Shopping Cart</h1>
 
@@ -284,16 +283,21 @@ const CartItem = () => {
           <div className="text-center">
             <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-red-500 dark:text-gray-200" />
             <h3 className="mb-5 text-lg font-normal text-black dark:text-gray-400">
-              আপনি কি পছন্দের তালিকায় যুক্ত করতে চান?
+              যেকোন মুহূর্তে স্টক শেষ হয়ে গেলে পরবর্তীতে পণ্যটি না-ও পেতে পারেন। আপনি কি নিশ্চিতভাবে পণ্যটি কার্ট থেকে মুছে ফেলতে চান?
             </h3>
             <div className="flex justify-center gap-4">
-              <button color="failure" className='btn btn-sm bg-green-500 text-white' onClick={() => addpdWishList(dataforWish)}>
-                {"Yes, sure"}
+              <button color="failure" className='btn btn-sm bg-green-500 text-white' onClick={() => setOpenModal(false)}>
+                না
               </button>
               <button color="gray" className='btn btn-sm bg-red-500 text-white' onClick={() => handleDelete(dataforWish?._id)}>
-                No, cancel
+                হাঁ
               </button>
             </div>
+            {
+              user?.email ? <button color="failure" className='btn btn-sm bg-yellow-100 text-green-700 mt-3' onClick={() => addpdWishList(dataforWish)}>
+                পছন্দের তালিকায় রাখুন
+              </button> : ''
+            }
           </div>
         </ModalBody>
       </Modal>

@@ -4,21 +4,21 @@ import './SHeader.css';
 
 const SHeader = () => {
 
-    const [scrolled, setScrolled] = useState(false);
+  //   const [scrolled, setScrolled] = useState(false);
 
-  const handleScroll = () => {
-    const offset = window.scrollY;
-    setScrolled(offset > 50);
-  };
+  // const handleScroll = () => {
+  //   const offset = window.scrollY;
+  //   setScrolled(offset > 50);
+  // };
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  // useEffect(() => {
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // }, []);
 
 
     return (
-         <header className={`header ${scrolled ? "scrolled" : ""}`}>
+        //  <header className={`header ${scrolled ? "scrolled" : ""}`}>
       <div className="container">
        <img src={img1} alt="Zaitoon Logo" className="h-[80px]" />
        
@@ -30,7 +30,7 @@ const SHeader = () => {
           <a href="#contact">Contact</a>
         </nav> */}
       </div>
-    </header>
+    // </header>
     );
 };
 

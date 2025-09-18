@@ -106,6 +106,13 @@ const CODInvoice = ({ codInvdata }) => {
     //     }
     // };
 
+
+    const ordoffer = (codInvdata?.totalPrice || 0) - 150;
+    const offerperc = Number(codInvdata?.offer) || 0;
+    const offerPrice = codInvdata?.offer
+        ? Math.round(ordoffer - (offerperc * ordoffer) / 100) + 150
+        : codInvdata?.totalPrice;
+
     return (
         <div style={{ padding: "1rem", maxWidth: "900px", margin: "0 auto" }}>
             {/* Buttons */}
@@ -207,25 +214,55 @@ const CODInvoice = ({ codInvdata }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {codInvdata?.productdata?.map((item, i) => (
-                            <tr key={i}>
-                                <td style={tdStyle}>{item?.nameeng}</td>
-                                <td style={tdStyle}>{item?.ProductCode}</td>
-                                <td style={tdStyle}>{item?.quantity}</td>
-                                <td style={tdStyle}>{item?.offer}</td>
-                                <td style={tdStyle}>{item?.total}</td>
-                            </tr>
-                        ))}
+                        {codInvdata?.productdata?.map((item, i) => {
+                            // calculate offer price if needed
+                            const ordoffer = codInvdata?.totalPrice - 150;
+                            const offerperc = Number(codInvdata?.offer) || 0;
+                            const offerPrice = codInvdata?.offer
+                                ? Math.round(ordoffer - (offerperc * ordoffer) / 100)
+                                : codInvdata?.totalPrice;
+                            return (
+                                <tr key={i}>
+                                    <td style={tdStyle}>{item?.nameeng}</td>
+                                    <td style={tdStyle}>{item?.ProductCode}</td>
+                                    <td style={tdStyle}>{item?.quantity}</td>
+                                    <td style={tdStyle}>{item?.offer}</td>
+                                    <td style={tdStyle}>{item?.total}</td>
+                                </tr>
+                            )
+                        })}
                     </tbody>
                 </table>
 
-                <div style={{ textAlign: "right", marginTop: "1rem" }}>
-                    <h4 className="pt-5 text-[13] font-semibold">
-                        Delivary Charge: ৳ 150
+                <div className="flex justify-between p-10" 
+                // style={{ textAlign: "right", marginTop: "1rem" }}
+                >
+                    <div>
+                        <h4 className="pt-5 text-[13px] font-semibold">
+                        SubTotal: ৳ {ordoffer.toFixed(2)}
                     </h4>
-                    <h4 className="pt-5 text-[16] font-bold">
-                        Total: ৳ {codInvdata?.totalPrice?.toFixed(2)}
+                        {
+                            codInvdata?.offer ? (
+                                <h4 className="pt-5 text-[13px] font-semibold text-red-500">
+                                    Discount: {codInvdata?.offer}% ( your save  {( (offerperc * ordoffer) / 100).toFixed(2)} ৳)
+                                   
+                                </h4>
+                            ) : (
+                                <h4 className="pt-5 text-[13px] font-semibold">
+                                    Discount: - 
+                                </h4>
+                            )
+                        }
+                    
+                    </div>
+                   <div>
+                     <h4 className="pt-5 text-[13px] font-semibold">
+                        Delivery Charge: ৳ 150
                     </h4>
+                    <h4 className="pt-5 text-[16px] font-bold">
+                        Pay Total: ৳ {offerPrice.toFixed(2)}
+                    </h4>
+                   </div>
                 </div>
 
 

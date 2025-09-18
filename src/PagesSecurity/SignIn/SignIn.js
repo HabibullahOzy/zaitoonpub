@@ -8,6 +8,7 @@ import { GoogleAuthProvider } from 'firebase/auth';
 import useAdmin from '../../hooks/adminHooks/useAdmin';
 import useSuperAdmin from '../../hooks/superAdmin/superAdmin';
 import { useQuery } from '@tanstack/react-query';
+import { PiPhonePlusFill } from 'react-icons/pi';
 
 import axios from 'axios';
 import { t } from 'i18next';
@@ -169,8 +170,9 @@ const SignIn = () => {
                         </form>
 
                         <div className='text-center'>
-                            <button onClick={handlegoogleLogin}><FcGoogle /></button>
-                            {/* <button onClick={handleGithubLogIn} className='ml-3 text-sky-500'><AiFillGithub /></button> */}
+                            <button onClick={handlegoogleLogin}><FcGoogle className='text-2xl'/></button>
+                            <button  className='ml-3 text-sky-500'><PiPhonePlusFill className='text-2xl'/></button>
+                        
                         </div>
 
                         <p className='text-center mb-5 text-black'>If you do not have an account  <Link to={'/signUp'} className='text-blue-500'>Signup</Link></p>

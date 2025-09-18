@@ -1,12 +1,18 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import React, { useState } from 'react';
+import { Modal, ModalBody, ModalHeader } from 'flowbite-react';
+import React, { useContext, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { BiSolidOffer } from 'react-icons/bi';
 import { FaTrashAlt } from 'react-icons/fa';
 import { TbPlayerTrackNextFilled, TbPlayerTrackPrevFilled } from 'react-icons/tb';
+import { Zaitooncontext } from '../../../../SecureContext/ContextAuth';
+import { HiOutlineTag } from 'react-icons/hi';
 
 const PendingOrder = () => {
 
+  const {user}= useContext(Zaitooncontext)
 
   // const [openModalId, setOpenModalId] = useState(null);
   // const [status, setStatus] = useState('');
@@ -59,6 +65,44 @@ const PendingOrder = () => {
     refetch();
   };
 
+
+
+
+  // offer set start
+  const [openoffermodal, setOpenoffermodal] = useState(false);
+  const [orderoffer, setOrderoffer] = useState();
+
+
+  const handlesetpenoffer = (id) => {
+    setOpenoffermodal(true)
+    // console.log(id)
+    setOrderoffer(id)
+
+  }
+
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+
+  const onSubmit = async (data) => {
+    const offerCr = user?.email
+    const offer = data.offerord
+    const paymentData = {
+      offerCr,
+      offer
+    }
+    // console.log(paymentData)
+
+    const res = await axios.put(`${process.env.REACT_APP_backendurl}/orderoffer/${orderoffer}`, paymentData)
+    // console.log(res)
+    res?.status ? toast.success('Offer Data Added Successfully') : toast.error('Something went wrong, please try again later');
+    reset();
+    setOpenoffermodal(false)
+    toast.success('Offer Set Successfully')
+  }
+  // offer set end
+
+
+
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
   const totalPages = Math.ceil(cashonprod.length / itemsPerPage);
@@ -100,6 +144,7 @@ const PendingOrder = () => {
               <th className="border px-2 py-2">Pay Date</th>
               {/* <th className="border px-2 py-2">Order Status</th> */}
               <th className="border px-2 py-2">Status</th>
+              {/* <th className="border px-2 py-2"></th> */}
               <th className="border px-2 py-2">Action</th>
             </tr>
           </thead>
@@ -137,11 +182,21 @@ const PendingOrder = () => {
 
                         <button
                           onClick={() => {
-                            handleConfirmOrder(cashdata._id);
+                            handleConfirmOrder(cashdata?._id);
                           }}
                           className="bg-green-600 btn-sm btn text-white px-3 py-1 rounded text-sm"
                         >
                           Confirm
+                        </button>
+
+
+
+                        <button
+                          onClick={() => handlesetpenoffer(cashdata?._id)}
+                          className=" text-red-400 px-1 tooltip tooltip-success tooltip-top"
+                          data-tip="Set Offer"
+                        >
+                          <BiSolidOffer className='text-2xl' />
                         </button>
 
 
@@ -214,6 +269,54 @@ const PendingOrder = () => {
           </button>
         </div>
       )}
+
+
+
+
+
+      <Modal show={openoffermodal} size="md" onClose={() => setOpenoffermodal(false)} popup>
+              <ModalHeader />
+              <ModalBody>
+                <div className="text-center">
+                  <HiOutlineTag className="mx-auto mb-4 h-14 w-14 text-green-500" />
+                  <h3 className="mb-5 text-lg font-semibold text-black">
+                    Set offers for this order
+                  </h3>
+      
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                  {/* Input field */}
+                  <input
+                    type="number"
+                    placeholder="Offer %"
+                    {...register("offerord", { required: true, min: 1, max: 100 })}
+                    className="w-full p-2 border text-black border-gray-300 rounded-lg 
+                               focus:ring-2 focus:ring-green-400 outline-none mb-2"
+                  />
+      
+                  {errors.offerord && (
+                    <p className="text-red-500 text-sm mb-3">Offer must be between 1% and 100%</p>
+                  )}
+      
+                  {/* Buttons */}
+                  <div className="flex justify-center gap-4">
+                    <button
+                      type="button"
+                      className="btn btn-sm bg-gray-400 text-white px-4 py-2 rounded-md"
+                      onClick={() => setOpenoffermodal(false)}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="btn btn-sm bg-green-500 text-white px-4 py-2 rounded-md"
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </form>
+                </div>
+              </ModalBody>
+            </Modal>
 
     </div>
   );

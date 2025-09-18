@@ -3,5 +3,26 @@
 }
 
 .head-color{
-    background-image: linear-gradient(to left, rgb(25, 79, 25), rgb(109, 218, 109));
+    /* background-image: linear-gradient(to left, rgb(25, 79, 25), rgb(109, 218, 109)); */
+    background-image: linear-gradient(to left, rgb(25, 79, 25), rgb(168, 255, 168));
+}
+
+.header {
+    width: 100%;
+    /* padding: 7px 0; */
+    background: #b1f3ab;
+    /* color: white; */
+    transition: all 0.3s ease;
+    z-index: 1000;
+
+}
+
+.header.scrolled {
+    position: fixed;
+    top: 0;
+    background: transparent;
+    /* background: #2da922; */
+    color: #333;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* padding: 10px 0; */
 }

@@ -6,6 +6,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { FcGoogle } from 'react-icons/fc';
 import { GoogleAuthProvider } from 'firebase/auth';
 import axios from 'axios';
+import { PiPhonePlusFill } from 'react-icons/pi';
 
 const SignUP = () => {
     const { user, createUserWithEP, addedUpdateUser, signInwithGoogle } = useContext(Zaitooncontext);
@@ -217,7 +218,7 @@ const SignUP = () => {
 
                         <div className='text-center'>
                             <button onClick={handlegoogleLogin}><FcGoogle /></button>
-                            {/* <button onClick={""} className='ml-3 text-sky-500'><AiFillGithub /></button> */}
+                            <button  className='ml-3 text-sky-500'><PiPhonePlusFill className='text-2xl'/></button>
                         </div>
 
                         <p className='text-center mb-5 text-black'>Alredy you have an account <Link to={'/signIn'} className='text-blue-500'>Login</Link></p>

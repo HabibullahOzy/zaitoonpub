@@ -35,7 +35,7 @@ const ReportOrders = () => {
   const { data: orders = [], isLoading } = useQuery({
     queryKey: ["orders"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:5000/orders");
+      const res = await fetch(`${process.env.REACT_APP_backendurl}/orders`);
       return res.json();
     },
   });

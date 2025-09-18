@@ -1,59 +1,73 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import flogo from "../../../assets/zaitoonPublication.jpg"
 import { Link } from 'react-router-dom';
 import { RiWhatsappFill } from 'react-icons/ri';
 import VisitorCount from './VisitorCount';
+import axios from 'axios';
+import { v4 as uuidv4 } from "uuid"
+import { Zaitooncontext } from '../../../SecureContext/ContextAuth';
 
 
 
 
 const Footer = () => {
 
-  
-  const [totalVisitors, setTotalVisitors] = useState(0);
-  const [monthlyVisitors, setMonthlyVisitors] = useState(0);
-  const [todaysVisitors, setTodaysVisitors] = useState(0);
-  const [onlineUsers, setOnlineUsers] = useState(0);
+  const { user, localDeviceId } = useContext(Zaitooncontext);
+
+
+
+
+
+  const [stats, setStats] = useState({
+    today: 0,
+    yesterday: 0,
+    month: 0,
+    total: 0,
+  });
+
+  console.log(stats);
+
 
   useEffect(() => {
-    const now = new Date();
-    const todayKey = now.toISOString().split('T')[0]; // YYYY-MM-DD format
-    const monthKey = `${now.getFullYear()}-${now.getMonth() + 1}`;
+    // const backendUrl = process.env.REACT_APP_backendurl || "http://localhost:5000";
 
-    // Fetch stored values
-    let storedTotal = parseInt(localStorage.getItem("totalVisitors")) || 0;
-    let storedMonthly = JSON.parse(localStorage.getItem("monthlyVisitors")) || {};
-    let storedToday = JSON.parse(localStorage.getItem("todaysVisitors")) || {};
+    let deviceCode = localDeviceId() || localStorage.getItem("deviceCode");
+    // let deviceCode = localStorage.getItem("deviceCode");
+    // if (!deviceCode) {
+    //   deviceCode = uuidv4();
+    //   localStorage.setItem("deviceCode", deviceCode);
+    // }
 
-    // Update total visitors
-    storedTotal += 1;
-    localStorage.setItem("totalVisitors", storedTotal);
-    setTotalVisitors(storedTotal);
+    // const lastTracked = stats
+    const today = new Date().toDateString();
 
-    // Update monthly visitors
-    storedMonthly[monthKey] = (storedMonthly[monthKey] || 0) + 1;
-    localStorage.setItem("monthlyVisitors", JSON.stringify(storedMonthly));
-    setMonthlyVisitors(storedMonthly[monthKey]);
+    // if (lastTracked !== today) {
+    axios
+      .post(`${process.env.REACT_APP_backendurl}/api/track`, { deviceCode })
+      .then(() => {
+        localStorage.setItem("visitor-tracked-date", today);
+        console.log(today, deviceCode)
+      })
+      .catch((err) => {
+        console.warn("Visitor tracking failed", err);
+      });
+    // }
+  }, []);
 
-    // Update today's visitors
-    storedToday[todayKey] = (storedToday[todayKey] || 0) + 1;
-    localStorage.setItem("todaysVisitors", JSON.stringify(storedToday));
-    setTodaysVisitors(storedToday[todayKey]);
 
-    // Track online users using sessionStorage
-    const sessionKey = `user_${Math.random()}`;
-    sessionStorage.setItem(sessionKey, Date.now());
 
-    const updateOnlineUsers = () => {
-      const now = Date.now();
-      const sessionEntries = Object.entries(sessionStorage);
-      const activeUsers = sessionEntries.filter(([key, value]) => now - parseInt(value) < 60000).length; // 1 min active
-      setOnlineUsers(activeUsers);
+
+  // Load stats
+  useEffect(() => {
+    const loadStats = async () => {
+      try {
+        const res = await axios.get(`${process.env.REACT_APP_backendurl}/api/visitor-stats`);
+        setStats(res.data);
+      } catch (err) {
+        console.error("Failed to fetch visitor stats", err);
+      }
     };
-
-    updateOnlineUsers();
-    const interval = setInterval(updateOnlineUsers, 5000);
-    return () => clearInterval(interval);
+    loadStats();
   }, []);
 
 
@@ -77,20 +91,18 @@ const Footer = () => {
           <a className="link link-hover"></a>
         </nav>
 
-        <nav className=' bg-gray-400 text-black' >
+        <nav className='  text-black' >
 
-          <VisitorCount></VisitorCount>
-          {/* <h6 className="footer-title bg-green-500 p-3">Visitor counter</h6>
-          <div className='grid  px-3'>
-            <a className="link link-hover ">Today: {todaysVisitors} </a>
-            <a className="link link-hover">Online: {onlineUsers} </a>
-            <a className="link link-hover">Monthly: {monthlyVisitors} </a>
-            <a className="link link-hover">All:{totalVisitors} </a>
+          <a href='https://cloud.umami.is/share/0dT48ccbfkcuo39f/zaitoonpublication.com' target='_blank' className="bg-gray-400">
 
-          </div> */}
+            <h6 className=" bg-green-500 p-3">Visitor counter</h6>
+              <p className="px-3 pt-2">👁️ Today: {stats.today}</p>
+              <p className="px-3">👁️ Yesterday: {stats.yesterday}</p>
+              <p className="px-3">📅 Monthly: {stats.month}</p>
+              <p className="px-3 pb-2">🌐 Total: {stats.total}</p>
 
-          {/* <script type="text/javascript" src="https://www.free-counters.org/count/i532"></script><br/>
- <a href='https://www.versicherungen.at/'>Versicherungen</a> <script type='text/javascript' src='https://www.whomania.com/ctr?id=5db42ab2e447643288701264f9b0c62974097b8e'></script> */}
+          </a>
+
         </nav>
       </footer>
       <footer className="footer bg-base-200 text-base-content border-base-300 border-t px-10 py-4">
@@ -155,7 +167,7 @@ const Footer = () => {
 
     </div>
 
-    
+
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Link, useLoaderData, useNavigate } from 'react-router-dom';
 import { Zaitooncontext } from '../../../../SecureContext/ContextAuth';
 import { FaCartFlatbed, FaHeartCirclePlus } from 'react-icons/fa6';
@@ -22,11 +22,12 @@ import { FaShoppingBag } from 'react-icons/fa';
 import BuyNowpdModa from './BuyNowpdModal/BuyNowpdModa';
 import SharebookSocialModal from './ShareBook/SharebookSocialModal';
 import RelatedPShow from './RelatedProducts/RelatedPShow';
+import { FcOk } from 'react-icons/fc';
 
 const ProductsDetails = () => {
     const { user, producD, setProducD, localDeviceId } = useContext(Zaitooncontext);
     const dataes = useLoaderData();
-    const [modalOpen, setModalOpen] = useState(null)
+    const [modalOpen, setModalOpen] = useState(false);
     const [rating, setRating] = useState(0);
     const [showModal, setShowModal] = useState(false);
     const [reviewinfo, setReviewinfo] = useState()
@@ -34,6 +35,7 @@ const ProductsDetails = () => {
     const [redata, setRedata] = useState()
     const navigate = useNavigate();
     // console.log(redata)
+
 
 
     const emaile = user?.email || localDeviceId()
@@ -193,6 +195,24 @@ const ProductsDetails = () => {
         setShareProduct(product);
     }
 
+const [orderCou, setOrderCou] = useState()
+// console.log(dataes?.ProductCode)
+     useEffect(() => {
+        
+
+        try {
+             dataes.map(async (info) => {
+            const res = await axios.get(`${process.env.REACT_APP_backendurl}/ordercount/${info?.ProductCode}`);
+                    const orderCou = res.data
+                    // console.log(orderCou.totalQuantity)
+                    setOrderCou(orderCou)
+                    
+})}      
+        catch (error) {
+
+        }
+    }, []);
+
     return (
         <div className='grid '>
             {
@@ -207,7 +227,10 @@ const ProductsDetails = () => {
 
                             <div className='lg:flex '>
                                 <div className='lg:w-1/2 grid justify-center'>
-                                    <button onClick={() => document.getElementById('my_modal_3').showModal()}>
+                                    <button
+                                        // onClick={() => document.getElementById('my_modal_3').showModal()}
+                                        onClick={() => setModalOpen(true)} className="tooltip tooltip-success" data-tip="Some Read একটু পড়ে দেখুন"
+                                    >
                                         <figure className="border border-spacing-2 flex flex-grow shadow-md shadow-lime-400 border-emerald-400 p-5">
                                             <img src={data.image} alt="" className='lg:w-80 object-contain transition-transform duration-300 hover:scale-105' />
                                             <p className='p-tex font-semibold'>একটু পড়ে দেখুন</p>
@@ -272,6 +295,13 @@ const ProductsDetails = () => {
                                             <p className='font-semibold text-xl text-green-600'>Tk {data?.productPrice}৳</p>
                                         )}
                                     </h1>
+
+
+                                    <div className='flex gap-2'>
+                                       <FcOk /> In Stock<>{
+orderCou?.totalQuantity ? <p className='text-green-600 font-semibold'>{`${data?.quantity - orderCou?.totalQuantity}`}</p> : <p className='text-green-600 font-semibold'>{data?.quantity}</p>
+                                       }</> + copies available
+                                    </div>
 
 
                                     {/* products action button */}
@@ -434,9 +464,9 @@ const ProductsDetails = () => {
 
 
 
-            <PdfOpenModal pdf={producD.pdf}>
-                modalOpen={modalOpen}
-                setModalOpen={setModalOpen}
+            <PdfOpenModal pdf={producD.pdf} modalOpen={modalOpen}
+                onClose={() => setModalOpen(false)}>
+
             </PdfOpenModal>
 
 

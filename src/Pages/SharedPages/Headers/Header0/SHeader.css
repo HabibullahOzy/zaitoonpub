@@ -1,4 +1,4 @@
-.header {
+/* .header {
     width: 100%;
     padding: 7px 0;
     background: #b1f3ab;
@@ -6,23 +6,22 @@
     transition: all 0.3s ease;
     z-index: 1000;
 
-}
-
+} */
+/*
 .header.scrolled {
     position: fixed;
     top: 0;
     background: transparent;
-    /* background: #2da922; */
     color: #333;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     padding: 10px 0;
-}
+} */
 
 .container {
     max-width: 100%;
     margin: 0 auto;
     height: 80px;
-    padding: 0 20px;
+    /* padding: 5px; */
     display: flex;
     justify-content: space-between;
     align-items: center;

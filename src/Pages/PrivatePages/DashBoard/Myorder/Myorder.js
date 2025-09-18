@@ -108,7 +108,6 @@ const Myorder = () => {
                           payment data
                         </button>
                         }
-                        
                       </div>
                     )}
                   </td>
@@ -162,9 +161,9 @@ const Myorder = () => {
       {/*Order Payment confermation Modal */}
       {showModal && (
         <div className="modal modal-open">
-          <div className="modal-box max-w-4xl w-full" style={{ backgroundColor: "#baefba" }}>
+          <div className="modal-box w-full" style={{ backgroundColor: "#baefba" }}>
             <div className="modal-action">
-              <button className="btn" onClick={() => setShowModal(false)}>✕</button>
+              <button className="p-2 rounded-[100%] bg-green-400 hover:bg-green-600" onClick={() => setShowModal(false)}>✕</button>
             </div>
             <OrderPaymentmodal paydata={orderPaymeData} />
           </div>
