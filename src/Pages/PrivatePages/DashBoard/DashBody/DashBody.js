@@ -1,15 +1,14 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import './DashBoard.css';
-import { MdOutlinePendingActions } from 'react-icons/md';
-import { AiFillProduct } from 'react-icons/ai';
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Zaitooncontext } from "../../../../SecureContext/ContextAuth";
 
-import { useQuery } from "@tanstack/react-query";
 import OrderSchart from "./OrderSummarychart/OrderSchart";
 import OnlyOrderCou from "./OrderSummarychart/OnlyOrderCou/OnlyOrderCou";
-import { ArrowDownRight, ArrowUpRight, BarChart2, CheckCircle, Package, ShoppingCart, Users } from "lucide-react";
+import { BarChart2, CheckCircle, ShoppingCart, Users } from "lucide-react";
+import Visitorshow from "./VisitorSummery/Visitorshow";
+
 
 // Sample data: dates & order quantity (dates in YYYY-MM-DD format)
 // const allData = [
@@ -127,12 +126,13 @@ const DashBody = () => {
     }, []);
 
 
-// Completed Orders
+    // Completed Orders
 
     const [viewComplete, setViewComplete] = useState(0)
+  
 
 
- useEffect(() => {
+    useEffect(() => {
         let start = 0;
 
         try {
@@ -140,6 +140,8 @@ const DashBody = () => {
                 .then((res) => {
                     const allcomplete = res.data
                     // console.log(allusers)
+
+                    setViewtotalsels(res?.data.reduce((total, order) => total + order.totalPrice, 0));
 
                     const end = allcomplete.length;
                     // totalUsers;
@@ -173,7 +175,7 @@ const DashBody = () => {
     const [viewConfirm, setViewConfirm] = useState(0)
 
 
- useEffect(() => {
+    useEffect(() => {
         let start = 0;
 
         try {
@@ -209,12 +211,12 @@ const DashBody = () => {
 
 
 
-    //ViewConfirm Orders
+    //ViewCancel Orders
 
     const [viewCancel, setViewCancel] = useState(0)
 
 
- useEffect(() => {
+    useEffect(() => {
         let start = 0;
 
         try {
@@ -247,7 +249,7 @@ const DashBody = () => {
 
         }
     }, []);
-    
+
 
     // Total products show
 
@@ -287,6 +289,46 @@ const DashBody = () => {
 
     // Total products count end
 
+    // Total Sales
+
+  const [viewtotalsels, setViewtotalsels] = useState(0)
+
+    useEffect(() => {
+        let start = 0;
+
+        try {
+            axios.get(`${process.env.REACT_APP_backendurl}/caspurchage/complete`)
+                .then((res) => {
+                    const allcomplete = res.data
+                    // console.log(allusers)
+
+                    
+
+                    const end = res?.data.reduce((total, order) => total + order.totalPrice, 0)
+                    // totalUsers;
+                    if (start === end) return;
+
+                    const duration = 1000;
+                    const incrementTime = 20;
+                    const step = Math.ceil((end - start) / (duration / incrementTime));
+
+                    const timer = setInterval(() => {
+                        start += step;
+                        if (start >= end) {
+                            start = end;
+                            clearInterval(timer);
+                        }
+                        setViewtotalsels(start);
+                    }, incrementTime);
+
+                    return () => clearInterval(timer);
+                })
+        }
+        catch (error) {
+
+        }
+    }, []);
+
     return (
         <div className="min-h-screen w-10/12 mx-auto overflow-x-auto">
 
@@ -295,7 +337,7 @@ const DashBody = () => {
 
 
 
-            {/* Pending Orders */}
+                {/* Pending Orders */}
                 <Link to={'/dashboard/pendingOrder'}>
                     <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl p-6 flex flex-col justify-between transform transition-all duration-300 hover:scale-105 cardb">
                         <div className="flex items-center justify-between">
@@ -322,8 +364,8 @@ const DashBody = () => {
                 </Link>
 
 
-            {/* Confirme Orders */}
-                <Link to={'/dashboard/pendingOrder'}>
+                {/* Confirme Orders */}
+                <Link to={'/dashboard/confirmOrderlist'}>
                     <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl p-6 flex flex-col justify-between transform transition-all duration-300 hover:scale-105 cardb">
                         <div className="flex items-center justify-between">
                             <div className="p-3 bg-white/20 rounded-xl text-white">
@@ -350,8 +392,8 @@ const DashBody = () => {
 
 
 
-                 {/* Complete Orders */}
-                <Link to={'/dashboard/pendingOrder'}>
+                {/* Complete Orders */}
+                <Link to={'/dashboard/completelist'}>
                     <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl p-6 flex flex-col justify-between transform transition-all duration-300 hover:scale-105 cardb">
                         <div className="flex items-center justify-between">
                             <div className="p-3 bg-white/20 rounded-xl text-white">
@@ -377,8 +419,8 @@ const DashBody = () => {
                 </Link>
 
 
-                 {/* Cancel Orders */}
-                <Link to={'/dashboard/pendingOrder'}>
+                {/* Cancel Orders */}
+                <Link to={'/dashboard/cancelOrderlist'}>
                     <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl p-6 flex flex-col justify-between transform transition-all duration-300 hover:scale-105 cardb">
                         <div className="flex items-center justify-between">
                             <div className="p-3 bg-white/20 rounded-xl text-white">
@@ -404,7 +446,7 @@ const DashBody = () => {
                 </Link>
 
 
-{/* Total Sales */}
+                {/* Total Sales */}
                 <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl p-6 flex flex-col justify-between transform transition-all duration-300 hover:scale-105">
                     <div className="flex items-center justify-between">
                         <div className="p-3 bg-white/20 rounded-xl text-green-300">
@@ -413,8 +455,8 @@ const DashBody = () => {
                         <div className="text-sm font-semibold text-red-400"></div>
                     </div>
                     <div className="mt-6">
-                        <h2 className="text-3xl font-bold text-green-300">৳{}</h2>
-                        <p className="text-black mt-1">Total Sales</p>
+                        <h2 className="text-3xl font-bold text-green-300">৳{viewtotalsels}</h2>
+                        <p className="text-black mt-1 font-semibold">Total Sales</p>
                     </div>
                     <div className="mt-4 flex gap-1 h-10 items-end justify-end">
                         <div className="w-2 bg-green-500 rounded animate-bounce h-6"></div>
@@ -462,7 +504,7 @@ const DashBody = () => {
                 </div>
 
 
-                
+
 
                 {/* Total Products */}
                 <Link to={'/dashboard/allProducts'} >
@@ -475,7 +517,7 @@ const DashBody = () => {
                         </div>
                         <div className="mt-6">
                             <h2 className="text-3xl font-bold text-green-300">{countallProd.toLocaleString()}</h2>
-                            <p className="text-black mt-1">Total Products</p>
+                            <p className="text-black mt-1 font-semibold">Total Products</p>
                         </div>
                         <div className="mt-4 flex gap-1 h-10 items-end">
                             <div className="w-2 bg-green-500 rounded animate-bounce h-9"></div>
@@ -513,8 +555,12 @@ const DashBody = () => {
             </div>
 
 
-
+            <div>
+                <Visitorshow></Visitorshow>
+            </div>
             {/* order gant chart end */}
+
+
 
         </div>
     );

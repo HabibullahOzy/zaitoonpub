@@ -193,7 +193,7 @@ const CODInvoice = ({ codInvdata }) => {
                     <div>
                         <p>Email: {codInvdata?.email || "N/A"}</p>
                         <p>Phone: {codInvdata?.phonenumber || "N/A"}</p>
-                        <p>Address: {codInvdata?.dlocation},<br />{codInvdata?.area},<br />{codInvdata?.city},<br />{codInvdata?.nationality}</p>
+                        <p>Address: {codInvdata?.dlocation}</p>
                     </div>
                 </div>
 

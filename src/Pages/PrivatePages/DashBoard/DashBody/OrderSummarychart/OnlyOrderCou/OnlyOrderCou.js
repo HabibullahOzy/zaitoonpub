@@ -103,7 +103,7 @@ const OrderPieChart = () => {
   };
 
   return (
-    <div className="p-4 min-h-screen">
+    <div className="p-4 mb-10">
       <h2 className="text-xl font-semibold mb-4 text-black">
         🥧 Daily Orders –{" "}
         {new Date(year, month).toLocaleString("default", {

@@ -184,7 +184,7 @@ const Invoice = ({ invdata }) => {
                     <div>
                         <p>Email: {invdata?.email || "N/A"}</p>
                         <p>Phone: {invdata?.phonenumber || "N/A"}</p>
-                        <p>Address: {invdata?.dlocation},<br />{invdata?.area},<br />{invdata?.city},<br />{invdata?.nationality}</p>
+                        <p>Address: {invdata?.dlocation}</p>
                     </div>
                 </div>
 
