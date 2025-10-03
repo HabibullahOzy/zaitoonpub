@@ -7,7 +7,7 @@ import ClockLoader from 'react-spinners/ClockLoader';
 const AdminSecurPages = ({children}) => {
     const {user, loader}=useContext(Zaitooncontext)
     const [isAdmin, adminLoading]=useAdmin(user?.email)
-    // console.log(isAdmin)
+
     let location =useLocation();
 
 

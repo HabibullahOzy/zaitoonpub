@@ -66,7 +66,6 @@ const PaidPurch = ({ cartpaidItems }) => {
     };
     // const orderConfirmation = async (data) => {
 
-    //     console.log(data)
 
     //     const name = data.name;
     //     const email = data.email;
@@ -80,7 +79,6 @@ const PaidPurch = ({ cartpaidItems }) => {
     //     const totalPrice =prices;
     //     const role = "cashOnpurchages";
     //     const status= "pending"
-    //     // console.log(productdata)
 
     //     const cashOndata = {
     //         name,
@@ -108,10 +106,9 @@ const PaidPurch = ({ cartpaidItems }) => {
     //             toast.error("Order NOT Placed, Please Try again")
     //         }
 
-    //         console.log(response.data);
     //     }
     //     catch (error) {
-    //         console.log(error.massage)
+    //         console.error(error.massage)
     //     }
 
 

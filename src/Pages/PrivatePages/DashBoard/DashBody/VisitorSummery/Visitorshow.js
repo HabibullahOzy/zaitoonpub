@@ -32,7 +32,6 @@ const Visitorshow = () => {
 
         axios.get(`${process.env.REACT_APP_backendurl}/visitor`)
             .then(response => {
-                // console.log("Fetched visitor logs:", response.data);
 
                 const rawData = response.data;
                 // group data by selected view

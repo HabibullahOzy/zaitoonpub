@@ -63,7 +63,6 @@ const RelatedPShow = ({ categorys }) => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_backendurl}/products/${id}`)
             const email = emaile
-            console.log(email)
             const nameeng = response?.data[0]?.nameeng
             const namebn = response?.data[0]?.namebn
             const namearb = response?.data[0]?.namearb
@@ -104,7 +103,6 @@ const RelatedPShow = ({ categorys }) => {
             })
                 .then(res => res.json())
                 .then(infoe => {
-                    // console.log(infoe)
                     if (infoe.acknowledged) {
                         toast.success("Producte added to cart succesfully!!");
                         // navigate('/dashboard/allProducts')
@@ -114,7 +112,7 @@ const RelatedPShow = ({ categorys }) => {
                 })
 
         } catch (error) {
-            console.log(error)
+            console.error(error)
         }
 
     }

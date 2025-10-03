@@ -42,7 +42,7 @@ const ConfirmList = () => {
 
   const handleOrderComplete = async (id) => {
     const response = await axios.put(`${process.env.REACT_APP_backendurl}/ordercompletetatus/${id}`);
-    // console.log(response)
+   
     response?.status
       ? toast.success("Complete Order Placed!")
       : toast.error("Order not placed, please try again");
@@ -57,7 +57,7 @@ const ConfirmList = () => {
 
   const handleOrderpayment = (id) => {
     setShowPaymodal(true)
-    // console.log(id)
+    
     setOrderPaymentData(id)
   }
 
@@ -69,7 +69,6 @@ const ConfirmList = () => {
 
   const handlesetoffer = (id) => {
     setOpenoffermodal(true)
-    // console.log(id)
     setOrderoffer(id)
 
   }
@@ -83,10 +82,9 @@ const ConfirmList = () => {
       offerCr,
       offer
     }
-    // console.log(paymentData)
 
     const res = await axios.put(`${process.env.REACT_APP_backendurl}/orderoffer/${orderoffer}`, paymentData)
-    // console.log(res)
+    
     res?.status ? toast.success('Offer Data Added Successfully') : toast.error('Something went wrong, please try again later');
     reset();
     setOpenoffermodal(false)

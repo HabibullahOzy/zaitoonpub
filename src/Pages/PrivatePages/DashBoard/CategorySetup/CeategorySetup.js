@@ -38,7 +38,6 @@ const CeategorySetup = () => {
 const imageFile = categoryData.image;
 
 
-// console.log("Form Data:", data);
 const formData = new FormData();
 formData.append("image", imageFile);
     formData.append("categname", data.categname);
@@ -48,7 +47,6 @@ formData.append("image", imageFile);
     const res =await axios.post(`${process.env.REACT_APP_backendurl}/categoryset`, formData, {
        headers: { "Content-Type": "multipart/form-data" }
     });
-    // console.log(res.data);
     if (res?.data?.insertedId) {
       toast.success("Category and subcategories added successfully!");
       // Reset form or perform any other actions

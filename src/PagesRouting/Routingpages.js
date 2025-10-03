@@ -39,6 +39,7 @@ import AllCategory from "../Pages/PrivatePages/DashBoard/CategorySetup/AllCatego
 import ReviewList from "../Pages/PrivatePages/DashBoard/ReviewList/ReviewList";
 import SmWebmenulist from "../Pages/PrivatePages/DashBoard/WebmenuList/SmWebmenulist";
 import ReportOrders from "../Pages/PrivatePages/DashBoard/ReportOrders/ReportOrders";
+import ProductsFilter from "../Pages/FixedPages/Products/ProductsFilter/ProductsFilter";
 
 const router = createBrowserRouter([
     {
@@ -97,7 +98,11 @@ const router = createBrowserRouter([
         {
             path: "/payment/success/:tranId",
             element: <Successmassag></Successmassag>
-        }
+        },
+        {
+            path: "/filterproducts",
+            element: <ProductsFilter></ProductsFilter>
+        },
 
         ]
     },

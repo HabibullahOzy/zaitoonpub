@@ -10,7 +10,6 @@ import { reload } from 'firebase/auth';
 const WishList = () => {
     const { user } = useContext(Zaitooncontext);
     const wishdatas = useLoaderData();
-    // console.log(wishdatas);
 
     const [showModal, setShowModal] = useState(false);
 
@@ -19,7 +18,6 @@ const WishList = () => {
 
     const handleAddCart = async (informat, offerPrice) => {
 
-        // console.log(informat);
         const cartProducts = {
             id: informat?._id,
             email: informat?.email,
@@ -75,7 +73,6 @@ const WishList = () => {
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     );
-    // console.log(paginatedData)
 
     const goToPage = (page) => {
         if (page >= 1 && page <= totalPages) {

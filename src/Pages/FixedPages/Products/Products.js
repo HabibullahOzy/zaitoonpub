@@ -1,7 +1,7 @@
 import React, { use, useContext, useEffect, useState } from 'react';
 import "./Products.css";
-import { FaShoppingBag } from 'react-icons/fa';
-import { FaCartFlatbed, FaHeartCirclePlus } from 'react-icons/fa6';
+import { ImBooks } from 'react-icons/im';
+import { FaCartFlatbed } from 'react-icons/fa6';
 // import { RiShoppingBag4Fill } from 'react-icons/ri';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -10,7 +10,7 @@ import { Zaitooncontext } from '../../../SecureContext/ContextAuth';
 import axios from 'axios';
 import { FcViewDetails } from 'react-icons/fc';
 import SkeltonLoader from '../../SkeltonLoader/SkeltonLoader';
-import img from '../../../assets/wppBuy.png';
+import { motion } from "framer-motion";
 import BuyNowModal from '../Purchages/InstantPurch/BuyNowModal';
 // import { v4 as uuidv4 } from 'uuid';
 
@@ -20,8 +20,8 @@ const Products = () => {
 
     const queryClient = useQueryClient();
 
-    const { data: allproducts = [], refetch } = useQuery({
-        queryKey: ['allproducts'],
+    const { data: allbooks = [], refetch } = useQuery({
+        queryKey: ['allbooks'],
         queryFn: async () => {
             const res = await fetch(`${process.env.REACT_APP_backendurl}/allProducts`);
             const data = await res.json();
@@ -30,7 +30,7 @@ const Products = () => {
     });
 
 
-
+const allproducts = allbooks.filter(book => book.state === '' || book.state === 'Available');
     // const localDeviceId = () => {
     //     let deviceId = localStorage.getItem('device_id');
     //     if (!deviceId) {
@@ -144,8 +144,17 @@ const Products = () => {
     return (
 
         <div className=' w-10/12 mx-auto py-6'>
-            <div className=' mb-6'>
-                <h1 className='text-center text-black font-semibold text-3xl mt-10'>All Products</h1>
+            {/* <div className=' mb-6'>
+                <h1 className=' text-black font-semibold text-3xl mt-10 flex justify-center'><ImBooks className='text-yellow-600 mr-2'/>All Books</h1>
+                <p className='text-end text-black font-semibold'>সকল বই সমূহ</p>
+                <hr className='border-2 text-green-300 ' />
+            </div> */}
+
+            <div className=" text-center mb-12">
+                <motion.h2 className="text-3xl md:text-3xl font-semibold flex justify-center text-black" initial={{ opacity: 0, y: -30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} >
+                    <ImBooks className='text-yellow-500 mr-2'/> All Books </motion.h2>
+                <motion.p className="mt-3 text-gray-600" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }} > Stay tuned for our books and releases </motion.p>
+
                 <p className='text-end text-black font-semibold'>সকল বই সমূহ</p>
                 <hr className='border-2 text-green-300 ' />
             </div>
@@ -174,7 +183,7 @@ const Products = () => {
                                             {/* Product image */}
                                             <figure>
                                                 <Link to={`/products/${product?._id}`}>
-                                                    <img src={product.image} alt="product" className="object-cover" />
+                                                    <img src={product.image} alt="product" className="object-cover transform hover:scale-110 transition duration-500" />
                                                 </Link>
                                             </figure>
 

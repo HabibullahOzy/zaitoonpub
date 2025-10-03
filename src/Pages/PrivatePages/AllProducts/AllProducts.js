@@ -26,23 +26,21 @@ const AllProducts = () => {
     })
 
     const handleDelete = id => {
-        // console.log(id)
+        
         fetch(`${process.env.REACT_APP_backendurl}/products/delete/${id}`, {
             method: 'DELETE'
         })
             .then(res => res.json())
             .then(data => {
-                // console.log(data)
                 if (data.deletedCount > 0) {
                     toast.success("Product successfully Deleted");
                     refetch();
                 }
             })
     }
-    // console.log(users)
 // Pagination function
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 15;
 
   // Pagination logic
   const totalPages = Math.ceil(users.length / itemsPerPage);

@@ -6,6 +6,7 @@ import Openinganimation from '../../OpeningAnimation/Openinganimation';
 import Category from '../Products/Category/Category';
 import { RiWhatsappFill } from 'react-icons/ri';
 import ImportantVideo from '../VideoShow/ImportantVideo';
+import CommingSoon from '../Products/Upcomming/CommingSoon';
 
 // import image from "../../../assets/website-under-construction.png";
 
@@ -24,6 +25,10 @@ const Home = () => {
             <div className=' bg-products'>
 
                 <Products></Products>
+            </div>
+
+            <div>
+                <CommingSoon></CommingSoon>
             </div>
 
             <div className="pt-10">

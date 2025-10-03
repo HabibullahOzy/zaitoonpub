@@ -27,8 +27,6 @@ const SignIn = () => {
 
     const [isSuperAdmin] = useSuperAdmin(user?.email);
 
-    // console.log(user?.email, isAdmin, isSuperAdmin)
-
     const from = location.state?.from?.pathname || "/";
 
     // const { data: users = [], refetch } = useQuery({
@@ -58,8 +56,6 @@ const SignIn = () => {
         }
     }, [user?.email]);
 
-    // console.log(users)
-
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     const loginHandle = (data) => {
@@ -68,7 +64,6 @@ const SignIn = () => {
 
         loginWithEP(email, password)
             .then((results) => {
-                // console.log(results.user)
                 toast.success("Successfully Login Complited")
                 // { isAdmin === '' && <p className='text-red-500'>You are not an admin</p> }
 
@@ -92,7 +87,6 @@ const SignIn = () => {
                 // }
             })
             .catch((error) => {
-                // console.log(error.message)
                 toast.error("Please Enter Currect Email & password", error.message)
             })
 
@@ -102,12 +96,10 @@ const SignIn = () => {
     const handlegoogleLogin = () => {
         signInwithGoogle(provider)
             .then((result) => {
-                // console.log(result.user)
                 toast.success("Successfully Login Complited")
                 navigate(from, { replace: true })
             })
             .catch((error) => {
-                // console.log(error)
                 toast.error(error)
             })
     }

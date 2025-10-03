@@ -34,7 +34,7 @@ const ProductsDetails = () => {
     const [activeTab, setActiveTab] = useState('summary');
     const [redata, setRedata] = useState()
     const navigate = useNavigate();
-    // console.log(redata)
+
 
 
 
@@ -45,7 +45,6 @@ const ProductsDetails = () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_backendurl}/products/${id}`)
             const email = emaile
-            console.log(email)
             const nameeng = response?.data[0]?.nameeng
             const namebn = response?.data[0]?.namebn
             const namearb = response?.data[0]?.namearb
@@ -84,7 +83,6 @@ const ProductsDetails = () => {
             })
                 .then(res => res.json())
                 .then(infoe => {
-                    // console.log(infoe)
                     if (infoe.acknowledged) {
                         toast.success("Producte added to cart succesfully!!");
                         // navigate('/dashboard/allProducts')
@@ -94,7 +92,7 @@ const ProductsDetails = () => {
                 })
 
         } catch (error) {
-            console.log(error)
+            console.error(error)
         }
 
     }
@@ -118,11 +116,9 @@ const ProductsDetails = () => {
         })
     }, [dataes])
 
-    // console.log(redata)
     const totalRatings = redata?.reduce((sum, rinfo) => sum + rinfo.rating, 0);
     const averageRating = redata?.length ? (totalRatings / redata.length) : 0;
 
-    // console.log("Average Rating:", averageRating);
     const fullStars = Math.floor(averageRating);
     const halfStar = averageRating % 1 >= 0.5;
     const totalStars = 5;
@@ -196,7 +192,6 @@ const ProductsDetails = () => {
     }
 
 const [orderCou, setOrderCou] = useState()
-// console.log(dataes?.ProductCode)
      useEffect(() => {
         
 
@@ -204,7 +199,6 @@ const [orderCou, setOrderCou] = useState()
              dataes.map(async (info) => {
             const res = await axios.get(`${process.env.REACT_APP_backendurl}/ordercount/${info?.ProductCode}`);
                     const orderCou = res.data
-                    // console.log(orderCou.totalQuantity)
                     setOrderCou(orderCou)
                     
 })}      

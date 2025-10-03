@@ -17,7 +17,6 @@ const {data: webmenulist=[], refetch} =useQuery({
     });
 
 
-console.log(webmenulist)
   const handledelete = async (id) => {
     const response = await axios.delete(`${process.env.REACT_APP_backendurl}/webmenu/delete/${id}`);
     response?.status
@@ -40,7 +39,6 @@ console.log(webmenulist)
             if (page >= 1 && page <= totalPages) setCurrentPage(page);
           };
     
-          console.log(paginatedData)
 
     return (
        <div className="min-h-screen min-w-[50%] mx-auto pt-14 px-2 md:px-4 text-black overflow-x-auto">

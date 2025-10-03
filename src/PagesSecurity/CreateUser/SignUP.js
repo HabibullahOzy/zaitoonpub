@@ -10,7 +10,7 @@ import { PiPhonePlusFill } from 'react-icons/pi';
 
 const SignUP = () => {
     const { user, createUserWithEP, addedUpdateUser, signInwithGoogle } = useContext(Zaitooncontext);
-    // console.log(user)
+
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -55,7 +55,7 @@ const SignUP = () => {
                                 puteUser(email, displayName, photoURL);
                             })
                             .catch((error) => {
-                                console.log(error)
+                                console.error(error)
                             })
                     })
                     .catch((error) => {
@@ -73,7 +73,7 @@ const SignUP = () => {
         //         const response = await axios.post(`${process.env.REACT_APP_backendurl}/api/upload`, formData, {
         //             headers: { "Content-Type": "multipart/form-data" }
         //         });
-        //         console.log(response.data.imageUrl)
+       
         //     }
         //     catch (error) {
         //     }
@@ -119,7 +119,6 @@ const SignUP = () => {
                     'content-type': 'application/json'
                 },
             })
-            // console.log(addData)
 
             if (addData.status === 200) {
                 navigate('/')
@@ -127,7 +126,7 @@ const SignUP = () => {
             }
         }
         catch (error) {
-            console.log(error)
+            console.error(error)
         }
         // .then(res =>res.json())
         // .then(data => {

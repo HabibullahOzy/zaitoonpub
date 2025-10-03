@@ -9,7 +9,6 @@ import codimg from "../../../../assets/cod.png";
 import paidimg from "../../../../assets/paid.png";
 
 const CODInvoice = ({ codInvdata }) => {
-    // console.log(invdata);
     const componentRef = useRef();
 
 

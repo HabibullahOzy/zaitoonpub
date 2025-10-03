@@ -25,7 +25,6 @@ const Footer = () => {
     total: 0,
   });
 
-  console.log(stats);
 
 
   useEffect(() => {
@@ -46,7 +45,7 @@ const Footer = () => {
       .post(`${process.env.REACT_APP_backendurl}/api/track`, { deviceCode })
       .then(() => {
         localStorage.setItem("visitor-tracked-date", today);
-        console.log(today, deviceCode)
+        
       })
       .catch((err) => {
         console.warn("Visitor tracking failed", err);

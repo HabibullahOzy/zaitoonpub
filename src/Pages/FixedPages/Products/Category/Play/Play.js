@@ -11,7 +11,7 @@ import BuyNowModal from '../../../Purchages/InstantPurch/BuyNowModal';
 import { FaShoppingBag } from 'react-icons/fa';
 import { FcViewDetails } from 'react-icons/fc';
 
-const Play = () => {
+const Play = ({productCategory}) => {
 
     const { user } = useContext(Zaitooncontext)
     const navigate = useNavigate();
@@ -19,7 +19,7 @@ const Play = () => {
     const { data: nursproduct = [], refetch } = useQuery({
         queryKey: ['nursproduct'],
         queryFn: async () => {
-            const res = await fetch(`${process.env.REACT_APP_backendurl}/categoryproducts/Play`);
+            const res = await fetch(`${process.env.REACT_APP_backendurl}/categoryproducts/${productCategory?.categname || "একাডেমিক | Academic"}`);
             const data = await res.json();
             return data;
         }
@@ -114,8 +114,8 @@ const Play = () => {
     }
     return (
         <div>
-            <h1 className='font-semibold text-2xl'>Play</h1>
-            <div className='grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5 w-10/12 py-6 mx-auto' style={{ color: "black" }}>
+            <h1 className='font-semibold text-2xl'>{productCategory?.categname}</h1>
+            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-5 py-6 mx-auto' style={{ color: "black" }}>
                
                 {nursproduct?.map((product, i) => {
                     const offerPrice = product?.offerprice

@@ -12,10 +12,8 @@ const OrderPaymentmodal = ({ paydata }) => {
     const [hover, setHover] = useState(null);
 
     const reviewData = paydata;
-    // console.log(reviewData)
 
     const onSubmit = async (data) => {
-        // console.log(data, rating)
         const rname = data.rname
         const payMethod = data.payMethod
         const transactionId = data.transId
@@ -32,7 +30,7 @@ const OrderPaymentmodal = ({ paydata }) => {
         }
 
         const res = await axios.put(`${process.env.REACT_APP_backendurl}/orderPaymentdata/${paydata}`, paymentData)
-        // console.log(res)
+       
         res?.status ? toast.success('Payment Data Added Successfully') : toast.error('Something went wrong, please try again later');
         reset();
 

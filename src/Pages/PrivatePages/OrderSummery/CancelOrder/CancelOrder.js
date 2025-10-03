@@ -17,7 +17,7 @@ const CancelOrder = () => {
 
   const handleConfirmOrder = async (id) => {
     const response = await axios.put(`${process.env.REACT_APP_backendurl}/orderconfirmtatus/${id}`);
-    // console.log(response)
+   
     response?.status
       ? toast.success("Confirm Order Placed!")
       : toast.error("Order not confirm, please try again");
@@ -27,7 +27,7 @@ const CancelOrder = () => {
 
   const handleUpdateOrder = async (id) => {
     const response = await axios.put(`${process.env.REACT_APP_backendurl}/orderStatus/${id}`);
-    // console.log(response)
+    
     response?.status
       ? toast.success("Paid Order Placed!")
       : toast.error("Order not placed, please try again");
@@ -38,7 +38,7 @@ const CancelOrder = () => {
 
   const handleUpdateCODOrder = async (id) => {
     const response = await axios.put(`${process.env.REACT_APP_backendurl}/orderCODStatus/${id}`);
-    // console.log(response)
+    
     response?.status
       ? toast.success("COD Order Placed!")
       : toast.error("Order not placed, please try again");

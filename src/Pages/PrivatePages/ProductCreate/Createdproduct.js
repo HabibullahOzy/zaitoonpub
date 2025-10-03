@@ -5,15 +5,21 @@ import { Zaitooncontext } from '../../../SecureContext/ContextAuth';
 import axios from 'axios';
 import { FcAddDatabase } from 'react-icons/fc';
 import { useQuery } from '@tanstack/react-query';
+// import { FcAddDatabase } from "react-icons/fc";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 
 
 const Createdproduct = () => {
 
     const { user } = useContext(Zaitooncontext);
 
-    // uploaded file size less then 5mb
+    //   uploaded file size less then 5mb
 
     const [productCode, setProductCode] = useState('');
+    const [previewImage, setPreviewImage] = useState(null);
+    const [imageFile, setImageFile] = useState(null);
+    const [previewPdf, setPreviewPdf] = useState(null);
+    const [pdfFile, setPdfFile] = useState(null);
 
     const generateNextProductCode = () => {
         const lastNumber = parseInt(localStorage.getItem('lastProductNumber') || '0', 10);
@@ -33,8 +39,45 @@ const Createdproduct = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
 
+
+    //   Handle Image Select
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file && file.size <= 5 * 1024 * 1024) {
+            setImageFile(file);
+            setPreviewImage(URL.createObjectURL(file));
+        } else {
+            toast.error("Image must be less than 5MB!");
+        }
+    };
+
+    // Handle PDF Select
+    const handlePdfChange = (e) => {
+        const file = e.target.files[0];
+        if (file && file.size <= 5 * 1024 * 1024) {
+            setPdfFile(file);
+            setPreviewPdf(URL.createObjectURL(file))
+            // setPreviewPdf(file);
+        } else {
+            toast.error("PDF must be less than 5MB!");
+        }
+    };
+
+    // Remove Image
+    const removeImage = () => {
+        setImageFile(null);
+        setPreviewImage(null);
+    };
+
+    // Remove PDF
+    const removePdf = () => {
+        setPdfFile(null);
+        setPreviewPdf(null);
+    };
+
+
     const handleCreatProduct = async data => {
-        console.log(data)
+
         const imageFile = data.image?.[0];
         const pdfFile = data.files?.[0];
 
@@ -54,6 +97,7 @@ const Createdproduct = () => {
         formData.append('offerprice', data.offerprice);
         formData.append('quantity', data.quantity);
         formData.append('edition', data.edition);
+        formData.append('state', data.state);
         formData.append('description', data.description);
         formData.append('ProductCode', data.pcode);
         formData.append('category', data.category);
@@ -62,20 +106,20 @@ const Createdproduct = () => {
         formData.append('image', imageFile);
         formData.append('pdf', pdfFile);
 
-        // console.log(formData)
+ 
 
         for (let [key, value] of formData.entries()) {
-            console.log(`${key}:`, value);
         }
 
         try {
             const response = await axios.post(`${process.env.REACT_APP_backendurl}/profile`, formData, {
                 headers: { "Content-Type": "multipart/form-data" }
             });
-            // console.log(response.data)
             if (response.data.insertedId) {
                 toast.success("Product succesfully created")
                 reset()
+                removeImage()
+                removePdf()
             }
             else {
                 toast.error("Please try again properly, product not created")
@@ -114,7 +158,7 @@ const Createdproduct = () => {
                                 {/* Product BN Name */}
                                 <div className="form-control">
                                     <label className="label">
-                                        <span className="label-text text-black">Product BN Name</span>
+                                        <span className="label-text text-black">Product BN Name <small className='text-red-600 text-sm ml-1'>*</small></span>
                                     </label>
                                     <input
                                         {...register("productbnName", { required: true })}
@@ -128,7 +172,7 @@ const Createdproduct = () => {
                                 {/* Product Arabic Name */}
                                 <div className="form-control">
                                     <label className="label">
-                                        <span className="label-text text-black">Product Arabic Name</span>
+                                        <span className="label-text text-black">Product Arabic Name <small className='text-red-600 text-sm ml-1'>*</small></span>
                                     </label>
                                     <input
                                         {...register("arbproductarName", { required: true })}
@@ -142,7 +186,7 @@ const Createdproduct = () => {
                                 {/* Product EN Name */}
                                 <div className="form-control">
                                     <label className="label">
-                                        <span className="label-text text-black">Product EN Name</span>
+                                        <span className="label-text text-black">Product EN Name <small className='text-red-600 text-sm ml-1'>*</small></span>
                                     </label>
                                     <input
                                         {...register("engproductName", { required: true })}
@@ -156,7 +200,7 @@ const Createdproduct = () => {
                                 {/* Product Price */}
                                 <div className="form-control">
                                     <label className="label">
-                                        <span className="label-text text-black">Product Price</span>
+                                        <span className="label-text text-black">Product Price <small className='text-red-600 text-sm ml-1'>*</small></span>
                                     </label>
                                     <input
                                         {...register("productPrice", { required: true })}
@@ -170,7 +214,7 @@ const Createdproduct = () => {
                                 {/* Post Date */}
                                 <div className="form-control">
                                     <label className="label">
-                                        <span className="label-text text-black">Post Date</span>
+                                        <span className="label-text text-black">Post Date <small className='text-red-600 text-sm ml-1'>*</small></span>
                                     </label>
                                     <input
                                         {...register("postDate", { required: true })}
@@ -183,7 +227,7 @@ const Createdproduct = () => {
                                 {/* Number of Pages */}
                                 <div className="form-control">
                                     <label className="label">
-                                        <span className="label-text text-black">Number of Pages</span>
+                                        <span className="label-text text-black">Number of Pages <small className='text-red-600 text-sm ml-1'>*</small></span>
                                     </label>
                                     <input
                                         {...register("numberOfpage", { required: true })}
@@ -197,7 +241,7 @@ const Createdproduct = () => {
                                 {/* Author Name */}
                                 <div className="form-control">
                                     <label className="label">
-                                        <span className="label-text text-black">Author Name</span>
+                                        <span className="label-text text-black">Author Name <small className='text-red-600 text-sm ml-1'>*</small></span>
                                     </label>
                                     <input
                                         {...register("authorName", { required: true })}
@@ -211,7 +255,7 @@ const Createdproduct = () => {
                                 {/* Language */}
                                 <div className="form-control">
                                     <label className="label">
-                                        <span className="label-text text-black">Language</span>
+                                        <span className="label-text text-black">Language <small className='text-red-600 text-sm ml-1'>*</small></span>
                                     </label>
                                     <input
                                         {...register("language", { required: true })}
@@ -238,10 +282,10 @@ const Createdproduct = () => {
                                 {/* Quantity */}
                                 <div className="form-control">
                                     <label className="label">
-                                        <span className="label-text text-black">Quantity</span>
+                                        <span className="label-text text-black">Quantity <small className='text-red-600 text-sm ml-1'>*</small></span>
                                     </label>
                                     <input
-                                        {...register("quantity")}
+                                        {...register("quantity", { required: true })}
                                         type="number"
                                         placeholder="Enter quantity"
                                         className="input input-bordered w-full"
@@ -251,7 +295,7 @@ const Createdproduct = () => {
                                 {/* Edition */}
                                 <div className="form-control">
                                     <label className="label">
-                                        <span className="label-text text-black">Edition</span>
+                                        <span className="label-text text-black">Edition <small className='text-red-600 text-sm ml-1'>*</small></span>
                                     </label>
                                     <input
                                         {...register("edition", { required: true })}
@@ -262,14 +306,15 @@ const Createdproduct = () => {
                                     {errors.edition && <span className="text-red-500">This field is required</span>}
                                 </div>
 
+
                                 {/* Description */}
                                 <div className="form-control">
                                     <label className="label">
-                                        <span className="label-text text-black">Description</span>
+                                        <span className="label-text text-black">Description <small className='text-red-600 text-sm ml-1'>*</small></span>
                                     </label>
                                     <textarea
                                         {...register("description", { required: true })}
-                                        className="textarea textarea-bordered h-24 w-full"
+                                        className="textarea input textarea-bordered h-24 w-full"
                                         placeholder="Enter product description"
                                     ></textarea>
                                     {errors.description && <span className="text-red-500">This field is required</span>}
@@ -281,13 +326,13 @@ const Createdproduct = () => {
                                 {/* Product Code */}
                                 <div className="form-control">
                                     <label className="label">
-                                        <span className="label-text text-black">Product Code</span>
+                                        <span className="label-text text-black">Product Code <small className='text-red-600 text-sm ml-1'>*</small></span>
                                     </label>
                                     <input
                                         {...register("pcode", { required: true })}
                                         type="text"
                                         defaultValue={productCode}
-                                        
+
                                         className="input input-bordered w-full"
                                     />
                                     {errors.pcode && (
@@ -296,10 +341,29 @@ const Createdproduct = () => {
 
                                 </div>
 
+                                {/* Status*/}
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text text-black">Status <small className='text-red-600 text-sm ml-1'>*</small></span>
+                                    </label>
+                                    <select
+                                        {...register("state")}
+
+                                        className="select select-bordered text-black w-full bg-[#baefba]"
+                                    >
+                                        <option value="Available">Available</option>
+                                        <option value="Unavailable">Unavailable</option>
+                                        <option value="Preorder">Preorder</option>
+                                        <option value="Coming Soon">Coming Soon</option>
+                                        <option value="Out of Stock">Out of Stock</option>
+                                    </select>
+                                </div>
+
+
                                 {/* Category */}
                                 <div className="form-control">
                                     <label className="label">
-                                        <span className="label-text text-black">Category</span>
+                                        <span className="label-text text-black flex ">Category <small className='text-red-600 text-sm ml-1'>*</small></span>
                                     </label>
 
                                     {allcategory.length > 0 ? (
@@ -327,7 +391,7 @@ const Createdproduct = () => {
 
                                 <div className="form-control">
                                     <label className="label">
-                                        <span className='label-text text-black'>Sub Category</span>
+                                        <span className='label-text text-black'>Sub Category <small className='text-red-600 text-sm ml-1'>*</small></span>
                                     </label>
                                     <select
                                         className="select select-bordered w-full bg-[#baefba] text-black"
@@ -351,9 +415,9 @@ const Createdproduct = () => {
                                     )}
                                 </div>
                                 {/* Product Picture */}
-                                <div className="form-control">
+                                {/* <div className="form-control">
                                     <label className="label">
-                                        <span className="label-text text-black">Product Picture</span>
+                                        <span className="label-text text-black">Product Picture <small className='text-red-600 text-sm ml-1'>*</small></span>
                                     </label>
                                     <input
                                         {...register("image", { required: true })}
@@ -362,12 +426,42 @@ const Createdproduct = () => {
                                         className="input input-bordered w-full"
                                     />
                                     {errors.image && <span className="text-red-500">This field is required</span>}
+                                </div> */}
+
+                                {/* Image Upload + Preview */}
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text text-black">Product Picture <small className='text-red-600 text-sm ml-1'>*</small></span>
+                                    </label>
+                                    <input
+                                        {...register("image", { required: true })}
+                                        type="file"
+                                        accept="image/*"
+                                        className="input input-bordered w-full"
+                                        onChange={handleImageChange}
+                                    />
+                                    {previewImage && (
+                                        <div className="mt-2 relative inline-block">
+                                            <img src={previewImage} alt="Preview" className="h-32 object-cover border rounded-md" />
+                                            <p className="text-xs text-gray-600">
+                                                Size: {(imageFile.size / 1024 / 1024).toFixed(2)} MB
+                                            </p>
+                                            <button
+                                                type="button"
+                                                onClick={removeImage}
+                                                className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full p-1"
+                                            >
+                                                <AiOutlineCloseCircle size={18} />
+                                            </button>
+                                        </div>
+                                    )}
+                                    {errors.image && <span className="text-red-500">Image required</span>}
                                 </div>
 
                                 {/* PDF Upload */}
-                                <div className="form-control">
+                                {/* <div className="form-control">
                                     <label className="label">
-                                        <span className="label-text text-black">Upload PDF file</span>
+                                        <span className="label-text text-black">Upload PDF file <small className='text-red-600 text-sm ml-1'>*</small></span>
                                     </label>
                                     <input
                                         {...register("files", { required: true })}
@@ -376,6 +470,46 @@ const Createdproduct = () => {
                                         className="input input-bordered w-full"
                                     />
                                     {errors.files && <span className="text-red-500">This field is required</span>}
+                                </div> */}
+
+                                {/* PDF Upload + Preview */}
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text text-black">Upload PDF <small className='text-red-600 text-sm ml-1'>*</small></span>
+                                    </label>
+                                    <input
+                                        {...register("files", { required: true })}
+                                        type="file"
+                                        accept="application/pdf"
+                                        max={1}
+                                        className="input input-bordered w-full"
+                                        onChange={handlePdfChange}
+                                    />
+                                    {previewPdf && (
+                                        <div className="mt-2 relative p-2 border rounded-md bg-white">
+                                            <p className="text-sm text-black font-semibold">{pdfFile.name}</p>
+                                            <p className="text-xs text-gray-600">
+                                                {(pdfFile.size / 1024 / 1024).toFixed(2)} MB
+                                            </p>
+                                            <div className="mt-2"> <embed src={previewPdf} type="application/pdf" width="100%" height="200px" /> <p className="text-sm text-gray-600">Size: {(pdfFile.size / 1024 / 1024).toFixed(2)} MB</p> </div>
+                                            {/* <a
+                                                href={URL.createObjectURL(pdfFile)}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-blue-600 underline text-xs"
+                                            >
+                                                Preview PDF
+                                            </a> */}
+                                            <button
+                                                type="button"
+                                                onClick={removePdf}
+                                                className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1"
+                                            >
+                                                <AiOutlineCloseCircle size={18} />
+                                            </button>
+                                        </div>
+                                    )}
+                                    {errors.files && <span className="text-red-500">PDF required</span>}
                                 </div>
                             </div>
                         </div>

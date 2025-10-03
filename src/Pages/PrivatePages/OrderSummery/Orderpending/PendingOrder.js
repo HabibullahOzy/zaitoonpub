@@ -28,7 +28,7 @@ const PendingOrder = () => {
 
   const handleConfirmOrder = async (id) => {
     const response = await axios.put(`${process.env.REACT_APP_backendurl}/orderconfirmtatus/${id}`);
-    // console.log(response)
+    
     response?.status
       ? toast.success("Confirm Order Placed!")
       : toast.error("Order not confirm, please try again");
@@ -72,7 +72,6 @@ const PendingOrder = () => {
 
   const handlesetpenoffer = (id) => {
     setOpenoffermodal(true)
-    // console.log(id)
     setOrderoffer(id)
 
   }
@@ -86,10 +85,9 @@ const PendingOrder = () => {
       offerCr,
       offer
     }
-    // console.log(paymentData)
 
     const res = await axios.put(`${process.env.REACT_APP_backendurl}/orderoffer/${orderoffer}`, paymentData)
-    // console.log(res)
+  
     res?.status ? toast.success('Offer Data Added Successfully') : toast.error('Something went wrong, please try again later');
     reset();
     setOpenoffermodal(false)

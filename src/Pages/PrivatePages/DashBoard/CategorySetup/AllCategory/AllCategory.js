@@ -38,7 +38,6 @@ const AllCategory = () => {
         if (page >= 1 && page <= totalPages) setCurrentPage(page);
       };
 
-      console.log(paginatedData)
     return (
         <div className="min-h-screen mx-auto pt-14 px-2 md:px-4 text-black overflow-x-auto">
               <h1 className="text-center text-2xl font-bold mb-6">All Category</h1>

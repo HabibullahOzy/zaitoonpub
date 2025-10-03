@@ -5,7 +5,7 @@ import Invoice from '../../OrderSummery/InvoiceOrder/Invoice';
 
 const Myorder = () => {
   const orderdataes = useLoaderData();
-  console.log(orderdataes);
+ 
 
   const [showModal, setShowModal] = useState(false);
   const [orderPaymeData, setOrderPaymeData] = useState();
@@ -16,7 +16,6 @@ const Myorder = () => {
 
 
 
-  // console.log(orderPaymeData)
 
   const handleUpdateOrderpayment = (id) => {
     setShowModal(true)
@@ -40,7 +39,6 @@ const Myorder = () => {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-  // console.log(paginatedData)
 
   const goToPage = (page) => {
     if (page >= 1 && page <= totalPages) {

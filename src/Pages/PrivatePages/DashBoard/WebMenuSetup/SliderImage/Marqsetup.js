@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
@@ -27,7 +27,7 @@ const Marqsetup = () => {
 
 
         const res = await axios.post(`${process.env.REACT_APP_backendurl}/marqwebmenu`, marqdata);
-        // console.log(res.data);
+       
         if (res?.data?.insertedId) {
             toast.success("Category and subcategories added successfully!");
             // Reset form or perform any other actions

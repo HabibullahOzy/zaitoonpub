@@ -37,7 +37,7 @@
 
 @media screen and (min-width: 769px) and (max-width: 1366px) {
   .banner {
-    height: 340px;
+    height: 240px;
     background-size: cover;
     background-position: center;
   }

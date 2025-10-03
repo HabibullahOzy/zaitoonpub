@@ -63,7 +63,6 @@ const ContextAuth = ({children}) => {
                 setLoader(false);
             // }
             // else {
-            //     console.log("sign in error")
             // }
         })
         return unSubmit;

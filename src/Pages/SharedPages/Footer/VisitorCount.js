@@ -3,16 +3,16 @@
 
 // const VisitorCount = () => {
 //     const [stats, setStats] = useState({ today: 0, yesterday: 0, month: 0, total: 0 });
-//     console.log(stats)
+
 
 //     const websiteId = process.env.REACT_APP_umamiwebsiteid;
-//     // console.log(websiteId);
+
 //     const umamiUrl = process.env.REACT_APP_umamihost; // example: https://umami.yourdomain.com
-//     // console.log(umamiUrl);
+
 //     const username = process.env.REACT_APP_username;
-//     // console.log(username);
+
 //     const password = process.env.REACT_APP_password;
-//     // console.log(password);
+
 
 //     const getDateRange = (type) => {
 //         const today = dayjs();
@@ -69,7 +69,7 @@
 
 // //     const [stats, setStats] = useState({ today: 0, yesterday: 0, month: 0, total: 0 });
 
-// //     console.log(stats);
+
 
 // //   useEffect(() => {
 // //     const loadStats = async () => {
@@ -83,7 +83,7 @@
 // //           month: data.data?.find(item => item.label === "This month")?.value || 0,
 // //           total: data.data?.find(item => item.label === "Total")?.value || 0,
 // //         };
-// // console.log(reducedStats);
+
 // //         setStats(reducedStats);
 // //       } catch (err) {
 // //         console.error("Failed to load visitor stats", err);

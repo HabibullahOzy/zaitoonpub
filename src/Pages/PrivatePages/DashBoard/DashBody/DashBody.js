@@ -35,7 +35,7 @@ import Visitorshow from "./VisitorSummery/Visitorshow";
 const DashBody = () => {
 
     const { user, trendType, trend } = useContext(Zaitooncontext)
-    // console.log(user)
+    
     // Start with May 2025 for example
     const [year, setYear] = useState(2025);
     const [month, setMonth] = useState(4); // May (0-based index)
@@ -55,7 +55,6 @@ const DashBody = () => {
             axios.get(`${process.env.REACT_APP_backendurl}/allusers`)
                 .then((res) => {
                     const allusers = res.data
-                    // console.log(allusers)
 
                     const end = allusers.length;
                     // totalUsers;
@@ -98,7 +97,6 @@ const DashBody = () => {
             axios.get(`${process.env.REACT_APP_backendurl}/caspurchage/pending`)
                 .then((res) => {
                     const allpending = res.data
-                    // console.log(allusers)
 
                     const end = allpending.length;
                     // totalUsers;
@@ -139,7 +137,6 @@ const DashBody = () => {
             axios.get(`${process.env.REACT_APP_backendurl}/caspurchage/complete`)
                 .then((res) => {
                     const allcomplete = res.data
-                    // console.log(allusers)
 
                     setViewtotalsels(res?.data.reduce((total, order) => total + order.totalPrice, 0));
 
@@ -182,7 +179,7 @@ const DashBody = () => {
             axios.get(`${process.env.REACT_APP_backendurl}/caspurchage/confirm`)
                 .then((res) => {
                     const allcomplete = res.data
-                    // console.log(allusers)
+                    
 
                     const end = allcomplete.length;
                     // totalUsers;
@@ -223,7 +220,7 @@ const DashBody = () => {
             axios.get(`${process.env.REACT_APP_backendurl}/caspurchage/cancel`)
                 .then((res) => {
                     const allcomplete = res.data
-                    // console.log(allusers)
+                    
 
                     const end = allcomplete.length;
                     // totalUsers;
@@ -260,7 +257,7 @@ const DashBody = () => {
             axios.get(`${process.env.REACT_APP_backendurl}/allProducts`)
                 .then((res) => {
                     const allproducts = res.data
-                    // console.log(allusers)
+                   
 
                     const end = allproducts.length;
                     // totalUsers;
@@ -300,7 +297,7 @@ const DashBody = () => {
             axios.get(`${process.env.REACT_APP_backendurl}/caspurchage/complete`)
                 .then((res) => {
                     const allcomplete = res.data
-                    // console.log(allusers)
+                    
 
                     
 

@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { QueryClient } from '@tanstack/react-query';
 
 const CashOnpurch = ({ cartItems, setShowModal }) => {
   const { user, prices, localDeviceId } = useContext(Zaitooncontext);
@@ -31,7 +32,6 @@ const CashOnpurch = ({ cartItems, setShowModal }) => {
 
   const orderConfirmation = async (data) => {
 
-    // console.log(emaile)
 
     const name = data.name;
     const email = emaile;
@@ -45,7 +45,6 @@ const CashOnpurch = ({ cartItems, setShowModal }) => {
     const totalPrice = prices;
     // const role = "cashOnpurchages";
     const status = "pending"
-    // console.log(productdata)
 
     const cashOndata = {
       name,
@@ -70,6 +69,18 @@ const CashOnpurch = ({ cartItems, setShowModal }) => {
       if (response?.data?.insertedId) {
         toast.success("Order Successfully Placed!!");
         setShowModal(false)
+
+         // 🚀 clear modal
+        setShowModal(false);
+
+        // 🚀 clear cart from backend
+        await fetch(`${process.env.REACT_APP_backendurl}/cart/clear/${email}`, {
+          method: "DELETE",
+        });
+
+        // 🚀 instantly refresh cart
+        QueryClient.invalidateQueries(["cartItems", email]);
+
         navigate(`/myorder/${emaile}`)
       } else {
         toast.error("Order NOT Placed, Please Try again")
@@ -77,7 +88,7 @@ const CashOnpurch = ({ cartItems, setShowModal }) => {
 
     }
     catch (error) {
-      console.log(error.massage)
+      console.error(error.massage)
     }
 
 

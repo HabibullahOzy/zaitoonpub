@@ -89,7 +89,7 @@ const BuyNowpdModa = ({ dataes }) => {
                 toast.error("Order NOT Placed, Please Try again");
             }
         } catch (error) {
-            console.log(error.message);
+            console.error(error.message);
         }
     };
 

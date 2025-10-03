@@ -31,7 +31,6 @@ const ImageSlider = () => {
         const imageFile = categoryData.image;
 
 
-        // console.log("Form Data:", data);
         const formData = new FormData();
         formData.append("image", imageFile);
         formData.append("type", data.type);
@@ -40,7 +39,6 @@ const ImageSlider = () => {
         const res = await axios.post(`${process.env.REACT_APP_backendurl}/sliderimage`, formData, {
             headers: { "Content-Type": "multipart/form-data" }
         });
-        // console.log(res.data);
         if (res?.data?.insertedId) {
             toast.success("Category and subcategories added successfully!");
             // Reset form or perform any other actions
