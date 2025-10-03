@@ -32,32 +32,33 @@ const dialogRef = useRef(null);
       className="modal"
       onClick={handleBackdropClick}
     >
+      {/* Close button */}
+        <button
+          onClick={onClose}
+          className="btn btn-sm btn-circle btn-ghost bg-white lg:absolute lg:top-12 lg:right-[31%] md:absolute md:top-12 md:right-3 sm:absolute sm:top-12 sm:right-3"
+        >
+          ✕
+        </button>
       <div
         className="modal-box relative"
         style={{
           maxWidth: 650,
-          maxHeight: "100vh",
+          maxHeight: "90vh",
           overflowY: "auto",
           padding: 4,
           borderRadius: 12,
-          backgroundColor: "white",
+          backgroundColor: "transparent",
           boxShadow: "0 8px 20px rgba(0,0,0,0.2)",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
         }}
       >
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          className="btn btn-sm btn-circle btn-ghost bg-[rgb(8, 130, 8)] absolute right-2 top-2"
-        >
-          ✕
-        </button>
+        
 
         {/* PDF Viewer */}
-        <div className="flex flex-col items-center bg-gray-100">
-          <div className="w-full max-w-2xl bg-white shadow-lg p-2 rounded-md">
+        <div className="flex flex-col items-center">
+          <div className="w-full max-w-2xl bg-white shadow-lg p-2 rounded-2xl">
             <ViewPdfsecond pdfUrl={pdf} />
           </div>
         </div>

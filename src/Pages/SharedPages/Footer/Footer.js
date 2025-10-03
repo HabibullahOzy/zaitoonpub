@@ -122,7 +122,7 @@ const Footer = () => {
           <p>
             Zaitoon Publication.
             <br />
-            @c developed by Md.Habibullah
+            © {new Date().getFullYear()}{" "} developed by <a href='http://habibullah.falrex.com/' className='text-blue-600 font-bold' target='_blank'>Md.Habibullah</a>
           </p>
         </aside>
         <nav className="md:place-self-center md:justify-self-end">

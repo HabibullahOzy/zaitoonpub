@@ -191,17 +191,18 @@ const ProductsDetails = () => {
         setShareProduct(product);
     }
 
-const [orderCou, setOrderCou] = useState()
-     useEffect(() => {
-        
+    const [orderCou, setOrderCou] = useState()
+    useEffect(() => {
+
 
         try {
-             dataes.map(async (info) => {
-            const res = await axios.get(`${process.env.REACT_APP_backendurl}/ordercount/${info?.ProductCode}`);
-                    const orderCou = res.data
-                    setOrderCou(orderCou)
-                    
-})}      
+            dataes?.map(async (info) => {
+                const res = await axios.get(`${process.env.REACT_APP_backendurl}/ordercount/${info?.ProductCode}`);
+                const orderCou = res.data
+                setOrderCou(orderCou)
+
+            })
+        }
         catch (error) {
 
         }
@@ -292,9 +293,9 @@ const [orderCou, setOrderCou] = useState()
 
 
                                     <div className='flex gap-2'>
-                                       <FcOk /> In Stock<>{
-orderCou?.totalQuantity ? <p className='text-green-600 font-semibold'>{`${data?.quantity - orderCou?.totalQuantity}`}</p> : <p className='text-green-600 font-semibold'>{data?.quantity}</p>
-                                       }</> + copies available
+                                        <FcOk /> In Stock<>{
+                                            orderCou?.totalQuantity ? <p className='text-green-600 font-semibold'>{`${data?.quantity - orderCou?.totalQuantity}`}</p> : <p className='text-green-600 font-semibold'>{data?.quantity}</p>
+                                        }</> + copies available
                                     </div>
 
 
@@ -448,7 +449,10 @@ orderCou?.totalQuantity ? <p className='text-green-600 font-semibold'>{`${data?.
 
 
                             {
+
                                 setProducD(data)
+
+
                             }
                         </div>)
                 }

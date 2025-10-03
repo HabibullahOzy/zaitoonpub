@@ -38,13 +38,13 @@ const Header = () => {
         i18n.changeLanguage(lng);
     };
 
-    // 🔎 search + filter states
+    //  search + filter states
     const [searchTerm, setSearchTerm] = useState("");
     const [isFetching, setIsFetching] = useState(false);
     const [filteredData, setFilteredData] = useState([]);
     const [mobileOpen, setMobileOpen] = useState(false);
 
-    // ✅ fetch products
+    //  fetch products
     const { data: allproducts = [] } = useQuery({
         queryKey: ["allproducts"],
         queryFn: async () => {
@@ -55,7 +55,7 @@ const Header = () => {
         },
     });
 
-    // ✅ search filter logic
+    //  search filter logic
     useEffect(() => {
         if (!allproducts.length) return;
 
@@ -139,7 +139,7 @@ const Header = () => {
                                     <div className="flex items-center gap-2">
                                         <input
                                             type="text"
-                                            placeholder="Search products..."
+                                            placeholder="Search products by name, author, category..."
                                             className="flex-grow bg-transparent rounded-full border-none outline-none text-sm"
                                             value={searchTerm}
                                             autoFocus
