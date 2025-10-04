@@ -37,7 +37,7 @@ const AllUsers = () => {
             .then(res => {
                 if (res.data.acknowledged === true) {
                     toast.success("User Successfully deleted");
-                    setAlluser(prev => prev.filter(u => u._id !== id));
+                    setAlluser(prev => (prev || []).filter(u => u._id !== id));
                 }
             })
             .catch((error) => {

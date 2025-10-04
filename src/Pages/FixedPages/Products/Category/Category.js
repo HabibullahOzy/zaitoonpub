@@ -16,25 +16,25 @@ const Category = () => {
   });
 
   // get unique categories from product list
-  const categories = [...new Set(allcategory.map(p => p.categname))];
+  const categories = [...new Set(Array.isArray(allcategory) && allcategory?.map(p => p.categname))];
 
   return (
     <div className='mt-11 w-10/12 mx-auto'>
       <div>
-        <h1 className='flex justify-center text-black font-semibold text-3xl'><BiSolidCategoryAlt className='mr-2 text-yellow-500'/>Category</h1><br/>
+        <h1 className='flex justify-center text-black font-semibold text-3xl'><BiSolidCategoryAlt className='mr-2 text-yellow-300'/>Category</h1><br/>
         <p className='text-end text-black font-semibold'>সকল ক্যাটাগরি সমূহ</p>
         <hr className='border-2 border-gray-300 w-full mx-auto' />
       </div>
 
       {/* category buttons */}
       <div className='flex justify-center mt-12 flex-wrap gap-8'>
-        {categories.map((cat, i) => {
+        {categories?.map((cat, i) => {
           const product = allcategory.find(p => p.categname === cat);
           return (
             <div key={i} className="relative group inline-block">
               {/* Tooltip */}
               <div className="absolute -top-10 left-1/2 -translate-x-1/2 hidden group-hover:block tooltip-content z-10">
-                <div className="animate-bounce text-orange-400 -rotate-10 text-lg font-black">
+                <div className="animate-bounce text-orange-300 -rotate-10 text-lg font-black">
                   {cat}
                 </div>
               </div>
@@ -63,11 +63,10 @@ const Category = () => {
       <div className="text-gray-800 leading-relaxed mt-10">
         {activeTab && (
           <div className="grid gap-6">
-            {allcategory
-              .filter(p => p.categname === activeTab)
-              .map(p => (
-                <div key={p._id} className=" shadow-md rounded-sm p-4">
-                    <Play productCategory={p} />
+            {(allcategory || []).filter(p => p.categname === activeTab)
+              .map(pcate => (
+                <div key={pcate._id} className=" rounded-sm p-4">
+                    <Play productCategory={pcate} />
                   {/* <img src={p.image} alt={p.nameeng} className="w-full h-40 object-cover rounded-md" />
                   <h2 className="font-semibold mt-2">{p.nameeng}</h2>
                   <p className="text-sm text-gray-500">{p.authorName}</p>

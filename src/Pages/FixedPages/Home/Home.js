@@ -2,13 +2,25 @@ import React, { useEffect, useState } from 'react';
 import Banner from '../Banner/Banner';
 import Products from '../Products/Products';
 // import CustomerReview from '../Review/CustomerReview';
-import Openinganimation from '../../OpeningAnimation/Openinganimation';
+// import Openinganimation from '../../OpeningAnimation/Openinganimation';
 import Category from '../Products/Category/Category';
 import { RiWhatsappFill } from 'react-icons/ri';
 import ImportantVideo from '../VideoShow/ImportantVideo';
 import CommingSoon from '../Products/Upcomming/CommingSoon';
+import img from '../../../assets/booksirize.jpg'
+import './Home.css';
 
 // import image from "../../../assets/website-under-construction.png";
+
+const videoData = [
+  {
+    src: "https://www.youtube.com/watch?v=-M6t0oP5ZDc",
+    thumbnail: img,
+    title: "Intro Video"
+  }
+];
+
+
 
 const Home = () => {
     const [visible, setVisible] = useState(false);
@@ -31,8 +43,8 @@ const Home = () => {
                 <CommingSoon></CommingSoon>
             </div>
 
-            <div className="pt-10">
-                <ImportantVideo vidSrc='https://www.youtube.com/watch?v=-M6t0oP5ZDc'></ImportantVideo>
+            <div className="w-10/12 mx-auto pt-10">
+                <ImportantVideo vidSrc={videoData} ></ImportantVideo>
             </div>
 
             {/* <CustomerReview></CustomerReview> */}
@@ -66,19 +78,6 @@ const Home = () => {
                         <RiWhatsappFill className="text-[#2da922] text-6xl drop-shadow-lg  border-green-500 " />
                     </div>
                 </a>
-
-                <style jsx>{`
-    @keyframes slideIn {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0%);
-        opacity: 1;
-      }
-    }
-  `}</style>
             </div>
         </div>
     );

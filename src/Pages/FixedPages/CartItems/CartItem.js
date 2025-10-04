@@ -20,7 +20,7 @@ const CartItem = () => {
   const navigate = useNavigate();
   const email = user?.email || localDeviceId();
 
-  // 🚀 Access queryClient
+  //  Access queryClient
   const queryClient = useQueryClient();
 
   const { data: cartItems = [] } = useQuery({
@@ -67,7 +67,7 @@ const CartItem = () => {
     setdataforWish(item);
   };
 
-  // ✅ DELETE with invalidateQueries
+  //  DELETE with invalidateQueries
   const handleDelete = id => {
     fetch(`${process.env.REACT_APP_backendurl}/cartItem/delete/${id}`, {
       method: 'DELETE',
@@ -82,7 +82,7 @@ const CartItem = () => {
       });
   };
 
-  // ✅ Wishlist (same logic: refresh cache if needed)
+  //  Wishlist (same logic: refresh cache if needed)
   const addpdWishList = async (product) => {
     if (!user) {
       toast.error("Please login first to add to wishlist");
@@ -224,17 +224,10 @@ const CartItem = () => {
         </div>
       )}
 
-      {/* Paid Purchase Modal */}
-      {paidshowModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl max-w-4xl w-full p-6 relative">
-            <button className="absolute top-4 right-4 text-gray-700" onClick={() => setPaidShowModal(false)}>✕</button>
-            <PaidPurch cartpaidItems={paidmodalData} price={prices} />
-          </div>
-        </div>
-      )}
 
-      {/* Delete Confirmation Modal */}
+
+
+{/* Delete Confirmation Modal */}
       <Modal show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
         <ModalHeader />
         <ModalBody>
@@ -263,6 +256,22 @@ const CartItem = () => {
           </div>
         </ModalBody>
       </Modal>
+
+
+
+
+
+      {/* Paid Purchase Modal */}
+      {paidshowModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl max-w-4xl w-full p-6 relative">
+            <button className="absolute top-4 right-4 text-gray-700" onClick={() => setPaidShowModal(false)}>✕</button>
+            <PaidPurch cartpaidItems={paidmodalData} price={prices} />
+          </div>
+        </div>
+      )}
+
+      
     </div>
   );
 };

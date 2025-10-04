@@ -143,7 +143,7 @@ const queryClient = useQueryClient();
 
     {/* Subcategory */}
     <div>
-      <h3 className="font-medium mb-2">Subcategory</h3>
+      <h3 className="font-medium mb-2">Sub Category</h3>
       {subCategory.map((sub,i) => (
         <label key={i} className="flex items-center gap-2 mb-1">
           <input

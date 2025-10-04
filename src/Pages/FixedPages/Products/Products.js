@@ -30,7 +30,7 @@ const Products = () => {
     });
 
 
-const allproducts = allbooks.filter(book => book.state === '' || book.state === 'Available');
+const allproducts = (allbooks || []).filter(book => book.state === '' || book.state === 'Available');
     // const localDeviceId = () => {
     //     let deviceId = localStorage.getItem('device_id');
     //     if (!deviceId) {
@@ -39,8 +39,6 @@ const allproducts = allbooks.filter(book => book.state === '' || book.state === 
     //     }
     //     return deviceId;
     // };
-
-
 
     const handleAddCart = async (id, offerPrice) => {
         const response = await axios.get(`${process.env.REACT_APP_backendurl}/products/${id}`);
@@ -152,7 +150,7 @@ const allproducts = allbooks.filter(book => book.state === '' || book.state === 
 
             <div className=" text-center mb-12">
                 <motion.h2 className="text-3xl md:text-3xl font-semibold flex justify-center text-black" initial={{ opacity: 0, y: -30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} >
-                    <ImBooks className='text-yellow-500 mr-2'/> All Books </motion.h2>
+                    <ImBooks className='text-yellow-300 mr-2'/> All Books </motion.h2>
                 <motion.p className="mt-3 text-gray-600" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }} > Stay tuned for our books and releases </motion.p>
 
                 <p className='text-end text-black font-semibold'>সকল বই সমূহ</p>

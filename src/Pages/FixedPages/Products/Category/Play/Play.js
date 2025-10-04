@@ -5,10 +5,8 @@ import toast from 'react-hot-toast';
 import { FaCartFlatbed, FaHeartCirclePlus, FaRegEye } from 'react-icons/fa6';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import img from '../../../../../assets/wppBuy.png';
 import { Zaitooncontext } from '../../../../../SecureContext/ContextAuth';
 import BuyNowModal from '../../../Purchages/InstantPurch/BuyNowModal';
-import { FaShoppingBag } from 'react-icons/fa';
 import { FcViewDetails } from 'react-icons/fc';
 
 const Play = ({productCategory}) => {
@@ -19,7 +17,7 @@ const Play = ({productCategory}) => {
     const { data: nursproduct = [], refetch } = useQuery({
         queryKey: ['nursproduct'],
         queryFn: async () => {
-            const res = await fetch(`${process.env.REACT_APP_backendurl}/categoryproducts/${productCategory?.categname || "একাডেমিক | Academic"}`);
+            const res = await fetch(`${process.env.REACT_APP_backendurl}/categoryproducts/${productCategory?.categname}`);
             const data = await res.json();
             return data;
         }

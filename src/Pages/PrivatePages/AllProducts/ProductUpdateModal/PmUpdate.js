@@ -6,7 +6,7 @@ import { useLoaderData, useNavigate } from 'react-router-dom';
 import { Zaitooncontext } from '../../../../SecureContext/ContextAuth';
 
 const PmUpdate = () => {
-  const {isAdmin, isSuperAdmin} =useContext(Zaitooncontext)
+  const { isAdmin, isSuperAdmin } = useContext(Zaitooncontext)
   const navigate = useNavigate();
   const productsdata = useLoaderData();
 
@@ -36,7 +36,14 @@ const PmUpdate = () => {
 
       if (response.config.data) {
         toast.success("Updated Successfully ✅");
-        navigate("/dashboard/allProducts")
+        if (isAdmin) {
+          navigate("/dashboard/allProducts");
+        } else if (isSuperAdmin) {
+          navigate("/dashboard/superadmin/allProducts");
+        }
+        else {
+          navigate("/");
+        }
       } else {
         toast.error("Product Not Updated ❌");
       }

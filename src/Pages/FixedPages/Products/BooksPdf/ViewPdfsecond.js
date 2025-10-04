@@ -13,7 +13,7 @@ const ViewPdfScroll = ({ pdfUrl }) => {
   const containerRef = useRef();
   const touchStartX = useRef(null);
 
-  // ✅ Load PDF
+  //  Load PDF
   useEffect(() => {
     if (!pdfUrl) return;
 
@@ -38,7 +38,7 @@ const ViewPdfScroll = ({ pdfUrl }) => {
     loadPDF();
   }, [pdfUrl]);
 
-  // ✅ Render all pages
+  //  Render all pages
   useEffect(() => {
     const renderAllPages = async () => {
       if (!pdfDoc || !containerRef.current) return;
@@ -51,7 +51,7 @@ const ViewPdfScroll = ({ pdfUrl }) => {
         const canvas = document.createElement("canvas");
         canvas.style.marginBottom = "1rem";
         canvas.style.maxWidth = "100%";
-        canvas.style.scrollSnapAlign = "start"; // ✅ for smooth snap scrolling
+        canvas.style.scrollSnapAlign = "start"; //  for smooth snap scrolling
         const context = canvas.getContext("2d");
         canvas.height = viewport.height;
         canvas.width = viewport.width;
@@ -70,7 +70,7 @@ const ViewPdfScroll = ({ pdfUrl }) => {
     if (pdfDoc) renderAllPages();
   }, [pdfDoc, scale]);
 
-  // ✅ Touch gestures for zoom
+  //  Touch gestures for zoom
   const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
   };
@@ -128,7 +128,7 @@ const ViewPdfScroll = ({ pdfUrl }) => {
           overflowY: "auto",
           maxWidth: "100%",
           padding: "0 10px",
-          scrollSnapType: "y mandatory", // ✅ Smooth page snapping
+          scrollSnapType: "y mandatory", //  Smooth page snapping
         }}
       />
 

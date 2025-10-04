@@ -13,6 +13,7 @@ import useAdmin from "../../../../hooks/adminHooks/useAdmin";
 import useSuperAdmin from "../../../../hooks/superAdmin/superAdmin";
 import { Drawer, DrawerHeader, DrawerItems } from "flowbite-react";
 import CartItem from "../../../FixedPages/CartItems/CartItem";
+import TranslateLang from "../../LangTranslate/TranslateLang";
 
 const Header = () => {
     const { logOut, user, prices, ident, localDeviceId } =
@@ -63,7 +64,7 @@ const Header = () => {
         const delay = setTimeout(() => {
             const lower = searchTerm.toLowerCase();
 
-            const results = allproducts.filter((item) => {
+            const results = (allproducts || []).filter((item) => {
                 const namebn = item.namebn?.toLowerCase() || "";
                 const nameeng = item.nameeng?.toLowerCase() || "";
                 const namearb = item.namearb?.toLowerCase() || "";
@@ -322,6 +323,10 @@ const Header = () => {
                                             </Link>
                                         )}
                                     </div>
+
+                                    <li>
+                                        {/* <TranslateLang /> */}
+                                    </li>
                                 </ul>
                             </div>
                         </div>

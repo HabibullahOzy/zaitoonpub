@@ -18,7 +18,7 @@ const Main = () => {
     <div>
       <div className="overflow-hidden py-2 relative group w-[90%] mx-auto">
         <div className="flex gap-8 items-center whitespace-nowrap animate-marquee group-hover:[animation-play-state:paused]">
-          {marqdata?.map((item, i) => (
+          {Array.isArray(marqdata) && marqdata?.map((item, i) => (
             <div key={i} className="flex items-center gap-4 text-black text-md">
               <span>{item?.marqtext}</span>
               {item?.link === "" ? "," : <a

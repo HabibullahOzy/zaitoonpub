@@ -26,7 +26,7 @@ const RelatedPShow = ({ categorys }) => {
 
   useEffect(() => {
     if (Array.isArray(nursproduct)) {
-      const filtered = nursproduct.filter(p => p?.category === categorys);
+      const filtered = (nursproduct || []).filter(p => p?.category === categorys);
       setProducts(filtered.slice(0, 20));
     }
   }, [nursproduct, categorys]);

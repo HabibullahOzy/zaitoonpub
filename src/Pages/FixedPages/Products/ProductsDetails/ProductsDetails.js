@@ -6,13 +6,13 @@ import toast from 'react-hot-toast';
 import PdfOpenModal from '../BooksPdf/PdfOpenModal';
 import axios from 'axios';
 import Reviewgetform from '../../Review/ReviewTake/Reviewgetform';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import PSummer from './PSummer';
 import Pspecifica from './Pspecifica';
 import Pauthor from './Pauthor';
 import rearrow from '../../../../assets/redo-arrow.png';
 import { HiShare } from 'react-icons/hi';
-import { PiArrowBendDownLeftFill } from 'react-icons/pi';
+import { PiArrowBendDownLeftFill, PiArrowBendRightDownBold } from 'react-icons/pi';
 // import { FcReading } from 'react-icons/fc'
 // import { FaStar } from 'react-icons/fa';
 // import CustomerReview from '../../Review/CustomerReview';
@@ -40,7 +40,8 @@ const ProductsDetails = () => {
 
     const emaile = user?.email || localDeviceId()
 
-
+    const queryClient = useQueryClient();
+    
     const handleAddCart = async (id, offerPrice) => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_backendurl}/products/${id}`)
@@ -85,6 +86,7 @@ const ProductsDetails = () => {
                 .then(infoe => {
                     if (infoe.acknowledged) {
                         toast.success("Producte added to cart succesfully!!");
+                        queryClient.clear();
                         // navigate('/dashboard/allProducts')
                     } else {
                         toast.error("producte can't added please try again")
@@ -226,9 +228,28 @@ const ProductsDetails = () => {
                                         // onClick={() => document.getElementById('my_modal_3').showModal()}
                                         onClick={() => setModalOpen(true)} className="tooltip tooltip-success" data-tip="Some Read একটু পড়ে দেখুন"
                                     >
-                                        <figure className="border border-spacing-2 flex flex-grow shadow-md shadow-lime-400 border-emerald-400 p-5">
+                                        <figure className="border border-spacing-2 grid flex flex-grow shadow-md shadow-lime-400 border-emerald-400 p-5">
+                                            <div className='flex text-center justify-center  text-yellow-500'>
+                                                <p className=' font-semibold'>একটু পড়ে দেখুন </p> <div
+                                                    style={{
+                                                        display: "inline-block",
+                                                        animation: "updown 1.5s ease-in-out infinite",
+                                                    }}
+                                                >
+                                                    <PiArrowBendRightDownBold size={18} className='ml-2' />
+                                                    <style>
+                                                        {`
+          @keyframes updown {
+            0% { transform: translateY(-5px); }
+            50% { transform: translateY(5px); }
+            100% { transform: translateY(-5px); }
+          }
+        `}
+                                                    </style>
+                                                </div>
+                                            </div>
                                             <img src={data.image} alt="" className='lg:w-80 object-contain transition-transform duration-300 hover:scale-105' />
-                                            <p className='p-tex font-semibold'>একটু পড়ে দেখুন</p>
+
                                         </figure>
                                     </button>
                                 </div>
