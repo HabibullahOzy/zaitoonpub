@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Banner from '../Banner/Banner';
 import Products from '../Products/Products';
+import { useQuery } from '@tanstack/react-query';
 // import CustomerReview from '../Review/CustomerReview';
 // import Openinganimation from '../../OpeningAnimation/Openinganimation';
 import Category from '../Products/Category/Category';
@@ -12,13 +13,6 @@ import './Home.css';
 
 // import image from "../../../assets/website-under-construction.png";
 
-const videoData = [
-  {
-    src: "https://www.youtube.com/watch?v=-M6t0oP5ZDc",
-    thumbnail: img,
-    title: "Intro Video"
-  }
-];
 
 
 
@@ -29,6 +23,18 @@ const Home = () => {
         const timer = setTimeout(() => setVisible(true), 500); // Delay for animation
         return () => clearTimeout(timer);
     }, []);
+
+
+
+    const { data: videoData = [], refetch } = useQuery({
+        queryKey: ['videoData'],
+        queryFn: async () => {
+            const res = await fetch(`${process.env.REACT_APP_backendurl}/webmenu/video`);
+            const data = await res.json();
+            return data;
+        }
+    });
+
     return (
 
         <div className='bg-image'>

@@ -32,6 +32,7 @@ import {
     HiShoppingBag,
     HiUsers,
 } from "react-icons/hi";
+import {FcVideoCall} from 'react-icons/fc';
 import {
     MdRateReview
 } from "react-icons/md"
@@ -238,6 +239,12 @@ const DHeader = () => {
                                                             Marq Setup
                                                         </SidebarItem>
                                                     </Link>
+
+                                                    <Link to={'/dashboard/videoupload'}>
+                                                        <SidebarItem icon={FcVideoCall}>
+                                                            video set
+                                                        </SidebarItem>
+                                                    </Link>
                                                 </SidebarCollapse>
 
 
@@ -301,6 +308,12 @@ const DHeader = () => {
                                                     <Link to={'/dashboard/superadmin/marqsetup'}>
                                                         <SidebarItem icon={BsFillMenuButtonWideFill}>
                                                             Marq Setup
+                                                        </SidebarItem>
+                                                    </Link>
+
+                                                    <Link to={'/dashboard/superadmin/videoupload'}>
+                                                        <SidebarItem icon={FcVideoCall}>
+                                                            video set
                                                         </SidebarItem>
                                                     </Link>
 

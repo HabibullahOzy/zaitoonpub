@@ -221,7 +221,7 @@ const Invoice = ({ invdata }) => {
                                 : invdata?.totalPrice;
                             return (
                                 <tr key={i}>
-                                    <td style={tdStyle}>{item?.nameeng}</td>
+                                    <td style={tdStyle}>{item?.namebn}</td>
                                     <td style={tdStyle}>{item?.ProductCode}</td>
                                     <td style={tdStyle}>{item?.quantity}</td>
                                     <td style={tdStyle}>{item?.offer}</td>

@@ -40,6 +40,7 @@ import ReviewList from "../Pages/PrivatePages/DashBoard/ReviewList/ReviewList";
 import SmWebmenulist from "../Pages/PrivatePages/DashBoard/WebmenuList/SmWebmenulist";
 import ReportOrders from "../Pages/PrivatePages/DashBoard/ReportOrders/ReportOrders";
 import ProductsFilter from "../Pages/FixedPages/Products/ProductsFilter/ProductsFilter";
+import VideoUpload from "../Pages/PrivatePages/DashBoard/WebMenuSetup/VideoSetup/VideoUpload";
 
 const router = createBrowserRouter([
     {
@@ -230,6 +231,14 @@ const router = createBrowserRouter([
             {
                 path: "/dashboard/orderreport",
                 element: <AdminSecurPages><ReportOrders></ReportOrders></AdminSecurPages>
+            },
+            {
+                path: "/dashboard/videoupload",
+                element: <AdminSecurPages><VideoUpload></VideoUpload></AdminSecurPages>
+            },
+            {
+                path: "/dashboard/superadmin/videoupload",
+                element: <SuperAdmin><VideoUpload></VideoUpload></SuperAdmin>
             }
         ]
     },

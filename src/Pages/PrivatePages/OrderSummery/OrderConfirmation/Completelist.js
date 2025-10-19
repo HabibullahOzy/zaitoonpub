@@ -198,14 +198,14 @@ const Completelist = () => {
                                   </div>
                                 </div>
                               </td>
-                              <td className="border px-2 py-1 text-center">{prodata.nameeng}</td>
-                              <td className="border px-2 py-1 text-center">{prodata.ProductCode}</td>
-                              <td className="border px-2 py-1 text-center">{prodata.category}</td>
+                              <td className="border px-2 py-1 text-center">{prodata?.namebn || prodata?.nameeng}</td>
+                              <td className="border px-2 py-1 text-center">{prodata?.ProductCode}</td>
+                              <td className="border px-2 py-1 text-center">{prodata?.category}</td>
                               <td className="border px-2 py-1 text-center">{prodata?.subcategory}</td>
                               <td className="border px-2 py-1 text-center">{prodata?.authorName}</td>
                               <td className="border px-2 py-1 text-center">{prodata?.edition}</td>
-                              <td className="border px-2 py-1 text-center">{prodata.quantity}</td>
-                              <td className="border px-2 py-1 text-center">{prodata.productPrice}</td>
+                              <td className="border px-2 py-1 text-center">{prodata?.quantity}</td>
+                              <td className="border px-2 py-1 text-center">{prodata?.productPrice}</td>
                               <td className="border px-2 py-1 text-center">{prodata?.total}</td>
                             </tr>
                           ))}

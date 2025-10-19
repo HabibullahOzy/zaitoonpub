@@ -285,7 +285,7 @@ const ConfirmList = () => {
                                     </div>
                                   </td>
                                   <td className="border px-2 py-1 text-center">
-                                    {prodata.nameeng}
+                                    {prodata.namebn || prodata.nameeng}
                                   </td>
                                   <td className="border px-2 py-1 text-center">
                                     {prodata.ProductCode}

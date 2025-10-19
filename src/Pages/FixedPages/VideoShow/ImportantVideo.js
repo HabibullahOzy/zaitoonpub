@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import ReactPlayer from 'react-player';
 import './ImpVideoShow.css';
 
-const ImportantVideoGallery = ({ vidSrc }) => {
+const ImportantVideo = ({ vidSrc }) => {
     const videos = vidSrc || [];
   const [activeVideo, setActiveVideo] = useState(videos[0]);
 
   return (
     <div className="w-full mx-auto">
       {/* Main Video Player */}
-      <div className="aspect-w-full overflow-hidden shadow-lg videoratio mb-6">
+      <div className="aspect-w-full overflow-hidden shadow-lg videoratio mb-6 rounded-2xl">
         <ReactPlayer
-          src={activeVideo.src}
+          src={activeVideo?.srce}
           width="100%"
           height="100%"
           controls={true}
@@ -29,22 +29,22 @@ const ImportantVideoGallery = ({ vidSrc }) => {
       </div>
 
       {/* Thumbnail Carousel */}
-      <div className="flex gap-4 overflow-x-auto pb-2 no-scrollbar">
+      <div className="flex gap-4 overflow-x-auto pb-2 no-scrollbar pl-2">
         {videos.map((video, index) => (
           <div
             key={index}
             onClick={() => setActiveVideo(video)}
-            className={`min-w-[150px] cursor-pointer border rounded-lg overflow-hidden shadow-sm flex-shrink-0 transition-transform hover:scale-105 ${
-              activeVideo.src === video.src ? 'ring-2 ring-blue-500' : ''
+            className={`min-w-[100px] cursor-pointer border rounded-lg overflow-hidden shadow-sm flex-shrink-0 transition-transform hover:scale-105 ${
+              activeVideo?.srce === video?.srce ? 'ring-2 ring-blue-500' : ''
             }`}
           >
             <img
-              src={video.thumbnail}
-              alt={video.title || `Video ${index + 1}`}
-              className="w-36 h-24"
+              src={video?.image}
+              alt={video?.title || `Video ${index + 1}`}
+              className="w-24 h-24"
             />
             <div className="p-2 text-sm text-center font-medium whitespace-nowrap">
-              {video.title || `Video ${index + 1}`}
+              {video?.title || `Video ${index + 1}`}
             </div>
           </div>
         ))}
@@ -53,7 +53,7 @@ const ImportantVideoGallery = ({ vidSrc }) => {
   );
 };
 
-export default ImportantVideoGallery;
+export default ImportantVideo;
 
 
 

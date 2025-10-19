@@ -184,9 +184,9 @@ const CancelOrder = () => {
                               <td className="border px-2 py-1">
                                 <img src={prodata.image} alt="Product" className="h-10 w-10 rounded object-cover" />
                               </td>
-                              <td className="border px-2 py-1 text-center">{prodata.nameeng}</td>
-                              <td className="border px-2 py-1 text-center">{prodata.ProductCode}</td>
-                              <td className="border px-2 py-1 text-center">{prodata.category}</td>
+                              <td className="border px-2 py-1 text-center">{prodata?.namebn || prodata?.nameeng}</td>
+                              <td className="border px-2 py-1 text-center">{prodata?.ProductCode}</td>
+                              <td className="border px-2 py-1 text-center">{prodata?.category}</td>
                               <td className="border px-2 py-1 text-center">{prodata?.subcategory}</td>
                               <td className="border px-2 py-1 text-center">{prodata?.authorName}</td>
                               <td className="border px-2 py-1 text-center">{prodata?.edition}</td>

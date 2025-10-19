@@ -71,7 +71,7 @@ const PmUpdate = () => {
             {/* Input Field */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Product (BN)
+                Product (BN) <span className='text-red-600'>*</span>
               </label>
               <input
                 {...register("productbnName", { required: true })}
@@ -89,14 +89,11 @@ const PmUpdate = () => {
                 Product (Arabic)
               </label>
               <input
-                {...register("arbproductarName", { required: true })}
+                {...register("arbproductarName")}
                 defaultValue={pdata.namearb}
                 placeholder="Enter Arabic product name"
                 className="w-full mt-1 rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
               />
-              {errors.arbproductarName && (
-                <p className="text-red-500 text-sm mt-1">This field is required</p>
-              )}
             </div>
 
             <div>
@@ -104,21 +101,18 @@ const PmUpdate = () => {
                 Product (EN)
               </label>
               <input
-                {...register("engproductName", { required: true })}
+                {...register("engproductName")}
                 defaultValue={pdata.nameeng}
                 placeholder="Enter English product name"
                 className="w-full mt-1 rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
               />
-              {errors.engproductName && (
-                <p className="text-red-500 text-sm mt-1">This field is required</p>
-              )}
             </div>
 
             {/* Price & Offer */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Product Price
+                  Product Price <span className='text-red-600'>*</span>
                 </label>
                 <input
                   {...register("productPrice", { required: true })}
@@ -150,7 +144,7 @@ const PmUpdate = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Number of Pages
+                  Number of Pages <span className='text-red-600'>*</span>
                 </label>
                 <input
                   {...register("numberOfpage", { required: true })}
@@ -179,7 +173,7 @@ const PmUpdate = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Author Name
+                  Author Name <span className='text-red-600'>*</span>
                 </label>
                 <input
                   {...register("authorName", { required: true })}
@@ -209,7 +203,7 @@ const PmUpdate = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Edition
+                  Edition <span className='text-red-600'>*</span>
                 </label>
                 <input
                   {...register("edition", { required: true })}
@@ -223,7 +217,7 @@ const PmUpdate = () => {
             {/* Description */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Description
+                Description <span className='text-red-600'>*</span>
               </label>
               <textarea
                 {...register("description", { required: true })}

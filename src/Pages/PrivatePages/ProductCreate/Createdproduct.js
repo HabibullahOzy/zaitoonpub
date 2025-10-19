@@ -7,6 +7,9 @@ import { FcAddDatabase } from 'react-icons/fc';
 import { useQuery } from '@tanstack/react-query';
 // import { FcAddDatabase } from "react-icons/fc";
 import { AiOutlineCloseCircle } from "react-icons/ai";
+import { motion, AnimatePresence } from 'framer-motion';
+import { GrCompliance } from "react-icons/gr";
+import { ImSpinner8 } from "react-icons/im";
 
 
 const Createdproduct = () => {
@@ -20,18 +23,34 @@ const Createdproduct = () => {
     const [imageFile, setImageFile] = useState(null);
     const [previewPdf, setPreviewPdf] = useState(null);
     const [pdfFile, setPdfFile] = useState(null);
+    const [submitShow, setSubmitShow] = useState(false);
 
-    const generateNextProductCode = () => {
-        const lastNumber = parseInt(localStorage.getItem('lastProductNumber') || '0', 10);
-        const nextNumber = lastNumber + 1;
-        localStorage.setItem('lastProductNumber', nextNumber);
-        return `ZP${nextNumber.toString().padStart(4, '0')}`;
-    };
+    const { data: allprods = [] } = useQuery({
+        queryKey: ["allprods"],
+        queryFn: async () => {
+            const res = await fetch(`${process.env.REACT_APP_backendurl}/allProducts`);
+            const data = await res.json();
+            return data;
+        },
+    });
 
     useEffect(() => {
-        const procode = generateNextProductCode();
-        setProductCode(procode);
-    }, []);
+        if (allprods.length > 0) {
+            // Find the highest numeric value from ProductCode (like ZP0007 → 7)
+            const lastCode = allprods
+                .map((p) => parseInt(p?.ProductCode?.replace("ZP", ""), 10))
+                .filter((n) => !isNaN(n))
+                .sort((a, b) => b - a)[0] || 0;
+
+            // Generate next ProductCode
+            const nextCode = lastCode + 1;
+            const formattedCode = `ZP${nextCode.toString().padStart(4, "0")}`;
+            setProductCode(formattedCode);
+        } else {
+            // If no products exist yet
+            setProductCode("ZP0001");
+        }
+    }, [allprods]);
 
 
 
@@ -106,7 +125,7 @@ const Createdproduct = () => {
         formData.append('image', imageFile);
         formData.append('pdf', pdfFile);
 
- 
+
 
         for (let [key, value] of formData.entries()) {
         }
@@ -116,10 +135,12 @@ const Createdproduct = () => {
                 headers: { "Content-Type": "multipart/form-data" }
             });
             if (response.data.insertedId) {
+                setSubmitShow(response.data.insertedId)
                 toast.success("Product succesfully created")
                 reset()
                 removeImage()
                 removePdf()
+                setSubmitShow(true)
             }
             else {
                 toast.error("Please try again properly, product not created")
@@ -142,6 +163,44 @@ const Createdproduct = () => {
             return data;
         }
     });
+
+
+
+    // Auto reset success message after 3 seconds
+    //   useEffect(() => {
+    //     if (submitShow) {
+    //       const timer = setTimeout(() => {
+    //         setSubmitShow(false);
+    //       }, 3000);
+    //       return () => clearTimeout(timer);
+    //     }
+    //   }, [submitShow, setSubmitShow]);
+
+
+    const [loading, setLoading] = useState(false);
+
+    // Handle transitions
+    useEffect(() => {
+        if (submitShow) {
+            setLoading(true);
+
+            // ⏳ Simulate 1.5s "submitting" delay before showing success
+            const loadingTimer = setTimeout(() => {
+                setLoading(false);
+            }, 1500);
+
+            // ✅ After success, auto-reset to button in 3 seconds
+            const resetTimer = setTimeout(() => {
+                setSubmitShow(false);
+                setLoading(false);
+            }, 4500);
+
+            return () => {
+                clearTimeout(loadingTimer);
+                clearTimeout(resetTimer);
+            };
+        }
+    }, [submitShow, setSubmitShow]);
 
     return (
         <div className="hero min-h-screen">
@@ -172,29 +231,27 @@ const Createdproduct = () => {
                                 {/* Product Arabic Name */}
                                 <div className="form-control">
                                     <label className="label">
-                                        <span className="label-text text-black">Product Arabic Name <small className='text-red-600 text-sm ml-1'>*</small></span>
+                                        <span className="label-text text-black">Product Arabic Name</span>
                                     </label>
                                     <input
-                                        {...register("arbproductarName", { required: true })}
+                                        {...register("arbproductarName")}
                                         type="text"
                                         placeholder="Enter Arabic Product Name"
                                         className="input input-bordered w-full"
                                     />
-                                    {errors.arbproductarName && <span className="text-red-500">This field is required</span>}
                                 </div>
 
                                 {/* Product EN Name */}
                                 <div className="form-control">
                                     <label className="label">
-                                        <span className="label-text text-black">Product EN Name <small className='text-red-600 text-sm ml-1'>*</small></span>
+                                        <span className="label-text text-black">Product EN Name</span>
                                     </label>
                                     <input
-                                        {...register("engproductName", { required: true })}
+                                        {...register("engproductName")}
                                         type="text"
                                         placeholder="Enter English Product Name"
                                         className="input input-bordered w-full"
                                     />
-                                    {errors.engproductName && <span className="text-red-500">This field is required</span>}
                                 </div>
 
                                 {/* Product Price */}
@@ -515,10 +572,95 @@ const Createdproduct = () => {
                         </div>
 
                         {/* Submit Button */}
-                        <div className="form-control mt-6">
+                        {/* <div className="form-control mt-6">
                             <button type="submit" className="btn btn-success w-full lg:w-1/3 mx-auto"><FcAddDatabase className='text-3xl hover:bg-blue-600' />
                                 Submit
                             </button>
+                            {
+                                submitShow ? <p><GrCompliance />Submited</p> : <p>someting ealse Pleas try again .....</p>
+                            }
+                        </div> */}
+                        <div className="form-control mt-6 text-center">
+                            <AnimatePresence mode="wait">
+                                {!submitShow && !loading && (
+                                    // 🟢 Default Submit Button
+                                    <motion.button
+                                        key="submit"
+                                        type="submit"
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.95 }}
+                                        transition={{ duration: 0.2 }}
+                                        className="btn bg-green-600 hover:bg-green-700 text-white font-semibold flex items-center justify-center gap-2 w-full lg:w-1/3 mx-auto shadow-lg rounded-2xl py-3"
+                                    >
+                                        <motion.div
+                                            animate={{ rotate: [0, 10, -10, 0] }}
+                                            transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+                                        >
+                                            <FcAddDatabase className="text-3xl" />
+                                        </motion.div>
+                                        <motion.span
+                                            animate={{ opacity: [1, 0.7, 1] }}
+                                            transition={{ repeat: Infinity, duration: 1.5 }}
+                                        >
+                                            Submit
+                                        </motion.span>
+                                    </motion.button>
+                                )}
+
+                                {submitShow && loading && (
+                                    // 🌀 Loading Spinner Animation
+                                    <motion.div
+                                        key="loading"
+                                        initial={{ opacity: 0, scale: 0.8 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        transition={{ duration: 0.3 }}
+                                        className="flex items-center justify-center gap-3 text-green-600 mt-3"
+                                    >
+                                        <motion.div
+                                            animate={{ rotate: 360 }}
+                                            transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
+                                        >
+                                            <ImSpinner8 className="text-3xl" />
+                                        </motion.div>
+                                        <motion.span
+                                            animate={{ opacity: [1, 0.6, 1] }}
+                                            transition={{ repeat: Infinity, duration: 1.2 }}
+                                            className="font-semibold"
+                                        >
+                                            Submitting...
+                                        </motion.span>
+                                    </motion.div>
+                                )}
+
+                                {submitShow && !loading && (
+                                    // ✅ Success Message Animation
+                                    <motion.div
+                                        key="success"
+                                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                                        exit={{ opacity: 0, scale: 0.9, y: -20 }}
+                                        transition={{ duration: 0.6, ease: "easeOut" }}
+                                        className="flex flex-col items-center justify-center gap-2 mt-3"
+                                    >
+                                        <motion.div
+                                            initial={{ scale: 0 }}
+                                            animate={{ scale: [1.2, 1], rotate: [0, 10, -10, 0] }}
+                                            transition={{ duration: 0.6 }}
+                                        >
+                                            <GrCompliance className="text-green-600 text-4xl animate-pulse" />
+                                        </motion.div>
+                                        <motion.p
+                                            initial={{ opacity: 0, y: 5 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: 0.2 }}
+                                            className="text-green-600 font-semibold text-lg"
+                                        >
+                                            Submitted Successfully!
+                                        </motion.p>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </div>
                     </form>
                 </div>

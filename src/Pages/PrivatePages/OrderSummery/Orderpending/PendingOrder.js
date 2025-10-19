@@ -283,7 +283,7 @@ const PendingOrder = () => {
                             </thead>
                             <tbody>
                               {cashdata?.productdata?.map((prodata, j) => (
-                                <tr key={prodata._id} className="hover:bg-gray-50">
+                                <tr key={prodata?._id} className="hover:bg-gray-50">
                                   <td className="border px-2 py-1 text-center">
                                     {j + 1}
                                   </td>
@@ -291,32 +291,32 @@ const PendingOrder = () => {
                                     <div className="avatar">
                                       <div className="mask mask-squircle h-12 w-12">
                                         <img
-                                          src={prodata.image}
-                                          alt={prodata.name}
+                                          src={prodata?.image}
+                                          alt={prodata?.name}
                                         />
                                       </div>
                                     </div>
                                   </td>
                                   <td className="border px-2 py-1 text-center">
-                                    {prodata.nameeng}
+                                    {prodata?.namebn || prodata.nameeng}
                                   </td>
                                   <td className="border px-2 py-1 text-center">
-                                    {prodata.ProductCode}
+                                    {prodata?.ProductCode}
                                   </td>
                                   <td className="border px-2 py-1 text-center">
-                                    {prodata.category}
+                                    {prodata?.category}
                                   </td>
                                   <td className="border px-2 py-1 text-center">{prodata?.subcategory}</td>
                                   <td className="border px-2 py-1 text-center">{prodata?.authorName}</td>
                                   <td className="border px-2 py-1 text-center">{prodata?.edition}</td>
                                   <td className="border px-2 py-1 text-center">
-                                    {prodata.quantity}
+                                    {prodata?.quantity}
                                   </td>
                                   <td className="border px-2 py-1 text-center">
-                                    {prodata.productPrice}
+                                    {prodata?.productPrice}
                                   </td>
                                   <td className="border px-2 py-1 text-center">
-                                    {prodata.total}
+                                    {prodata?.total}
                                   </td>
 
                                 </tr>

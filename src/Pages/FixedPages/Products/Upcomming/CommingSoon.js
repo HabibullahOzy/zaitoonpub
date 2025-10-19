@@ -32,46 +32,46 @@ const CommingSoon = () => {
             {
                 books.length > 0 ? (
                     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-6xl"> {books.map((book, idx) => (
-                <motion.div key={idx} className="bg-white rounded-2xl shadow-lg overflow-hidden border hover:shadow-2xl transition duration-300" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.2, duration: 0.6 }} whileHover={{ scale: 1.03 }} >
-                    {
-                        book?.state === 'Preorder' ?
-                            <div className="relative w-full overflow-hidden tooltip tooltip-top" data-tip="Click to Preorder">
-  <Link to={`/products/${book._id}`} className="cursor-pointer block relative">
-    <img
-      src={book.image}
-      alt={book.title}
-      className="transform hover:scale-110 transition duration-500 w-full"
-    />
-    <span className="absolute top-3 left-3 bg-yellow-500 text-white text-xs px-3 py-1 rounded-full">
-      {book.state}
-    </span>
-  </Link>
-</div> : <div className="relative w-full overflow-hidden">
-                                <img src={book.image} alt={book.title}
-                                    className=" transform hover:scale-110 transition duration-500" />
-                                <span className="absolute top-3 left-3 bg-yellow-500 text-white text-xs px-3 py-1 rounded-full"> {book.state} </span>
-                            </div>
-                    }
-                    {
-                        book?.state === 'Preorder' ? <Link to={`/products/${book._id}`} className="cursor-pointer">
-                            <div className="p-5 text-center bg-[#baefba]">
-                        <h3 className="text-lg font-semibold mb-1">{book.nameeng}</h3>
-                        <p className="text-sm text-gray-500 mb-2">by {book.authorName}</p>
-                        <p className="text-gray-600 text-sm line-clamp-3"> {book.description?.slice(0, 40)}...... </p>
-                        <div className="mt-4 text-sm text-gray-700"> 📅 Release Date: <b>{book.postDate}</b>
-                        </div>
-                    </div>
-                        </Link> : <div className="p-5 text-center bg-[#baefba]">
-                        <h3 className="text-lg font-semibold mb-1">{book.nameeng}</h3>
-                        <p className="text-sm text-gray-500 mb-2">by {book.authorName}</p>
-                        <p className="text-gray-600 text-sm line-clamp-3"> {book.description?.slice(0, 40)}...... </p>
-                        <div className="mt-4 text-sm text-gray-700"> 📅 Release Date: <b>{book.postDate}</b>
-                        </div>
-                    </div>
-                    }
-                </motion.div>
-            ))}
-            </div>) : <div className="text-center text-gray-500">No upcoming books at the moment. Please check back later!</div>
+                        <motion.div key={idx} className="bg-white rounded-2xl shadow-lg overflow-hidden border hover:shadow-2xl transition duration-300" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.2, duration: 0.6 }} whileHover={{ scale: 1.03 }} >
+                            {
+                                book?.state === 'Preorder' ?
+                                    <div className="relative w-full overflow-hidden tooltip tooltip-top" data-tip="Click to Preorder">
+                                        <Link to={`/products/${book._id}`} className="cursor-pointer block relative">
+                                            <img
+                                                src={book.image}
+                                                alt={book.title}
+                                                className="transform hover:scale-110 transition duration-500 w-full"
+                                            />
+                                            <span className="absolute top-3 left-3 bg-yellow-500 text-white text-xs px-3 py-1 rounded-full">
+                                                {book.state}
+                                            </span>
+                                        </Link>
+                                    </div> : <div className="relative w-full overflow-hidden">
+                                        <img src={book.image} alt={book.title}
+                                            className=" transform hover:scale-110 transition duration-500" />
+                                        <span className="absolute top-3 left-3 bg-yellow-500 text-white text-xs px-3 py-1 rounded-full"> {book.state} </span>
+                                    </div>
+                            }
+                            {
+                                book?.state === 'Preorder' ? <Link to={`/products/${book._id}`} className="cursor-pointer">
+                                    <div className="p-5 text-center bg-[#baefba]">
+                                        <h3 className="text-lg font-semibold mb-1">{book.namebn}</h3>
+                                        <p className="text-sm text-gray-500 mb-2">by {book.authorName}</p>
+                                        <p className="text-gray-600 text-sm line-clamp-3"> {book.description?.slice(0, 40)}...... </p>
+                                        <div className="mt-4 text-sm text-gray-700"> 📅 Release Date: <b>{book.postDate}</b>
+                                        </div>
+                                    </div>
+                                </Link> : <div className="p-5 text-center bg-[#baefba]">
+                                    <h3 className="text-lg font-semibold mb-1">{book.nameeng}</h3>
+                                    <p className="text-sm text-gray-500 mb-2">by {book.authorName}</p>
+                                    <p className="text-gray-600 text-sm line-clamp-3"> {book.description?.slice(0, 40)}...... </p>
+                                    <div className="mt-4 text-sm text-gray-700"> 📅 Release Date: <b>{book.postDate}</b>
+                                    </div>
+                                </div>
+                            }
+                        </motion.div>
+                    ))}
+                    </div>) : <div className="text-center text-gray-500">No upcoming books at the moment. Please check back later!</div>
             }
         </section>
     );

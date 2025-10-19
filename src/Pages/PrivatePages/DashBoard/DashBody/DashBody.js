@@ -8,6 +8,8 @@ import OrderSchart from "./OrderSummarychart/OrderSchart";
 import OnlyOrderCou from "./OrderSummarychart/OnlyOrderCou/OnlyOrderCou";
 import { BarChart2, CheckCircle, ShoppingCart, Users } from "lucide-react";
 import Visitorshow from "./VisitorSummery/Visitorshow";
+import useAdmin from "../../../../hooks/adminHooks/useAdmin";
+import useSuperAdmin from "../../../../hooks/superAdmin/superAdmin";
 
 
 // Sample data: dates & order quantity (dates in YYYY-MM-DD format)
@@ -41,6 +43,8 @@ const DashBody = () => {
     const [month, setMonth] = useState(4); // May (0-based index)
     const [tooltip, setTooltip] = useState({ visible: false, x: 0, y: 0, content: "" });
     const [countallProd, setCountallProd] = useState(0)
+    const [isAdmin] =useAdmin(user?.email)
+    const [isSuperAdmin] =useSuperAdmin(user?.email)
 
 
 
@@ -334,6 +338,8 @@ const DashBody = () => {
 
 
 
+               {
+                isAdmin && <>
                 {/* Pending Orders */}
                 <Link to={'/dashboard/pendingOrder'}>
                     <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl p-6 flex flex-col justify-between transform transition-all duration-300 hover:scale-105 cardb">
@@ -528,14 +534,213 @@ const DashBody = () => {
         </div> */}
                     </div>
                 </Link>
+                </>
+               }
 
 
 
 
 
+               {
+                isSuperAdmin && <>
+                <Link to={'/dashboard/superadmin/pendingOrder'}>
+                    <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl p-6 flex flex-col justify-between transform transition-all duration-300 hover:scale-105 cardb">
+                        <div className="flex items-center justify-between">
+                            <div className="p-3 bg-white/20 rounded-xl text-white">
+                                <CheckCircle size={24} />
+                            </div>
+                            <div className="text-sm font-semibold text-green-400">+8%</div>
+                        </div>
+                        <div className="mt-6">
+                            <h2 className="text-3xl font-bold text-white">{viewPending.toLocaleString()}</h2>
+                            <p className="text-black font-semibold mt-1">Pending Orders</p>
+                        </div>
+                        <div className="mt-4 flex gap-1 h-10 items-end justify-end">
+                            <div className="w-2 bg-green-300 rounded animate-pulse h-8"></div>
+                            <div className="w-2 bg-green-700 rounded animate-bounce h-6"></div>
+                            <div className="w-2 bg-green-300 rounded animate-pulse h-9"></div>
+                            <div className="w-2 bg-green-700 rounded animate-bounce h-7"></div>
+                            <div className="w-2 bg-green-300 rounded animate-pulse h-5"></div>
+                        </div>
+                        {/* <div className="mt-2 border-t border-white/20 pt-2 text-xs text-green-200">
+          Last 24 hours
+        </div> */}
+                    </div>
+                </Link>
 
 
+                {/* Confirme Orders */}
+                <Link to={'/dashboard/superadmin/confirmOrderlist'}>
+                    <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl p-6 flex flex-col justify-between transform transition-all duration-300 hover:scale-105 cardb">
+                        <div className="flex items-center justify-between">
+                            <div className="p-3 bg-white/20 rounded-xl text-white">
+                                <CheckCircle size={24} />
+                            </div>
+                            <div className="text-sm font-semibold text-green-400">+8%</div>
+                        </div>
+                        <div className="mt-6">
+                            <h2 className="text-3xl font-bold text-white">{viewConfirm.toLocaleString()}</h2>
+                            <p className="text-black font-semibold mt-1">Confirmed Orders</p>
+                        </div>
+                        <div className="mt-4 flex gap-1 h-10 items-end justify-end">
+                            <div className="w-2 bg-green-300 rounded animate-pulse h-8"></div>
+                            <div className="w-2 bg-green-700 rounded animate-bounce h-6"></div>
+                            <div className="w-2 bg-green-300 rounded animate-pulse h-9"></div>
+                            <div className="w-2 bg-green-700 rounded animate-bounce h-7"></div>
+                            <div className="w-2 bg-green-300 rounded animate-pulse h-5"></div>
+                        </div>
+                        {/* <div className="mt-2 border-t border-white/20 pt-2 text-xs text-green-200">
+          Last 24 hours
+        </div> */}
+                    </div>
+                </Link>
+
+
+
+                {/* Complete Orders */}
+                <Link to={'/dashboard/superadmin/completelist'}>
+                    <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl p-6 flex flex-col justify-between transform transition-all duration-300 hover:scale-105 cardb">
+                        <div className="flex items-center justify-between">
+                            <div className="p-3 bg-white/20 rounded-xl text-white">
+                                <CheckCircle size={24} />
+                            </div>
+                            <div className="text-sm font-semibold text-green-400">+8%</div>
+                        </div>
+                        <div className="mt-6">
+                            <h2 className="text-3xl font-bold text-white">{viewComplete.toLocaleString()}</h2>
+                            <p className="text-black font-semibold mt-1">Completed Orders</p>
+                        </div>
+                        <div className="mt-4 flex gap-1 h-10 items-end justify-end">
+                            <div className="w-2 bg-green-300 rounded animate-pulse h-8"></div>
+                            <div className="w-2 bg-green-700 rounded animate-bounce h-6"></div>
+                            <div className="w-2 bg-green-300 rounded animate-pulse h-9"></div>
+                            <div className="w-2 bg-green-700 rounded animate-bounce h-7"></div>
+                            <div className="w-2 bg-green-300 rounded animate-pulse h-5"></div>
+                        </div>
+                        {/* <div className="mt-2 border-t border-white/20 pt-2 text-xs text-green-200">
+          Last 24 hours
+        </div> */}
+                    </div>
+                </Link>
+
+
+                {/* Cancel Orders */}
+                <Link to={'/dashboard/superadmin/cancelOrderlist'}>
+                    <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl p-6 flex flex-col justify-between transform transition-all duration-300 hover:scale-105 cardb">
+                        <div className="flex items-center justify-between">
+                            <div className="p-3 bg-white/20 rounded-xl text-white">
+                                <CheckCircle size={24} />
+                            </div>
+                            <div className="text-sm font-semibold text-green-400">+8%</div>
+                        </div>
+                        <div className="mt-6">
+                            <h2 className="text-3xl font-bold text-white">{viewCancel.toLocaleString()}</h2>
+                            <p className="text-black font-semibold mt-1">Canceled Orders</p>
+                        </div>
+                        <div className="mt-4 flex gap-1 h-10 items-end justify-end">
+                            <div className="w-2 bg-green-300 rounded animate-pulse h-8"></div>
+                            <div className="w-2 bg-green-700 rounded animate-bounce h-6"></div>
+                            <div className="w-2 bg-green-300 rounded animate-pulse h-9"></div>
+                            <div className="w-2 bg-green-700 rounded animate-bounce h-7"></div>
+                            <div className="w-2 bg-green-300 rounded animate-pulse h-5"></div>
+                        </div>
+                        {/* <div className="mt-2 border-t border-white/20 pt-2 text-xs text-green-200">
+          Last 24 hours
+        </div> */}
+                    </div>
+                </Link>
+
+
+                {/* Total Sales */}
+                <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl p-6 flex flex-col justify-between transform transition-all duration-300 hover:scale-105">
+                    <div className="flex items-center justify-between">
+                        <div className="p-3 bg-white/20 rounded-xl text-green-300">
+                            <ShoppingCart size={24} />
+                        </div>
+                        <div className="text-sm font-semibold text-red-400"></div>
+                    </div>
+                    <div className="mt-6">
+                        <h2 className="text-3xl font-bold text-green-300">৳{viewtotalsels}</h2>
+                        <p className="text-black mt-1 font-semibold">Total Sales</p>
+                    </div>
+                    <div className="mt-4 flex gap-1 h-10 items-end justify-end">
+                        <div className="w-2 bg-green-500 rounded animate-bounce h-6"></div>
+                        <div className="w-2 bg-green-400 rounded animate-pulse h-8"></div>
+                        <div className="w-2 bg-green-500 rounded animate-bounce h-5"></div>
+                        <div className="w-2 bg-green-400 rounded animate-pulse h-9"></div>
+                        <div className="w-2 bg-green-500 rounded animate-bounce h-7"></div>
+                    </div>
+                    {/* <div className="mt-2 border-t border-white/20 pt-2 text-xs text-green-200">
+          Last 24 hours
+        </div> */}
+                </div>
+
+
+
+                {/* Total Users */}
+                <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl p-6 flex flex-col justify-between transform transition-all duration-300 hover:scale-105 cardb">
+                    {/* Top Row */}
+                    <div className="flex items-center justify-between">
+                        <div className="p-3 bg-white/20 rounded-xl text-white">
+                            <Users size={24} />
+                        </div>
+                        <div className="text-sm font-semibold text-green-400">+12%</div>
+                    </div>
+
+                    {/* Metric */}
+                    <div className="mt-6">
+                        <h2 className="text-3xl font-bold text-white">{count.toLocaleString()}</h2>
+                        <p className="text-black font-semibold mt-1">Total Users</p>
+                    </div>
+
+                    {/* Trend Bar */}
+                    <div className="mt-4 flex gap-1 h-10 items-end justify-end">
+                        <div className="w-2 bg-green-400 rounded animate-pulse h-5"></div>
+                        <div className="w-2 bg-green-500 rounded animate-bounce h-7"></div>
+                        <div className="w-2 bg-green-400 rounded animate-pulse h-6"></div>
+                        <div className="w-2 bg-green-500 rounded animate-bounce h-9"></div>
+                        <div className="w-2 bg-green-400 rounded animate-pulse h-8"></div>
+                    </div>
+
+                    {/* Footer */}
+                    {/* <div className="mt-2 border-t border-white/20 pt-2 text-xs text-green-200">
+          Last 24 hours
+        </div> */}
+                </div>
+
+
+
+
+                {/* Total Products */}
+                <Link to={'/dashboard/superadmin/allProducts'} >
+                    <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl p-6 flex flex-col justify-between transform transition-all duration-300 hover:scale-105">
+                        <div className="flex items-center justify-between">
+                            <div className="p-3 bg-white/20 rounded-xl text-green-300">
+                                <BarChart2 size={24} />
+                            </div>
+                            <div className="text-sm font-semibold text-green-400"></div>
+                        </div>
+                        <div className="mt-6">
+                            <h2 className="text-3xl font-bold text-green-300">{countallProd.toLocaleString()}</h2>
+                            <p className="text-black mt-1 font-semibold">Total Products</p>
+                        </div>
+                        <div className="mt-4 flex gap-1 h-10 items-end">
+                            <div className="w-2 bg-green-500 rounded animate-bounce h-9"></div>
+                            <div className="w-2 bg-green-400 rounded animate-pulse h-7"></div>
+                            <div className="w-2 bg-green-500 rounded animate-bounce h-6"></div>
+                            <div className="w-2 bg-green-400 rounded animate-pulse h-8"></div>
+                            <div className="w-2 bg-green-500 rounded animate-bounce h-5"></div>
+                        </div>
+                        {/* <div className="mt-2 border-t border-white/20 pt-2 text-xs text-green-200">
+          Last 24 hours
+        </div> */}
+                    </div>
+                </Link>
+                
                 {/* tota products show end */}
+                </>
+               }
+
             </div>
 
 
