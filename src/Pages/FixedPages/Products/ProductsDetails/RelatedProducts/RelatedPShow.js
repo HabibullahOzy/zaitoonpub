@@ -148,7 +148,7 @@ const RelatedPShow = ({ categorys }) => {
               <div
                 key={product._id}
                 className="snap-start shrink-0 w-[85%] sm:w-[45%] md:w-[30%] lg:w-[22%] transition-all duration-300 grid grid-cols-1 place-items-center"
-              >
+              ><Link to={`/products/${product?._id}`} target='_blank'>
                 <Card
                   className="h-full flex flex-col justify-between border border-gray-200 shadow"
                 >
@@ -157,7 +157,7 @@ const RelatedPShow = ({ categorys }) => {
                     alt={product.nameeng}
                     className="w-full object-cover mb-4 rounded-lg"
                   />
-                  <div className="md:flex lg:flex xl:flex flex justify-center gap-2 mt-auto place-items-center hover:shadow-lg transition-shadow duration-300">
+                  <div className="md:flex lg:flex xl:flex flex justify-center gap-2 mt-auto place-items-center transition-shadow duration-300">
                     <button
                       onClick={() => window.open(`/products/${product?._id}`, '_blank')}
                       className="px-8 py-2 tooltip rounded-full bg-green-400 hover:bg-green-600 text-white tooltip-top tooltip-success"
@@ -187,6 +187,7 @@ const RelatedPShow = ({ categorys }) => {
                   </p> */}
 
                 </Card>
+                </Link>
               </div>
             ))}
           </div>

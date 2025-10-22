@@ -1,6 +1,6 @@
 
 .videoratio{
-    aspect-ratio: 27 / 10;
+    aspect-ratio: 17.5 / 10;
     @media (max-width: 414px) {
         aspect-ratio: 16 / 9;
     }

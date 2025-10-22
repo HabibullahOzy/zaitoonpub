@@ -81,6 +81,7 @@ const Completelist = () => {
               <th className="border px-2 py-2">Pay Amount</th>
               <th className="border px-2 py-2">Transaction ID</th>
               <th className="border px-2 py-2">Pay Date</th>
+              <th className="border px-2 py-2">Pay Note</th>
               <th className="border px-2 py-2">Updated</th>
               <th className="border px-2 py-2 text-center">Action</th>
             </tr>
@@ -139,6 +140,9 @@ const Completelist = () => {
                     </td>
                     <td className="border py-1 text-center">
                       {cashdata?.paymentDate}
+                    </td>
+                    <td className="border py-1 text-center">
+                      {cashdata?.paidnote}
                     </td>
                     <td className="border py-1 text-center">
                       {cashdata?.updatedAt}

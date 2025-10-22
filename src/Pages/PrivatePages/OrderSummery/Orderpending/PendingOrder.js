@@ -81,9 +81,11 @@ const PendingOrder = () => {
   const onSubmit = async (data) => {
     const offerCr = user?.email
     const offer = data.offerord
+    const delicharge = data.delicharge
     const paymentData = {
       offerCr,
-      offer
+      offer,
+      delicharge
     }
 
     const res = await axios.put(`${process.env.REACT_APP_backendurl}/orderoffer/${orderoffer}`, paymentData)
@@ -499,14 +501,20 @@ const PendingOrder = () => {
               <input
                 type="number"
                 placeholder="Offer %"
-                {...register("offerord", { required: true, min: 1, max: 100 })}
+                {...register("offerord")}
                 className="w-full p-2 border text-black border-gray-300 rounded-lg 
                                focus:ring-2 focus:ring-green-400 outline-none mb-2"
               />
 
-              {errors.offerord && (
-                <p className="text-red-500 text-sm mb-3">Offer must be between 1% and 100%</p>
-              )}
+
+              {/*Delivary charge Input field */}
+              <input
+                type="number"
+                placeholder="Delivary Charge"
+                {...register("delicharge")}
+                className="w-full p-2 border text-black border-gray-300 rounded-lg 
+                               focus:ring-2 focus:ring-green-400 outline-none mb-2"
+              />
 
               {/* Buttons */}
               <div className="flex justify-center gap-4">

@@ -28,7 +28,7 @@ const Footer = () => {
 
 
   useEffect(() => {
-    // const backendUrl = process.env.REACT_APP_backendurl || "http://localhost:5000";
+    // const backendUrl = process.env.REACT_APP_backendurl || "${process.env.REACT_APP_backendurl}";
 
     let deviceCode = localDeviceId() || localStorage.getItem("deviceCode");
     // let deviceCode = localStorage.getItem("deviceCode");

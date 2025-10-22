@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; 
 import { useQuery } from '@tanstack/react-query';
 import Play from './Play/Play';
 import { BiSolidCategoryAlt } from 'react-icons/bi';
@@ -15,18 +15,28 @@ const Category = () => {
     }
   });
 
-  // get unique categories from product list
+  // Get unique categories
   const categories = [...new Set(Array.isArray(allcategory) && allcategory?.map(p => p.categname))];
+
+  // ✅ Automatically set the first category as active when data loads
+  useEffect(() => {
+    if (categories.length > 0 && !activeTab) {
+      setActiveTab(categories[0]);
+    }
+  }, [categories, activeTab]);
 
   return (
     <div className='mt-11 w-10/12 mx-auto'>
       <div>
-        <h1 className='flex justify-center text-black font-semibold text-3xl'><BiSolidCategoryAlt className='mr-2 text-yellow-300'/>Category</h1><br/>
+        <h1 className='flex justify-center text-black font-semibold text-3xl'>
+          <BiSolidCategoryAlt className='mr-2 text-yellow-300'/>Category
+        </h1>
+        <br/>
         <p className='text-end text-black font-semibold'>সকল ক্যাটাগরি সমূহ</p>
         <hr className='border-2 border-gray-300 w-full mx-auto' />
       </div>
 
-      {/* category buttons */}
+      {/* Category buttons */}
       <div className='flex justify-center mt-12 flex-wrap gap-8'>
         {categories?.map((cat, i) => {
           const product = allcategory.find(p => p.categname === cat);
@@ -59,18 +69,14 @@ const Category = () => {
         })}
       </div>
 
-      {/* products by category */}
+      {/* Products by category */}
       <div className="text-gray-800 leading-relaxed mt-10">
         {activeTab && (
           <div className="grid gap-6">
             {(allcategory || []).filter(p => p.categname === activeTab)
               .map(pcate => (
-                <div key={pcate._id} className=" rounded-sm p-4">
-                    <Play productCategory={pcate} />
-                  {/* <img src={p.image} alt={p.nameeng} className="w-full h-40 object-cover rounded-md" />
-                  <h2 className="font-semibold mt-2">{p.nameeng}</h2>
-                  <p className="text-sm text-gray-500">{p.authorName}</p>
-                  <p className="font-bold text-green-600">৳{p.productPrice}</p> */}
+                <div key={pcate._id} className="rounded-sm p-4">
+                  <Play productCategory={pcate} />
                 </div>
               ))}
           </div>
@@ -81,6 +87,7 @@ const Category = () => {
 };
 
 export default Category;
+
 
 
 

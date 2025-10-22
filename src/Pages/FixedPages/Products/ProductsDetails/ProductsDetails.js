@@ -226,7 +226,7 @@ const ProductsDetails = () => {
                                 <div className='lg:w-1/2 grid justify-center'>
                                     <button
                                         // onClick={() => document.getElementById('my_modal_3').showModal()}
-                                        onClick={() => setModalOpen(true)} className="tooltip tooltip-success" data-tip="Some Read একটু পড়ে দেখুন"
+                                        onClick={() => setModalOpen(true)} className="tooltip tooltip-success" data-tip="Read Some Demo pages একটু পড়ে দেখুন"
                                     >
                                         <figure className="border border-spacing-2 grid flex flex-grow shadow-md shadow-lime-400 border-emerald-400 p-5">
                                             <div className='flex text-center justify-center  text-yellow-500'>

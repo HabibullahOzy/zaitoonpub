@@ -46,11 +46,11 @@ const CommingSoon = () => {
                                                 {book.state}
                                             </span>
                                         </Link>
-                                    </div> : <div className="relative w-full overflow-hidden">
+                                    </div> : <Link to={`/products/${book._id}`}><div className="relative w-full overflow-hidden">
                                         <img src={book.image} alt={book.title}
                                             className=" transform hover:scale-110 transition duration-500" />
                                         <span className="absolute top-3 left-3 bg-yellow-500 text-white text-xs px-3 py-1 rounded-full"> {book.state} </span>
-                                    </div>
+                                    </div></Link>
                             }
                             {
                                 book?.state === 'Preorder' ? <Link to={`/products/${book._id}`} className="cursor-pointer">
@@ -62,7 +62,7 @@ const CommingSoon = () => {
                                         </div>
                                     </div>
                                 </Link> : <div className="p-5 text-center bg-[#baefba]">
-                                    <h3 className="text-lg font-semibold mb-1">{book.nameeng}</h3>
+                                    <h3 className="text-lg font-semibold mb-1">{book.namebn}</h3>
                                     <p className="text-sm text-gray-500 mb-2">by {book.authorName}</p>
                                     <p className="text-gray-600 text-sm line-clamp-3"> {book.description?.slice(0, 40)}...... </p>
                                     <div className="mt-4 text-sm text-gray-700"> 📅 Release Date: <b>{book.postDate}</b>

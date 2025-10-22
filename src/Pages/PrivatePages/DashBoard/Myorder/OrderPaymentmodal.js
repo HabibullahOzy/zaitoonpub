@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { FaStar } from 'react-icons/fa';
+// import { FaStar } from 'react-icons/fa';
 import { FcMoneyTransfer } from 'react-icons/fc';
 
 const OrderPaymentmodal = ({ paydata }) => {
@@ -19,14 +19,16 @@ const OrderPaymentmodal = ({ paydata }) => {
         const transactionId = data.transId
         const paymentDate = data.paymdate
         const amount = data.payamount
-        const paydescr = data.paydescr
+        // const paydescr = data.paydescr
+        const paidnote = data.paidnote
         const paymentData = {
             rname,
             payMethod,
             transactionId,
             paymentDate,
             amount,
-            paydescr
+            // paydescr,
+            paidnote
         }
 
         const res = await axios.put(`${process.env.REACT_APP_backendurl}/orderPaymentdata/${paydata}`, paymentData)
@@ -115,6 +117,19 @@ const OrderPaymentmodal = ({ paydata }) => {
       placeholder="Enter amount (e.g., 500.00)"
     />
     {errors.payamount && <p className="text-red-500 text-sm mt-1">Amount is required</p>}
+  </div>
+  {/* Payment not */}
+  <div>
+    <label className="block text-gray-700 font-medium mb-1">
+      Short Paid Not
+    </label>
+    <input
+      type="text"
+      step="0.01"
+      {...register("paidnote")}
+      className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+      placeholder="Enter amount (e.g., 500.00)"
+    />
   </div>
 
   {/* Submit Button */}

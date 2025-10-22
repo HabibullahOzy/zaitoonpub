@@ -41,6 +41,8 @@ import SmWebmenulist from "../Pages/PrivatePages/DashBoard/WebmenuList/SmWebmenu
 import ReportOrders from "../Pages/PrivatePages/DashBoard/ReportOrders/ReportOrders";
 import ProductsFilter from "../Pages/FixedPages/Products/ProductsFilter/ProductsFilter";
 import VideoUpload from "../Pages/PrivatePages/DashBoard/WebMenuSetup/VideoSetup/VideoUpload";
+import Authoradd from "../Pages/PrivatePages/AuthorAdd/Authoradd";
+import AuthorShow from "../Pages/PrivatePages/AuthorAdd/AuthorShow";
 
 const router = createBrowserRouter([
     {
@@ -239,6 +241,22 @@ const router = createBrowserRouter([
             {
                 path: "/dashboard/superadmin/videoupload",
                 element: <SuperAdmin><VideoUpload></VideoUpload></SuperAdmin>
+            },
+            {
+                path: "/dashboard/author",
+                element: <AdminSecurPages><Authoradd></Authoradd></AdminSecurPages>
+            },
+            {
+                path: "/dashboard/superadmin/author",
+                element: <SuperAdmin><Authoradd></Authoradd></SuperAdmin>
+            },
+            {
+                path: "/dashboard/showauthor",
+                element: <AdminSecurPages><AuthorShow></AuthorShow></AdminSecurPages>
+            },
+            {
+                path: "/dashboard/superadmin/authorshow",
+                element: <SuperAdmin><AuthorShow></AuthorShow></SuperAdmin>
             }
         ]
     },

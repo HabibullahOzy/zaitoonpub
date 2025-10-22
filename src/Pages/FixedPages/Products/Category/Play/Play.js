@@ -159,8 +159,9 @@ const Play = ({productCategory}) => {
                                             {/* Product Info */}
                                             <div className="card-body bg-[#baefba] relative overflow-hidden flex-grow flex flex-col justify-between">
                                                 <div>
-                                                    <p className="text-center font-semibold">{product.namebn}</p>
-                                                    <p className="text-center font-semibold">{product.category}</p>
+                                                    <p className="text-center text-md font-bold">{product.namebn}</p>
+                                                    <p className="text-center text-lg">{product.category}</p>
+                                                    <p className="text-center text-sm">{product.subCategory}</p>
                                                 </div>
 
                                                 <div className="flex justify-center items-center gap-2 mt-2">

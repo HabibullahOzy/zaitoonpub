@@ -5,7 +5,7 @@ import img from "../../../../assets/zaitoonPublication.jpg"
 import useAdmin from '../../../../hooks/adminHooks/useAdmin';
 import { Zaitooncontext } from '../../../../SecureContext/ContextAuth';
 import useSuperAdmin from '../../../../hooks/superAdmin/superAdmin';
-import { ImMenu2 } from 'react-icons/im';
+import { ImMenu2, ImProfile } from 'react-icons/im';
 import { LiaFirstOrder } from "react-icons/lia";
 import './DHeader.css';
 
@@ -88,90 +88,6 @@ const DHeader = () => {
         <div className='flex flex-col md:flex-row w-11/12 m-auto justify-between items-center'>
 
 
-            {/* // <div className="navbar w-11/12 m-auto text-black">
-        //     <div className="navbar-start">
-        //         <div className="dropdown">
-        //             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-        //                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
-        //             </div>
-        //             <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-        //                 {
-        //                     isAdmin && <>
-        //                         <li><Link to={'/dashboard/addProducts'}>Add Products</Link></li>
-        //                         <li><Link to={'/dashboard/allusers'}>All Users</Link></li>
-        //                         <li><Link to={'/dashboard/allProducts'}>All Products</Link></li>
-        //                         <li>
-        //                             <a>Placed Order Summery</a>
-        //                             <ul className="p-2" style={{ backgroundColor: "rgb(186, 239, 186)" }}>
-        //                                 <li><Link to={'/dashboard/cashonplaced'}>CashOn Order</Link></li>
-        //                                 <li><Link to={''}>Paid Order</Link></li>
-        //                             </ul>
-        //                         </li>
-        //                     </>
-        //                 }
-
-        //                 <li>
-        //                     <a>Parent</a>
-        //                 </li>
-        //                 <li><Link to={''}>About</Link></li>
-        //             </ul>
-        //         </div>
-        //         <Link to={'/'} className="btn btn-circle"><img className=' w-20 rounded-full' src={img} alt=''></img></Link>
-        //         <h1 className='colortext px-2 font-extrabold logowrihidden'>ZAIT<span className='text-yellow-300'>OO</span>N PUBLICATION</h1>
-        //     </div>
-        //     <div className="navbar-center hidden lg:flex">
-
-        //         <ul className="menu menu-horizontal px-1">
-        //             {
-        //                 isAdmin && <>
-        //                     <li><Link className='' to={'/dashboard/addProducts'}>Add Products</Link></li>
-        //                     <li><Link to={'/dashboard/allProducts'}>All Products</Link></li>
-        //                     <li>
-        //                         <details>
-        //                             <summary>Placed Order Summery</summary>
-        //                             <ul className="p-2 z-[1]" style={{ backgroundColor: "rgb(186, 239, 186)" }}>
-        //                                 <li><Link to={'/dashboard/cashonplaced'}>CashOn Order List</Link></li>
-        //                                 <li><Link to={''}>Paid Order List</Link></li>
-        //                                 <li><Link to={'/dashboard/pendingOrder'}>Pending Order List</Link></li>
-        //                             </ul>
-        //                         </details>
-        //                     </li>
-        //                 </>
-        //             }
-        //             {
-        //                 isSuperAdmin && <>
-        //                     <li><Link to={'/dashboard/allusers'}>All Users</Link></li>
-        //                     <li><Link className='' to={'/dashboard/addProducts'}>Add Products</Link></li>
-        //                     <li><Link to={'/dashboard/allProducts'}>All Products</Link></li>
-        //                     <li>
-        //                         <details>
-        //                             <summary>Placed Order Summery</summary>
-        //                             <ul className="p-2 z-[1]" style={{ backgroundColor: "rgb(186, 239, 186)" }}>
-        //                                 <li><Link to={'/dashboard/cashonplaced'}>CashOn Order List</Link></li>
-        //                                 <li><Link to={''}>Paid Order List</Link></li>
-        //                                 <li><Link to={'/dashboard/pendingOrder'}>Pending Order List</Link></li>
-        //                             </ul>
-        //                         </details>
-        //                     </li>
-        //                 </>
-        //             }
-
-        //         </ul>
-        //     </div>
-        //     <div className="navbar-end">
-
-
-        //         <p className='text-blue-600 font-bold'>{new Date().toLocaleString("en-US", {
-        //             timeZone: "Asia/Dhaka",
-        //             year: "numeric",
-        //             month: "2-digit",
-        //             day: "2-digit",
-
-        //         })}, {` 🕒 ${time}`}</p>
-
-        //     </div>
-        // </div> */}
-
             <div className="flex min-h-10 items-center justify-center">
                 <button className='btn btn-success mt-10' onClick={() => setIsOpen(true)}><ImMenu2 className='w-10' /></button>
             </div>
@@ -224,6 +140,12 @@ const DHeader = () => {
                                                     <Link to={'/dashboard/categoryset'}><SidebarItem >
                                                         Category Setup
                                                     </SidebarItem></Link>
+
+                                                    <Link to={'/dashboard/author'}>
+                                                        <SidebarItem icon={ImProfile}>
+                                                           Add Author
+                                                        </SidebarItem>
+                                                    </Link>
                                                 </SidebarCollapse>
 
                                                 <SidebarCollapse icon={BsFillMenuButtonWideFill} label="Web menu">
@@ -295,6 +217,13 @@ const DHeader = () => {
                                                         </SidebarItem>
                                                     </Link>
 
+
+                                                    <Link to={'/dashboard/superadmin/author'}>
+                                                        <SidebarItem icon={ImProfile}>
+                                                           Add Author
+                                                        </SidebarItem>
+                                                    </Link>
+
                                                 </SidebarCollapse>
 
                                                 <SidebarCollapse icon={BsFillMenuButtonWideFill} label="Web menu">
@@ -341,6 +270,10 @@ const DHeader = () => {
                                                     <Link to={'/dashboard/allcategory'}><SidebarItem >
                                                         All Category
                                                     </SidebarItem></Link>
+
+                                                    <Link to={'/dashboard/showauthor'}><SidebarItem >
+                                                        Author List
+                                                    </SidebarItem></Link>
                                                 </SidebarCollapse>
 
 
@@ -382,6 +315,10 @@ const DHeader = () => {
                                                 <SidebarCollapse icon={SiSetapp} label="Setup menu List">
                                                     <Link to={'/dashboard/superadmin/allcategory'}><SidebarItem >
                                                         All Category
+                                                    </SidebarItem></Link>
+
+                                                    <Link to={'/dashboard/superadmin/authorshow'}><SidebarItem >
+                                                        Author List
                                                     </SidebarItem></Link>
                                                 </SidebarCollapse>
 

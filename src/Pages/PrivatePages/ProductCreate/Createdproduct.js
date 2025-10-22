@@ -1,4 +1,4 @@
-import React, { use, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Zaitooncontext } from '../../../SecureContext/ContextAuth';
@@ -112,6 +112,7 @@ const Createdproduct = () => {
         formData.append('postDate', data.postDate);
         formData.append('numberOfpage', data.numberOfpage);
         formData.append('authorName', data.authorName);
+        formData.append('autemail', data.autemail);
         formData.append('language', data.language);
         formData.append('offerprice', data.offerprice);
         formData.append('quantity', data.quantity);
@@ -307,6 +308,20 @@ const Createdproduct = () => {
                                         className="input input-bordered w-full"
                                     />
                                     {errors.authorName && <span className="text-red-500">This field is required</span>}
+                                </div>
+
+                                {/* Author Email */}
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text text-black">Author Email <small className='text-red-600 text-sm ml-1'>*</small></span>
+                                    </label>
+                                    <input
+                                        {...register("autemail", { required: true })}
+                                        type="email"
+                                        placeholder="Enter author name"
+                                        className="input input-bordered w-full"
+                                    />
+                                    {errors.autemail && <span className="text-red-500">This field is required</span>}
                                 </div>
 
                                 {/* Language */}
