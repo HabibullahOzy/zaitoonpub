@@ -28,9 +28,31 @@ const BuyNowModal = ({ datas, deviceId }) => {
         setTotalPrice(subtotal + deliveryCharge);
     }, [quantity, offerPrice]);
 
+    // const handleQuantityChange = (change) => {
+    //     setQuantity((prev) => Math.max(1, prev + change));
+    // };
+
     const handleQuantityChange = (change) => {
-        setQuantity((prev) => Math.max(1, prev + change));
-    };
+    setQuantity(prev => ({
+      ...prev,
+      ['']: Math.max(1, (prev || 1) + change),
+    }));
+  };
+
+  // Handle manual input
+  const handleQuantityInput = (value) => {
+    const num = parseInt(value, 10);
+    if (!isNaN(num) && num > 0) {
+      setQuantity(prev => ({
+        ...prev, '': num,
+      }));
+    } else if (value === "") {
+      // allow clearing input temporarily
+      setQuantity(prev => ({
+        ...prev,
+      }));
+    }
+  };
 
     const orderDate = new Date().toLocaleString("en-BD", {
         timeZone: "Asia/Dhaka",
@@ -99,20 +121,26 @@ const BuyNowModal = ({ datas, deviceId }) => {
                 {/* Shipping Form */}
                 <form onSubmit={handleSubmit(orderConfirmation)} className="bg-white p-6 shadow-md rounded-xl space-y-6">
                     <div className="flex items-center justify-center gap-2">
-                        <button
-                            type="button"
-                            onClick={() => handleQuantityChange(-1)}
-                            className="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+                         <button
+                          onClick={() => handleQuantityChange(-1)}
+                          className="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600"
                         >
-                            -
+                          -
                         </button>
-                        <span className="text-lg font-bold">{quantity}</span>
+
+                        <input
+                          type="number"
+                          min="1"
+                          value={quantity || 1}
+                          onChange={(e) => handleQuantityInput(e.target.value)}
+                          className="w-24 text-center rounded rounded-full focus:outline-none focus:ring-2 focus:ring-green-400"
+                        />
+
                         <button
-                            type="button"
-                            onClick={() => handleQuantityChange(1)}
-                            className="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+                          onClick={() => handleQuantityChange(1)}
+                          className="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600"
                         >
-                            +
+                          +
                         </button>
                     </div>
 

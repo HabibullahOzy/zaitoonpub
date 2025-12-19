@@ -24,6 +24,7 @@ const PmUpdate = () => {
       productPrice: data.productPrice,
       description: data.description,
       quantity: data.quantity,
+      ProductCode: data.ProductCode,
       state: data?.state
     };
 
@@ -59,7 +60,7 @@ const PmUpdate = () => {
           Update Product
         </h2>
 
-        {productsdata.map((pdata, i) => (
+        {productsdata?.map((pdata, i) => (
           <form
             key={i}
             onSubmit={handleSubmit(handleCreatProduct)}
@@ -183,6 +184,19 @@ const PmUpdate = () => {
                 />
               </div>
 
+              {/*product code*/}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Product Code <span className='text-red-600'>*</span>
+                </label>
+                <input
+                  {...register("ProductCode", { required: true })}
+                  defaultValue={pdata.ProductCode}
+                  placeholder="Enter author name"
+                  className="w-full mt-1 rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
+                />
+              </div>
+
               {/* Status*/}
               <div className="form-control">
                 <label className="label">
@@ -195,6 +209,7 @@ const PmUpdate = () => {
                 >
                   <option value="Available">Available</option>
                   <option value="Unavailable">Unavailable</option>
+                  <option value="Previous">Previous</option>
                   <option value="Preorder">Preorder</option>
                   <option value="Coming Soon">Coming Soon</option>
                   <option value="Out of Stock">Out of Stock</option>

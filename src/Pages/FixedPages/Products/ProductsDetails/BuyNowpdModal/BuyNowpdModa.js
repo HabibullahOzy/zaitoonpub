@@ -28,9 +28,23 @@ const BuyNowpdModa = ({ dataes }) => {
         setTotalPrice(subtotal + deliveryCharge);
     }, [quantity, offerPrice]);
 
-    const handleQuantityChange = (change) => {
-        setQuantity((prev) => Math.max(1, prev + change));
-    };
+    // const handleQuantityChange = (change) => {
+    //     setQuantity((prev) => Math.max(1, prev + change));
+    // };
+   const handleQuantityChange = (change) => {
+  setQuantity((prev) => Math.max(1, prev + change));
+};
+
+// Handle manual input
+const handleQuantityInput = (value) => {
+  const num = parseInt(value, 10);
+  if (!isNaN(num) && num > 0) {
+    setQuantity(num);
+  } else if (value === "") {
+    // allow clearing input temporarily
+    setQuantity("");
+  }
+};
 
     const orderDate = new Date().toLocaleString("en-BD", {
         timeZone: "Asia/Dhaka",
@@ -81,7 +95,8 @@ const BuyNowpdModa = ({ dataes }) => {
 
 
         try {
-            const response = await axios.post(`${process.env.REACT_APP_backendurl}/purchage`, buynowdata);
+            // const response = await axios.post(`${process.env.REACT_APP_backendurl}/purchage`, buynowdata);
+            const response = await axios.post(`http://localhost:5000/purchage`, buynowdata);
             if (response?.data?.insertedId) {
                 toast.success("Order Successfully Placed!!");
                 navigate(`/myorder/${emaile}`);
@@ -107,21 +122,27 @@ const BuyNowpdModa = ({ dataes }) => {
                             <p className='text-black'>{dataes?.namebn}</p>
                         </div>
                         <div className="flex items-center justify-center gap-2">
-                            <button
-                                type="button"
-                                onClick={() => handleQuantityChange(-1)}
-                                className="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600"
-                            >
-                                -
-                            </button>
-                            <span className="text-lg font-bold">{quantity}</span>
-                            <button
-                                type="button"
-                                onClick={() => handleQuantityChange(1)}
-                                className="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600"
-                            >
-                                +
-                            </button>
+                             <button
+                          onClick={() => handleQuantityChange(-1)}
+                          className="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+                        >
+                          -
+                        </button>
+
+                        <input
+                          type="number"
+                          min="1"
+                          value={quantity || 1}
+                          onChange={(e) => handleQuantityInput(e.target.value)}
+                          className="w-24 text-center rounded rounded-full focus:outline-none focus:ring-2 focus:ring-green-400"
+                        />
+
+                        <button
+                          onClick={() => handleQuantityChange(1)}
+                          className="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+                        >
+                          +
+                        </button>
                         </div>
                     </div>
 

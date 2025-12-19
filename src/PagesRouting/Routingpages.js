@@ -43,6 +43,7 @@ import ProductsFilter from "../Pages/FixedPages/Products/ProductsFilter/Products
 import VideoUpload from "../Pages/PrivatePages/DashBoard/WebMenuSetup/VideoSetup/VideoUpload";
 import Authoradd from "../Pages/PrivatePages/AuthorAdd/Authoradd";
 import AuthorShow from "../Pages/PrivatePages/AuthorAdd/AuthorShow";
+import Previousproduct from "../Pages/PrivatePages/AllProducts/Previousproduct/Previousproduct";
 
 const router = createBrowserRouter([
     {
@@ -257,6 +258,14 @@ const router = createBrowserRouter([
             {
                 path: "/dashboard/superadmin/authorshow",
                 element: <SuperAdmin><AuthorShow></AuthorShow></SuperAdmin>
+            },
+            {
+                path: "/dashboard/previousproduct",
+                element: <AdminSecurPages><Previousproduct></Previousproduct></AdminSecurPages>
+            },
+            {
+                path: "/dashboard/superadmin/previousproduct",
+                element: <SuperAdmin><Previousproduct></Previousproduct></SuperAdmin>
             }
         ]
     },

@@ -131,6 +131,7 @@ const DHeader = () => {
                                                 >
                                                     <Link className='' to={'/dashboard/addProducts'}><SidebarItem >Add Products</SidebarItem></Link>
                                                     <Link to={'/dashboard/allProducts'}><SidebarItem>All Products</SidebarItem></Link>
+                                                    <Link to={'/dashboard/previousproduct'}><SidebarItem>Previous Books</SidebarItem></Link>
                                                     {/* <SidebarItem href="#">Refunds</SidebarItem>
                                             <SidebarItem href="#">Shipping</SidebarItem> */}
                                                 </SidebarCollapse>
@@ -203,6 +204,7 @@ const DHeader = () => {
                                                 >
                                                     <Link className='' to={'/dashboard/superadmin/addProducts'}><SidebarItem >Add Products</SidebarItem></Link>
                                                     <Link to={'/dashboard/superadmin/allProducts'}><SidebarItem>All Products</SidebarItem></Link>
+                                                    <Link to={'/dashboard/superadmin/previousproduct'}><SidebarItem>Previous Books</SidebarItem></Link>
                                                     {/* <SidebarItem href="#">Refunds</SidebarItem>
                                             <SidebarItem href="#">Shipping</SidebarItem> */}
                                                 </SidebarCollapse>

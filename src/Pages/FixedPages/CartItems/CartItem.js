@@ -52,12 +52,38 @@ const CartItem = () => {
     setPrices(subtotal + 150);
   }, [subtotal, setPrices]);
 
+  // const handleQuantityChange = (id, change) => {
+  //   setQuantities(prev => ({
+  //     ...prev,
+  //     [id]: Math.max(1, (prev[id] || 1) + change),
+  //   }));
+  // };
+
+
   const handleQuantityChange = (id, change) => {
     setQuantities(prev => ({
       ...prev,
       [id]: Math.max(1, (prev[id] || 1) + change),
     }));
   };
+
+  // Handle manual input
+  const handleQuantityInput = (id, value) => {
+    const num = parseInt(value, 10);
+    if (!isNaN(num) && num > 0) {
+      setQuantities(prev => ({
+        ...prev,
+        [id]: num,
+      }));
+    } else if (value === "") {
+      // allow clearing input temporarily
+      setQuantities(prev => ({
+        ...prev,
+        [id]: "",
+      }));
+    }
+  };
+
 
   const [openModal, setOpenModal] = useState(false);
   const [dataforWish, setdataforWish] = useState();
@@ -77,7 +103,7 @@ const CartItem = () => {
         if (data.deletedCount > 0) {
           toast.success('Item deleted successfully');
           setOpenModal(false);
-          queryClient.invalidateQueries(['cartItems', email]); // 🚀 refresh cache
+          queryClient.invalidateQueries(['cartItems', email]); // refresh cache
         }
       });
   };
@@ -161,7 +187,15 @@ const CartItem = () => {
                         >
                           -
                         </button>
-                        <span>{quantity}</span>
+
+                        <input
+                          type="number"
+                          min="1"
+                          value={quantities[item._id] || 1}
+                          onChange={(e) => handleQuantityInput(item._id, e.target.value)}
+                          className="w-24 text-center rounded rounded-full focus:outline-none focus:ring-2 focus:ring-green-400"
+                        />
+
                         <button
                           onClick={() => handleQuantityChange(item._id, 1)}
                           className="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600"
@@ -227,14 +261,14 @@ const CartItem = () => {
 
 
 
-{/* Delete Confirmation Modal */}
+      {/* Delete Confirmation Modal */}
       <Modal show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
         <ModalHeader />
         <ModalBody>
           <div className="text-center">
             <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-red-500" />
             <h3 className="mb-5 text-lg font-normal text-black">
-              যেকোন মুহূর্তে স্টক শেষ হয়ে গেলে পরবর্তীতে পণ্যটি না-ও পেতে পারেন। 
+              যেকোন মুহূর্তে স্টক শেষ হয়ে গেলে পরবর্তীতে পণ্যটি না-ও পেতে পারেন।
               আপনি কি নিশ্চিতভাবে পণ্যটি কার্ট থেকে মুছে ফেলতে চান?
             </h3>
             <div className="flex justify-center gap-4">
@@ -271,7 +305,7 @@ const CartItem = () => {
         </div>
       )}
 
-      
+
     </div>
   );
 };

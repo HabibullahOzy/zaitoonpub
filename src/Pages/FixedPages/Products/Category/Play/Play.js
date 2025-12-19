@@ -113,7 +113,7 @@ const Play = ({productCategory}) => {
     return (
         <div>
             <h1 className='font-semibold text-2xl'>{productCategory?.categname}</h1>
-            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-5 py-6 mx-auto' style={{ color: "black" }}>
+            <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-5 lg:gap-5 lg:gap-5 gap-2 py-6 mx-auto' style={{ color: "black" }}>
                
                 {nursproduct?.map((product, i) => {
                     const offerPrice = product?.offerprice
@@ -141,27 +141,27 @@ const Play = ({productCategory}) => {
                                             <div className="flex">
                                                 <Link
                                                             to={`/products/${product._id}`}
-                                                            className="p-4 w-1/2 bg-green-100 text-green-600 flex items-center justify-center tooltip tooltip-success"
+                                                            className="p-2 w-1/2 bg-green-100 text-green-600 flex items-center justify-center tooltip tooltip-success"
                                                             data-tip="View Details "
                                                         >
-                                                            <FcViewDetails className="w-5 h-5" />
+                                                            <FcViewDetails className="w-5 h-5" />View Details
                                                         </Link>
 
                                                 <button
                                                     onClick={() => handleAddCart(product._id, offerPrice)}
-                                                    className="p-4 w-1/2 bg-green-200 text-green-600 flex items-center justify-center tooltip tooltip-success"
+                                                    className="p-2 w-1/2 bg-green-200 text-green-600 flex items-center justify-center tooltip tooltip-success"
                                                     data-tip="Add to Cart"
                                                 >
-                                                    <FaCartFlatbed className="w-8" />
+                                                    <FaCartFlatbed className="w-8" />Add to Cart
                                                 </button>
                                             </div>
 
                                             {/* Product Info */}
                                             <div className="card-body bg-[#baefba] relative overflow-hidden flex-grow flex flex-col justify-between">
                                                 <div>
-                                                    <p className="text-center text-md font-bold">{product.namebn}</p>
-                                                    <p className="text-center text-lg">{product.category}</p>
-                                                    <p className="text-center text-sm">{product.subCategory}</p>
+                                                    <p className="lg:text-center md:text-center text-start text-md font-bold">{product.namebn}</p>
+                                                    <p className="lg:text-center md:text-center text-start text-lg">{product.category}</p>
+                                                    <p className="lg:text-center md:text-center text-start text-sm">{product.subCategory}</p>
                                                 </div>
 
                                                 <div className="flex justify-center items-center gap-2 mt-2">

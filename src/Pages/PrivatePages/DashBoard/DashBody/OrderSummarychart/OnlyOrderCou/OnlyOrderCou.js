@@ -47,8 +47,8 @@ const OrderPieChart = () => {
 
   const backgroundColors = dailyOrderCounts.map((count) => {
     if (count === 0) return "rgba(229, 231, 235, 0.6)"; // Gray
-    if (count <= 3) return "rgba(239, 68, 68, 0.8)"; // Red
-    if (count <= 6) return "rgba(250, 204, 21, 0.8)"; // Yellow
+    if (count <= 2) return "rgba(239, 68, 68, 0.8)"; // Red
+    if (count <= 5) return "rgba(250, 204, 21, 0.8)"; // Yellow
     return "rgba(34, 197, 94, 0.8)"; // Green
   });
 

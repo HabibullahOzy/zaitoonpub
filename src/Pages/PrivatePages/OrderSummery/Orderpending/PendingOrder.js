@@ -132,6 +132,7 @@ const PendingOrder = () => {
               <th className="border px-2 py-2">Location</th>
               <th className="border px-2 py-2">Order Note</th>
               <th className="border px-2 py-2">SubTotal</th>
+              <th className="border px-2 py-2">Delivary charge</th>
               <th className="border px-2 py-2">Offer</th>
               <th className="border px-2 py-2">PayTotal</th>
               <th className="border px-2 py-2">Pay Method</th>
@@ -183,6 +184,9 @@ const PendingOrder = () => {
                     </td>
                     <td className="border py-1 text-center">
                       {ordoffer}
+                    </td>
+                    <td className="border py-1 text-center">
+                      {cashdata?.delicharge}
                     </td>
                     <td className="border py-1 text-red-500 text-center">
                       {cashdata?.offer}

@@ -95,7 +95,13 @@ const ConfirmList = () => {
   // offer set end
 
 
-
+  const handleCancelOrder = async (id) => {
+    const response = await axios.put(`${process.env.REACT_APP_backendurl}/ordercanceltatus/${id}`);
+    response?.status
+      ? toast.success("Order Cancel!")
+      : toast.error("Please try again");
+    refetch();
+  };
 
 
 
@@ -247,6 +253,12 @@ const ConfirmList = () => {
                         >
                           <FaFileInvoiceDollar className="text-2xl" />
                         </button>
+                        <button
+                            onClick={() => handleCancelOrder(cashdata?._id)}
+                            className="btn btn-error btn-xs text-white"
+                          >
+                            cancel
+                          </button>
                       </div>
                     </td>
                   </tr>

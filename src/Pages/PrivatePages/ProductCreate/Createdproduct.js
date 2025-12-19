@@ -129,10 +129,12 @@ const Createdproduct = () => {
 
 
         for (let [key, value] of formData.entries()) {
+            console.log(value)
         }
 
         try {
             const response = await axios.post(`${process.env.REACT_APP_backendurl}/profile`, formData, {
+            // const response = await axios.post(`http://localhost:5000/profile`, formData, {
                 headers: { "Content-Type": "multipart/form-data" }
             });
             if (response.data.insertedId) {

@@ -26,7 +26,7 @@ const Category = () => {
   }, [categories, activeTab]);
 
   return (
-    <div className='mt-11 w-10/12 mx-auto'>
+    <div className='mt-11 lg:w-10/12 lg:w-10/12 p-2 mx-auto'>
       <div>
         <h1 className='flex justify-center text-black font-semibold text-3xl'>
           <BiSolidCategoryAlt className='mr-2 text-yellow-300'/>Category
