@@ -14,7 +14,7 @@ const Play = ({productCategory}) => {
     const { user } = useContext(Zaitooncontext)
     const navigate = useNavigate();
 
-    const { data: nursproduct = [], refetch } = useQuery({
+    const { data: nursproductes = [], refetch } = useQuery({
         queryKey: ['nursproduct'],
         queryFn: async () => {
             const res = await fetch(`${process.env.REACT_APP_backendurl}/categoryproducts/${productCategory?.categname}`);
@@ -24,7 +24,7 @@ const Play = ({productCategory}) => {
     });
 
 
-
+const nursproduct = (nursproductes).filter(book => book?.state === '' || book?.state === 'Available');
 
 
     const handleAddCart = async (id, offerPrice) => {
@@ -115,7 +115,14 @@ const Play = ({productCategory}) => {
             <h1 className='font-semibold text-2xl'>{productCategory?.categname}</h1>
             <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-5 lg:gap-5 lg:gap-5 gap-2 py-6 mx-auto' style={{ color: "black" }}>
                
-                {nursproduct?.map((product, i) => {
+                {nursproduct?.slice() // make a copy
+  .sort((a, b) => {
+    // If ProductCode is a number
+    // return Number(a.ProductCode) - Number(b.ProductCode);
+
+    // If ProductCode is a string
+    return a.ProductCode.localeCompare(b.ProductCode);
+  }).map((product, i) => {
                     const offerPrice = product?.offerprice
                         ? Math.round(product.productPrice - (product.offerprice * product.productPrice) / 100)
                         : product.productPrice;

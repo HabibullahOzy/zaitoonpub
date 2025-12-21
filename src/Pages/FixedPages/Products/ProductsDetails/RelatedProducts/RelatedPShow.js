@@ -16,13 +16,15 @@ const RelatedPShow = ({ categorys }) => {
   const scrollRef = useRef(null);
   const backendURL = process.env.REACT_APP_backendurl;
 
-  const { data: nursproduct = [], isLoading } = useQuery({
+  const { data: nursproductes = [], isLoading } = useQuery({
     queryKey: ['nursproduct', categorys],
     queryFn: async () => {
       const res = await fetch(`${backendURL}/categoryproducts/${categorys}`);
       return res.json();
     },
   });
+
+  const nursproduct = (nursproductes).filter(book => book?.state === '' || book?.state === 'Available');
 
   useEffect(() => {
     if (Array.isArray(nursproduct)) {
@@ -144,7 +146,14 @@ const RelatedPShow = ({ categorys }) => {
             ref={scrollRef}
             className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4 no-scrollbar"
           > 
-            {products.map((product) => (
+            {products?.slice() // make a copy
+  .sort((a, b) => {
+    // If ProductCode is a number
+    // return Number(a.ProductCode) - Number(b.ProductCode);
+
+    // If ProductCode is a string
+    return a.ProductCode.localeCompare(b.ProductCode);
+  }).map((product) => (
               <div
                 key={product._id}
                 className="snap-start shrink-0 w-[85%] sm:w-[45%] md:w-[30%] lg:w-[22%] transition-all duration-300 grid grid-cols-1 place-items-center"

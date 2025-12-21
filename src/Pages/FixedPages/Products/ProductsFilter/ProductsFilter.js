@@ -10,7 +10,7 @@ import { FcViewDetails } from "react-icons/fc";
 const ProductsFilter = () => {
 
 const {user, localDeviceId} = useContext(Zaitooncontext)
-    const { data: allproducts = []} = useQuery({
+    const { data: allproductes = []} = useQuery({
         queryKey: ["allproducts"],
         queryFn: async () => {
             const res = await fetch(`${process.env.REACT_APP_backendurl}/allProducts`);
@@ -18,6 +18,8 @@ const {user, localDeviceId} = useContext(Zaitooncontext)
             return data;
         },
     });
+
+    const allproducts = (allproductes).filter(book => book?.state === '' || book?.state === 'Available');
 
 const queryClient = useQueryClient();
     const handleAddCart = async (id, offerPrice) => {
@@ -69,7 +71,14 @@ const queryClient = useQueryClient();
         return [...new Set(langs)];
     };
 
-    const productsData = allproducts;
+    const productsData = allproducts.slice() // make a copy
+  .sort((a, b) => {
+    // If ProductCode is a number
+    // return Number(a.ProductCode) - Number(b.ProductCode);
+
+    // If ProductCode is a string
+    return a.ProductCode.localeCompare(b.ProductCode);
+  });
 
     // States
     const [selectedCategories, setSelectedCategories] = useState([]);

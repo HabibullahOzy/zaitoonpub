@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import PmUpdate from './ProductUpdateModal/PmUpdate';
+// import PmUpdate from './ProductUpdateModal/PmUpdate';
 import { Link } from 'react-router-dom';
 import { FaTrashAlt } from 'react-icons/fa';
 import { GrDocumentUpdate } from 'react-icons/gr';
@@ -10,7 +10,7 @@ import { TbPlayerTrackNextFilled, TbPlayerTrackPrevFilled } from 'react-icons/tb
 
 const AllProducts = () => {
 
-     const [modalOpen, setModalOpen] = useState(null)
+    //  const [modalOpen, setModalOpen] = useState(null)
      
      const [currentPage, setCurrentPage] = useState(1);
 
@@ -60,7 +60,7 @@ const AllProducts = () => {
     <table className="min-w-full table-auto">
       <thead className="bg-gray-100 text-black text-base font-semibold border-b">
         <tr className="text-left">
-          <th className="px-4 py-3">#</th>
+          <th className="px-4 py-3">SL</th>
           <th className="px-4 py-3">Product Name</th>
           <th className="px-4 py-3">Category</th>
           <th className="px-4 py-3">Details</th>
@@ -71,7 +71,14 @@ const AllProducts = () => {
       </thead>
       <tbody className="text-sm divide-y divide-gray-200">
         {currentUsers.length > 0 ? (
-          currentUsers.map((informat, i) => (
+          currentUsers?.slice() // make a copy
+  .sort((a, b) => {
+    // If ProductCode is a number
+    // return Number(a.ProductCode) - Number(b.ProductCode);
+
+    // If ProductCode is a string
+    return a.ProductCode.localeCompare(b.ProductCode);
+  }).map((informat, i) => (
             <tr key={informat._id} className="hover:bg-gray-50 transition">
               <td className="px-4 py-3">{startIndex + i + 1}</td>
               <td className="px-4 py-3">
