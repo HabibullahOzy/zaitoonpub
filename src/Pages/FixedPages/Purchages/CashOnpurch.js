@@ -73,15 +73,15 @@ const CashOnpurch = ({ cartItems, setShowModal }) => {
          // 🚀 clear modal
         setShowModal(false);
 
-        // 🚀 clear cart from backend
-        await fetch(`${process.env.REACT_APP_backendurl}/cart/clear/${email}`, {
-          method: "DELETE",
-        });
+        //  Clear cart from backend
+      await axios.delete(
+        `${process.env.REACT_APP_backendurl}/cart/clear/${email}`
+      );
 
+        navigate(`/myorder/${emaile}`)
         // 🚀 instantly refresh cart
         QueryClient.invalidateQueries(["cartItems", email]);
 
-        navigate(`/myorder/${emaile}`)
       } else {
         toast.error("Order NOT Placed, Please Try again")
       }

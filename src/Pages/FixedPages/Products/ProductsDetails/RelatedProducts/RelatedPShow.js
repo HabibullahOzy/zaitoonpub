@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
-import { Card, Button } from 'flowbite-react';
+import { Card } from 'flowbite-react';
 import './Relatedshow.css';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -12,7 +12,7 @@ import { FaCartFlatbed } from 'react-icons/fa6';
 
 const RelatedPShow = ({ categorys }) => {
   const { user, producD, setProducD, localDeviceId } = useContext(Zaitooncontext);
-  const [products, setProducts] = useState([]);
+  // const [products, setProducts] = useState([]);
   const scrollRef = useRef(null);
   const backendURL = process.env.REACT_APP_backendurl;
 
@@ -24,14 +24,31 @@ const RelatedPShow = ({ categorys }) => {
     },
   });
 
-  const nursproduct = (nursproductes).filter(book => book?.state === '' || book?.state === 'Available');
+  // Memoize first filter
+const nursproduct = useMemo(() => {
+  return Array.isArray(nursproductes)
+    ? nursproductes?.filter(
+        book => book?.state === '' || book?.state === 'Available'
+      )
+    : [];
+}, [nursproductes]);
 
-  useEffect(() => {
-    if (Array.isArray(nursproduct)) {
-      const filtered = (nursproduct || []).filter(p => p?.category === categorys);
-      setProducts(filtered.slice(0, 20));
-    }
-  }, [nursproduct, categorys]);
+// Memoize final products (NO STATE, NO LOOP)
+const products = useMemo(() => {
+  return nursproduct?.filter(p => p?.category === categorys)
+    .slice(0, 20);
+}, [nursproduct, categorys]);
+
+//   const nursproduct = (nursproductes).filter(book => book?.state === '' || book?.state === 'Available');
+
+//   useEffect(() => {
+//     if (Array.isArray(nursproduct)) {
+//       const filtered = nursproduct?.filter(p => p?.category === categorys);
+//       setProducts(filtered.slice(0, 20));
+//     }
+//   }, [nursproduct, categorys]);
+
+
 
   // Auto-scroll loop
   useEffect(() => {

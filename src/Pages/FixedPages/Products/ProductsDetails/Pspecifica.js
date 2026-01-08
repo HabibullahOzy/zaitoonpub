@@ -16,7 +16,7 @@ const Pspecifica = ({ data }) => {
     <div className="max-w-3xl mx-auto shadow-xl rounded-xl overflow-hidden border border-gray-200 transition-transform hover:scale-105">
     
       <div className="divide-y divide-gray-200">
-        {details.map((item, index) => (
+        {details?.map((item, index) => (
           <div
             key={index}
             className={`flex items-center justify-between px-4 py-4 cursor-pointer transition-colors hover:bg-indigo-50 ${

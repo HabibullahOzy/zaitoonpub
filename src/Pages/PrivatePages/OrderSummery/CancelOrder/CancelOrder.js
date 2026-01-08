@@ -94,12 +94,12 @@ const CancelOrder = () => {
             </tr>
           </thead>
           <tbody className="text-xs md:text-sm">
-            {paginatedData.map((cashdata, i) => {
+            {paginatedData?.map((cashdata, i) => {
               // calculate offer price if needed
-              const ordoffer = cashdata?.totalPrice - 150;
+              const ordoffer = cashdata?.totalPrice;
               const offerperc = Number(cashdata?.offer) || 0;
               const offerPrice = cashdata?.offer
-                ? Math.round(ordoffer - (offerperc * ordoffer) / 100) + 150
+                ? Math.round(ordoffer - (offerperc * ordoffer) / 100)
                 : cashdata?.totalPrice;
                 return (
               <React.Fragment key={cashdata._id}>

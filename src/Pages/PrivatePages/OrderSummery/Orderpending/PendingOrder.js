@@ -8,6 +8,7 @@ import { BiSolidOffer } from 'react-icons/bi';
 import { TbPlayerTrackNextFilled, TbPlayerTrackPrevFilled } from 'react-icons/tb';
 import { Zaitooncontext } from '../../../../SecureContext/ContextAuth';
 import { HiOutlineTag } from 'react-icons/hi';
+import { FaTrashAlt } from 'react-icons/fa';
 
 const PendingOrder = () => {
 
@@ -113,6 +114,16 @@ const PendingOrder = () => {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
   };
 
+
+
+  const handleDeleteOrder = async (id) => {
+    // const response = await axios.delete(`${process.env.REACT_APP_backendurl}/orderItem/delete/${id}`);
+    // response?.status
+    //   ? toast.success("Order Deleted!")
+    //   : toast.error("Please try again");
+    // refetch();
+  };
+
   const [expandedRow, setExpandedRow] = useState(null);
   return (
     <div className="min-h-screen pt-14 px-2 md:px-4 text-black overflow-x-auto">
@@ -132,14 +143,14 @@ const PendingOrder = () => {
               <th className="border px-2 py-2">Location</th>
               <th className="border px-2 py-2">Order Note</th>
               <th className="border px-2 py-2">SubTotal</th>
-              <th className="border px-2 py-2">Delivary charge</th>
+              <th className="border px-2 py-2">Deli charge</th>
               <th className="border px-2 py-2">Offer</th>
               <th className="border px-2 py-2">PayTotal</th>
               <th className="border px-2 py-2">Pay Method</th>
               <th className="border px-2 py-2">Pay Amount</th>
               <th className="border px-2 py-2">Transaction ID</th>
               <th className="border px-2 py-2">Pay Date</th>
-              <th className="border px-2 py-2">Updated</th>
+              <th className="border px-2 py-2">Order Date</th>
               <th className="border px-2 py-2 text-center">Action</th>
             </tr>
           </thead>
@@ -147,11 +158,11 @@ const PendingOrder = () => {
             {paginatedData.map((cashdata, i) => {
               const isExpanded = expandedRow === cashdata._id;
               // calculate offer price if needed
-              const ordoffer = cashdata?.totalPrice - 150;
+              const ordoffer = cashdata?.totalPrice;
               const offerperc = Number(cashdata?.offer) || 0;
               const offerPrice = cashdata?.offer
-                ? Math.round(ordoffer - (offerperc * ordoffer) / 100) + 150
-                : cashdata?.totalPrice;
+                ? Math.round(ordoffer - (offerperc * ordoffer) / 100) + Number(cashdata?.delicharge)
+                : ordoffer + Number(cashdata?.delicharge || 0);
               return (
                 <React.Fragment key={cashdata._id}>
                   {/* Parent Row */}
@@ -207,7 +218,7 @@ const PendingOrder = () => {
                       {cashdata?.paymentDate}
                     </td>
                     <td className="border py-1 text-center">
-                      {cashdata?.updatedAt}
+                      {cashdata?.orderDate}
                     </td>
                     <td className="border px-2 py-1 relative">
                       {cashdata?.status === 'pending' ? (
@@ -285,6 +296,7 @@ const PendingOrder = () => {
                                 <th className="border px-2 py-1">Qty</th>
                                 <th className="border px-2 py-1">Price</th>
                                 <th className="border px-2 py-1">Total</th>
+                                <th className="border px-2 py-1">action</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -323,6 +335,14 @@ const PendingOrder = () => {
                                   </td>
                                   <td className="border px-2 py-1 text-center">
                                     {prodata?.total}
+                                  </td>
+                                  <td className="border px-2 py-1 text-center">
+                                    <button
+                                                          onClick={() => handleDeleteOrder(prodata?._id)}
+                                                          className="btn btn-error btn-xs text-white"
+                                                        >
+                                                          <FaTrashAlt />
+                                                        </button>
                                   </td>
 
                                 </tr>

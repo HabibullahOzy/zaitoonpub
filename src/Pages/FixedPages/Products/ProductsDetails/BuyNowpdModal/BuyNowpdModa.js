@@ -14,7 +14,7 @@ const BuyNowpdModa = ({ dataes }) => {
 
     const [quantity, setQuantity] = useState(1);
     const [subPrice, setSubPrice] = useState(0);
-    const deliveryCharge = 150;
+    // const deliveryCharge = 150;
     const [totalPrice, setTotalPrice] = useState(0);
 
     const offerPrice = dataes?.offerprice
@@ -25,7 +25,8 @@ const BuyNowpdModa = ({ dataes }) => {
     useEffect(() => {
         const subtotal = offerPrice * quantity;
         setSubPrice(subtotal);
-        setTotalPrice(subtotal + deliveryCharge);
+        setTotalPrice(subtotal);
+        // setTotalPrice(subtotal + deliveryCharge);
     }, [quantity, offerPrice]);
 
     // const handleQuantityChange = (change) => {
@@ -95,10 +96,46 @@ const handleQuantityInput = (value) => {
 
 
         try {
-            // const response = await axios.post(`${process.env.REACT_APP_backendurl}/purchage`, buynowdata);
-            const response = await axios.post(`http://localhost:5000/purchage`, buynowdata);
+            const response = await axios.post(`${process.env.REACT_APP_backendurl}/purchage`, buynowdata);
+            // const response = await axios.post(`http://localhost:5000/purchage`, buynowdata);
             if (response?.data?.insertedId) {
-                toast.success("Order Successfully Placed!!");
+toast.custom((t) => (
+  <div
+    className={`${
+      t.visible ? 'animate-custom-enter' : 'animate-custom-leave'
+    } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+  >
+    <div className="flex-1 w-0 p-4">
+      <div className="flex items-start">
+        <div className="flex-shrink-0 pt-0.5">
+          <img
+            className="h-10 w-10 rounded-full"
+            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixqx=6GHAjsWpt9&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80"
+            alt=""
+          />
+        </div>
+        <div className="ml-3 flex-1">
+          <p className="text-sm font-medium text-gray-900">
+            Emilia Gates
+          </p>
+          <p className="mt-1 text-sm text-gray-500">
+            Sure! 8:30pm works great!
+          </p>
+        </div>
+      </div>
+    </div>
+    <div className="flex border-l border-gray-200">
+      <button
+        onClick={() => toast.dismiss(t.id)}
+        className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+))
+
+                // toast.success("Order Successfully Placed!!");
                 navigate(`/myorder/${emaile}`);
             } else {
                 toast.error("Order NOT Placed, Please Try again");
@@ -164,10 +201,10 @@ const handleQuantityInput = (value) => {
                                 <span>মোট</span>
                                 <span>{subPrice}৳</span>
                             </div>
-                            <div className="flex justify-between">
+                            {/* <div className="flex justify-between">
                                 <span>ডেলিভারি চার্জ</span>
                                 <span>{deliveryCharge}৳</span>
-                            </div>
+                            </div> */}
                             <hr className="my-4 border-gray-300" />
                             <div className="flex justify-between text-lg font-bold text-gray-800">
                                 <span>সর্বমোট </span>
@@ -186,7 +223,7 @@ const handleQuantityInput = (value) => {
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">নাম <span className='text-red-600'>*</span></label>
-                        <input required type="text" {...register("name")} className="w-full input input-bordered" placeholder='আপনার নাম' />
+                        <input required type="text" {...register("name")} className="w-full input" placeholder='আপনার নাম' />
                     </div>
 
                     <div>

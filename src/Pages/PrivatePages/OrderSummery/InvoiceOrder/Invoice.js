@@ -106,10 +106,10 @@ const Invoice = ({ invdata }) => {
     // };
 
 
-      const ordoffer = (invdata?.totalPrice || 0) - 150;
+      const ordoffer = (invdata?.totalPrice || 0);
     const offerperc = Number(invdata?.offer) || 0;
     const offerPrice = invdata?.offer
-        ? Math.round(ordoffer - (offerperc * ordoffer) / 100) + 150
+        ? Math.round(ordoffer - (offerperc * ordoffer) / 100)
         : invdata?.totalPrice;
     return (
         <div style={{ padding: "1rem", maxWidth: "900px", margin: "0 auto" }}>
@@ -214,7 +214,7 @@ const Invoice = ({ invdata }) => {
                     <tbody>
                         {invdata?.productdata?.map((item, i) => {
                             // calculate offer price if needed
-                            const ordoffer = invdata?.totalPrice - 150;
+                            const ordoffer = invdata?.totalPrice;
                             const offerperc = Number(invdata?.offer) || 0;
                             const offerPrice = invdata.offer
                                 ? Math.round(ordoffer - (offerperc * ordoffer) / 100)
@@ -254,9 +254,9 @@ const Invoice = ({ invdata }) => {
                     
                     </div>
                    <div>
-                     <h4 className="pt-5 text-[13px] font-semibold">
+                     {/* <h4 className="pt-5 text-[13px] font-semibold">
                         Delivery Charge: ৳ 150
-                    </h4>
+                    </h4> */}
                     <h4 className="pt-5 text-[16px] font-bold">
                         Pay Total: ৳ {offerPrice.toFixed(2)}
                     </h4>

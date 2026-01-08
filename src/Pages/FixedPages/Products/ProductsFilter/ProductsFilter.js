@@ -19,7 +19,7 @@ const {user, localDeviceId} = useContext(Zaitooncontext)
         },
     });
 
-    const allproducts = (allproductes).filter(book => book?.state === '' || book?.state === 'Available');
+    const allproducts = (allproductes)?.filter(book => book?.state === '' || book?.state === 'Available');
 
 const queryClient = useQueryClient();
     const handleAddCart = async (id, offerPrice) => {
@@ -65,7 +65,7 @@ const queryClient = useQueryClient();
 
     // Language is comma separated
     const getUniqueLanguages = (data) => {
-        const langs = data.flatMap((p) =>
+        const langs = data?.flatMap((p) =>
             p.language?.split(",").map((l) => l.trim())
         );
         return [...new Set(langs)];
@@ -136,7 +136,7 @@ const queryClient = useQueryClient();
     {/* Category */}
     <div>
       <h3 className="font-medium mb-2">Category</h3>
-      {categories.map((c) => (
+      {categories?.map((c) => (
         <label key={c} className="flex items-center gap-2 mb-1">
           <input
             type="checkbox"
@@ -153,7 +153,7 @@ const queryClient = useQueryClient();
     {/* Subcategory */}
     <div>
       <h3 className="font-medium mb-2">Sub Category</h3>
-      {subCategory.map((sub,i) => (
+      {subCategory?.map((sub,i) => (
         <label key={i} className="flex items-center gap-2 mb-1">
           <input
             type="checkbox"
@@ -170,7 +170,7 @@ const queryClient = useQueryClient();
     {/* Author */}
     <div>
       <h3 className="font-medium mb-2">Author</h3>
-      {authors.map((autho,i) => (
+      {authors?.map((autho,i) => (
         <label key={i} className="flex items-center gap-2 mb-1">
           <input
             type="checkbox"
@@ -185,7 +185,7 @@ const queryClient = useQueryClient();
     {/* Edition */}
     <div>
       <h3 className="font-medium mb-2">Edition</h3>
-      {editions.map((edi,i) => (
+      {editions?.map((edi,i) => (
         <label key={i} className="flex items-center gap-2 mb-1">
           <input
             type="checkbox"
@@ -202,7 +202,7 @@ const queryClient = useQueryClient();
     {/* Language */}
     <div>
       <h3 className="font-medium mb-2">Language</h3>
-      {languages.map((lang,j) => (
+      {languages?.map((lang,j) => (
         <label key={j} className="flex items-center gap-2 mb-1">
           <input
             type="checkbox"
@@ -255,7 +255,7 @@ const queryClient = useQueryClient();
   {/* Product Grid */}
   <main className="w-full lg:w-3/4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
     {filteredProducts.length > 0 ? (
-      filteredProducts.map((product) => {
+      filteredProducts?.map((product) => {
         const offerPrice = product?.offerprice
           ? product.productPrice -
             (product.productPrice * parseInt(product.offerprice)) / 100

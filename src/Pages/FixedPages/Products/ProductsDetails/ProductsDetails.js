@@ -1,12 +1,12 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, useLoaderData, useNavigate } from 'react-router-dom';
 import { Zaitooncontext } from '../../../../SecureContext/ContextAuth';
-import { FaCartFlatbed, FaHeartCirclePlus } from 'react-icons/fa6';
+import { FaCartFlatbed } from 'react-icons/fa6';
 import toast from 'react-hot-toast';
 import PdfOpenModal from '../BooksPdf/PdfOpenModal';
 import axios from 'axios';
 import Reviewgetform from '../../Review/ReviewTake/Reviewgetform';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import PSummer from './PSummer';
 import Pspecifica from './Pspecifica';
 import Pauthor from './Pauthor';
@@ -111,12 +111,12 @@ const ProductsDetails = () => {
     // for Reting show section
 
     useEffect(() => {
-        dataes.map(async (info) => {
+        dataes?.map(async (info) => {
             const res = await axios.get(`${process.env.REACT_APP_backendurl}/review/${info?.ProductCode}`);
             setRedata(res.data)
 
         })
-    }, [dataes])
+    }, [])
 
     const totalRatings = redata?.reduce((sum, rinfo) => sum + rinfo.rating, 0);
     const averageRating = redata?.length ? (totalRatings / redata.length) : 0;
@@ -195,8 +195,6 @@ const ProductsDetails = () => {
 
     const [orderCou, setOrderCou] = useState()
     useEffect(() => {
-
-
         try {
             dataes?.map(async (info) => {
                 const res = await axios.get(`${process.env.REACT_APP_backendurl}/ordercount/${info?.ProductCode}`);
@@ -208,7 +206,7 @@ const ProductsDetails = () => {
         catch (error) {
 
         }
-    }, []);
+    },[]);
 
     return (
         <div className='grid '>

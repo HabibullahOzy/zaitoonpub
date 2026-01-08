@@ -144,6 +144,7 @@ const ConfirmList = () => {
               <th className="border px-1 py-2">Location</th>
               <th className="border px-1 py-2">Order Note</th>
               <th className="border px-1 py-2">SubTotal</th>
+              <th className="border px-1 py-2">Deli Charge</th>
               <th className="border px-1 py-2">Offer</th>
               <th className="border px-1 py-2">PayTotal</th>
               <th className="border px-1 py-2">Pay Method</th>
@@ -159,11 +160,11 @@ const ConfirmList = () => {
             {paginatedData.map((cashdata, i) => {
               const isExpanded = expandedRow === cashdata._id;
               // calculate offer price if needed
-              const ordoffer = cashdata?.totalPrice - 150;
+              const ordoffer = cashdata?.totalPrice;
               const offerperc = Number(cashdata?.offer) || 0;
               const offerPrice = cashdata?.offer
-                ? Math.round(ordoffer - (offerperc * ordoffer) / 100) + 150
-                : cashdata?.totalPrice;
+                ? Math.round(ordoffer - (offerperc * ordoffer) / 100) + Number(cashdata?.delicharge)
+                : ordoffer + Number(cashdata?.delicharge || 0);
               return (
                 <React.Fragment key={cashdata._id}>
                   {/* Parent Row */}
@@ -197,6 +198,10 @@ const ConfirmList = () => {
                     <td className="border py-1 text-center">
                       {ordoffer}
                     </td>
+                    <td className="border py-1 text-center">
+                      {cashdata?.delicharge}
+                    </td>
+                
                     <td className="border py-1 text-red-500 text-center">
                       {cashdata?.offer}
                     </td>

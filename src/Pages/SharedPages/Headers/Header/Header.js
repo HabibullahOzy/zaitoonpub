@@ -13,11 +13,12 @@ import useAdmin from "../../../../hooks/adminHooks/useAdmin";
 import useSuperAdmin from "../../../../hooks/superAdmin/superAdmin";
 import { Drawer, DrawerHeader, DrawerItems } from "flowbite-react";
 import CartItem from "../../../FixedPages/CartItems/CartItem";
-import TranslateLang from "../../LangTranslate/TranslateLang";
+// import TranslateLang from "../../LangTranslate/TranslateLang";
 
 const Header = () => {
     const { logOut, user, prices, ident, localDeviceId } =
         useContext(Zaitooncontext);
+
 
     const queryClient = useQueryClient();
     const [isOpen, setIsOpen] = useState(false);
@@ -34,10 +35,10 @@ const Header = () => {
             .catch(() => { });
     };
 
-    const { t, i18n } = useTranslation();
-    const changeLanguage = (lng) => {
-        i18n.changeLanguage(lng);
-    };
+    // const { t, i18n } = useTranslation();
+    // const changeLanguage = (lng) => {
+    //     i18n.changeLanguage(lng);
+    // };
 
     //  search + filter states
     const [searchTerm, setSearchTerm] = useState("");
@@ -46,7 +47,7 @@ const Header = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
 
     //  fetch products
-    const { data: allproducts = [] } = useQuery({
+    const { data: allproductes = [] } = useQuery({
         queryKey: ["allproducts"],
         queryFn: async () => {
             const res = await fetch(
@@ -56,6 +57,8 @@ const Header = () => {
         },
     });
 
+    const allproducts = (allproductes)?.filter(book => book?.state === 'Available');
+
     //  search filter logic
     useEffect(() => {
         if (!allproducts.length) return;
@@ -63,8 +66,7 @@ const Header = () => {
         setIsFetching(true);
         const delay = setTimeout(() => {
             const lower = searchTerm.toLowerCase();
-
-            const results = (allproducts || []).filter((item) => {
+            const results = (allproducts)?.filter((item) => {
                 const namebn = item.namebn?.toLowerCase() || "";
                 const nameeng = item.nameeng?.toLowerCase() || "";
                 const namearb = item.namearb?.toLowerCase() || "";
@@ -100,6 +102,7 @@ const Header = () => {
     }, []);
 
     const email = user?.email || localDeviceId();
+
 
     return (
         <header className={`header ${scrolled ? "scrolled" : ""}`}>
@@ -150,10 +153,10 @@ const Header = () => {
                                     </div>
 
                                     {/* Dropdown */}
-                                    {searchTerm.length > 0 && (
+                                    {searchTerm?.length > 0 && (
                                         <div className="mt-2 overflow-y-auto">
                                             {filteredData.length > 0 ? (
-                                                filteredData.map((item) => (
+                                                filteredData?.map((item) => (
                                                     <Link
                                                         key={item._id}
                                                         to={`/products/${item._id}`}
@@ -256,9 +259,7 @@ const Header = () => {
                     {/* right side (cart, profile, login) */}
                     <div className="navbar-end">
                         <div>
-                            <Link to={"/filterproducts"} className="font-semibold text-white p-2 rounded-full hover:bg-green-200 mx-1">
-                                Products
-                            </Link>
+                            
                         </div>
 
 
@@ -350,6 +351,7 @@ const Header = () => {
                     </DrawerItems>
                 </Drawer>
             </div>
+            
         </header>
     );
 };

@@ -209,7 +209,7 @@ const PmUpdate = () => {
                 >
                   <option value="Available">Available</option>
                   <option value="Unavailable">Unavailable</option>
-                  <option value="Previous">Previous</option>
+                  <option value="Previous">Old Edition</option>
                   <option value="Preorder">Preorder</option>
                   <option value="Coming Soon">Coming Soon</option>
                   <option value="Out of Stock">Out of Stock</option>

@@ -106,10 +106,10 @@ const CODInvoice = ({ codInvdata }) => {
     // };
 
 
-    const ordoffer = (codInvdata?.totalPrice || 0) - 150;
+    const ordoffer = (codInvdata?.totalPrice || 0);
     const offerperc = Number(codInvdata?.offer) || 0;
     const offerPrice = codInvdata?.offer
-        ? Math.round(ordoffer - (offerperc * ordoffer) / 100) + 150
+        ? Math.round(ordoffer - (offerperc * ordoffer) / 100) + Number(codInvdata?.delicharge)
         : codInvdata?.totalPrice;
 
     return (
@@ -215,7 +215,7 @@ const CODInvoice = ({ codInvdata }) => {
                     <tbody>
                         {codInvdata?.productdata?.map((item, i) => {
                             // calculate offer price if needed
-                            const ordoffer = codInvdata?.totalPrice - 150;
+                            const ordoffer = codInvdata?.totalPrice;
                             const offerperc = Number(codInvdata?.offer) || 0;
                             const offerPrice = codInvdata?.offer
                                 ? Math.round(ordoffer - (offerperc * ordoffer) / 100)
@@ -225,7 +225,7 @@ const CODInvoice = ({ codInvdata }) => {
                                     <td style={tdStyle}>{item?.namebn}</td>
                                     <td style={tdStyle}>{item?.ProductCode}</td>
                                     <td style={tdStyle}>{item?.quantity}</td>
-                                    <td style={tdStyle}>{item?.offer}</td>
+                                    <td style={tdStyle}>{item?.productPrice}</td>
                                     <td style={tdStyle}>{item?.total}</td>
                                 </tr>
                             )
@@ -256,7 +256,7 @@ const CODInvoice = ({ codInvdata }) => {
                     </div>
                    <div>
                      <h4 className="pt-5 text-[13px] font-semibold">
-                        Delivery Charge: ৳ 150
+                        Delivery Charge: ৳ {codInvdata?.delicharge}
                     </h4>
                     <h4 className="pt-5 text-[16px] font-bold">
                         Pay Total: ৳ {offerPrice.toFixed(2)}
