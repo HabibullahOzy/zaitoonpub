@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import PdfOpenModal from '../BooksPdf/PdfOpenModal';
 import axios from 'axios';
 import Reviewgetform from '../../Review/ReviewTake/Reviewgetform';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import PSummer from './PSummer';
 import Pspecifica from './Pspecifica';
 import Pauthor from './Pauthor';
@@ -41,7 +41,7 @@ const ProductsDetails = () => {
     const emaile = user?.email || localDeviceId()
 
     const queryClient = useQueryClient();
-    
+
     const handleAddCart = async (id, offerPrice) => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_backendurl}/products/${id}`)
@@ -206,7 +206,25 @@ const ProductsDetails = () => {
         catch (error) {
 
         }
-    },[]);
+    }, []);
+
+
+
+    const email = user?.email || localDeviceId();
+
+    //  Access queryClient
+    //   const queryClient = useQueryClient();
+
+    const { data: cartItems = [] } = useQuery({
+        queryKey: ['cartItems', email],
+        queryFn: async () => {
+            const res = await fetch(`${process.env.REACT_APP_backendurl}/cashOnpurc/${email}`);
+            return res.json();
+        },
+    });
+
+    const cartMatch = cartItems?.map(cartit => cartit.ProductCode)
+
 
     return (
         <div className='grid '>
@@ -331,13 +349,21 @@ const ProductsDetails = () => {
                                                 অর্ডার করুন
                                             </button>
 
-                                            <button
-                                                onClick={() => handleAddCart(data?._id, offerPrice)}
-                                                className="p-4 w-1/2 bg-green-600 rounded-md text-white flex items-center justify-center vibrate-button"
-                                            >
-                                                <FaCartFlatbed className="w-8" />
-                                                কার্টে যোগ করুন
-                                            </button>
+
+                                            {cartMatch?.some(c => c === data?.ProductCode) ? (
+                                                <p className="p-2 w-1/2 bg-green-200 text-green-600 flex items-center justify-center font-semibold">
+                                                    Added
+                                                </p>
+                                            ) : (
+                                                <button
+                                                    onClick={() => handleAddCart(data?._id, offerPrice)}
+                                                    className="p-4 w-1/2 bg-green-600 rounded-md text-white flex items-center justify-center vibrate-button"
+                                                >
+                                                    <FaCartFlatbed className="w-8" />
+                                                    কার্টে যোগ করুন
+                                                </button>
+                                            )}
+
                                         </div>
 
                                         {/* <button

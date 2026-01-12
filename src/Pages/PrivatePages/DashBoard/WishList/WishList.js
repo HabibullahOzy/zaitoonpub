@@ -1,51 +1,78 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useLoaderData } from 'react-router-dom';
 import { Zaitooncontext } from '../../../../SecureContext/ContextAuth';
 import { FaTrashAlt } from 'react-icons/fa';
 import axios from 'axios';
-import { useQuery } from '@tanstack/react-query';
-import { reload } from 'firebase/auth';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 const WishList = () => {
-    const { user } = useContext(Zaitooncontext);
+    const { user, localDeviceId, setIdentWish } = useContext(Zaitooncontext);
     const wishdatas = useLoaderData();
+    const queryClient = useQueryClient();
 
     const [showModal, setShowModal] = useState(false);
 
+    const email = user?.email || localDeviceId();
 
-
+const { data: wishItems = [], refetch } = useQuery({
+    queryKey: ['wishItems', email],
+    queryFn: async () => {
+      const res = await fetch(`${process.env.REACT_APP_backendurl}/wishList/${email}`);
+      return res.json();
+    },
+  });
+useEffect(() => {
+    if (wishItems.length > 0) {
+      setIdentWish(wishItems.length);
+    }}
+)
 
     const handleAddCart = async (informat, offerPrice) => {
-
-        const cartProducts = {
-            id: informat?._id,
-            email: informat?.email,
-            offer: offerPrice,
-            name: informat?.product?.nameeng,
-            image: informat?.product?.image,
-            productPrice: informat?.product?.productPrice,
-            category: informat?.product?.category,
-            ProductCode: informat?.product?.ProductCode,
-            authorName: informat?.product?.authorName,
-            edition: informat?.product?.edition,
-            postDate: informat?.product?.postDate
-        };
-
-        fetch(`${process.env.REACT_APP_backendurl}/addedCart`, {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify(cartProducts)
-        })
-            .then(res => res.json())
-            .then(infoe => {
-                if (infoe.acknowledged) {
-                    toast.success("Your Product added successfully");
-                } else {
-                    toast.error("Your product can't be added, please try again");
-                }
-            });
+  try {
+    const cartProducts = {
+      id: informat?._id,
+      email: informat?.email,
+      offer: offerPrice,
+      name: informat?.product?.nameeng,
+      image: informat?.product?.image,
+      productPrice: informat?.product?.productPrice,
+      category: informat?.product?.category,
+      ProductCode: informat?.product?.ProductCode,
+      authorName: informat?.product?.authorName,
+      edition: informat?.product?.edition,
+      postDate: informat?.product?.postDate
     };
+
+    const res = await fetch(
+      `${process.env.REACT_APP_backendurl}/addedCart`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(cartProducts)
+      }
+    );
+
+    const infoe = await res.json();
+
+    if (infoe?.acknowledged) {
+      toast.success("Your product added to cart successfully");
+
+      // remove from wishlist
+      await axios.delete(
+        `${process.env.REACT_APP_backendurl}/wishList/delete/${informat._id}`
+      );
+
+      refetch();
+    } else {
+      toast.error("Your product can't be added, please try again");
+    }
+  } catch (error) {
+    console.error(error);
+    toast.error("Something went wrong!");
+  }
+};
+
 
 
     // handle Delete from wish list
@@ -55,6 +82,7 @@ const WishList = () => {
         const res = await axios.delete(`${process.env.REACT_APP_backendurl}/wishList/delete/${id}`);
         if (res.data.deletedCount > 0) {
             toast.success("Item deleted successfully");
+            queryClient.invalidateQueries(['wishItems', email]);
             // Optionally, you can refetch the wish list data here
             // window.location.reload();
         } else {
@@ -66,7 +94,7 @@ const WishList = () => {
 
 
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
+    const itemsPerPage = 15;
     const totalPages = Math.ceil(wishdatas.length / itemsPerPage);
 
     const paginatedData = wishdatas.slice(

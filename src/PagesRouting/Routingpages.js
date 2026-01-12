@@ -44,6 +44,10 @@ import VideoUpload from "../Pages/PrivatePages/DashBoard/WebMenuSetup/VideoSetup
 import Authoradd from "../Pages/PrivatePages/AuthorAdd/Authoradd";
 import AuthorShow from "../Pages/PrivatePages/AuthorAdd/AuthorShow";
 import Previousproduct from "../Pages/PrivatePages/AllProducts/Previousproduct/Previousproduct";
+import Tracer from "../Pages/SharedPages/Headers/OrderTracer/Tracer";
+import Stationary from "../Pages/FixedPages/Products/Stationary/Stationary";
+import Classbooks from "../Pages/FixedPages/Products/ClassBasedBooks/Classbooks";
+import Institutional from "../Pages/FixedPages/Purchages/InstitutionalOrder/Institutional";
 
 const router = createBrowserRouter([
     {
@@ -107,6 +111,23 @@ const router = createBrowserRouter([
             path: "/filterproducts",
             element: <ProductsFilter></ProductsFilter>
         },
+        {
+            path: "/ordertrack",
+            element: <Tracer></Tracer>
+        },
+        {
+            path: "/stationary",
+            element: <Stationary></Stationary>
+        },
+        {
+            path: "/subcategoryproducts/:subcategory",
+            element: <Classbooks></Classbooks>,
+            loader: ({params}) => fetch(`${process.env.REACT_APP_backendurl}/subcategoryproducts/${encodeURIComponent(params.subCategory)}`)
+        },
+        {
+            path: "/institutionalorder",
+            element: <Secureroute><Institutional></Institutional></Secureroute>
+        }
 
         ]
     },

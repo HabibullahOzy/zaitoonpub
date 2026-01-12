@@ -16,7 +16,10 @@ const Category = () => {
   });
 
   // Get unique categories
-  const categories = [...new Set(Array.isArray(allcategory) && allcategory?.map(p => p.categname))];
+  const categories = [...new Set(Array.isArray(allcategory) 
+    ? allcategory?.map(p => p.categname) 
+    : []
+  )];
 
   // ✅ Automatically set the first category as active when data loads
   useEffect(() => {

@@ -1,11 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { Link, NavLink } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import img1 from "../../../../assets/headerimg.png";
 import "./SHeader.css";
+import { IoIosHeartEmpty } from "react-icons/io";
+import { Zaitooncontext } from "../../../../SecureContext/ContextAuth";
 
 const SHeader = () => {
-  const [mobileSubOpen, setMobileSubOpen] = useState(false);
+  const { user, identWish } = useContext(Zaitooncontext)
+  // const [mobileSubOpen, setMobileSubOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
 
@@ -22,12 +25,14 @@ const SHeader = () => {
       return <li className="text-center py-2">Loading...</li>;
     }
 
-    return allcategory.flatMap((category) => {
+    const categories =Array.isArray(allcategory) ? allcategory : [];
+
+    return categories?.flatMap((category) => {
       const subs = category?.subcategories?.split(",").map((s) => s.trim());
       return subs?.map((sub, i) => (
         <li key={`${category._id}-${i}`}>
           <Link
-            to={`/filterproducts?category=${encodeURIComponent(sub)}`}
+            to={`/subcategoryproducts/${encodeURIComponent(sub)}`}
             className="block px-3 py-2 rounded hover:bg-green-100"
           >
             {sub}
@@ -51,12 +56,13 @@ const SHeader = () => {
   }, []);
 
 
+
   return (
     <header className="w-full">
       {/* NAVBAR */}
-      <div className="shadow-sm shadow-lime-600">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between">
+      <div className="shadow-1 shadow-lime-600">
+        <div className="" style={{ background: `linear-gradient(to left, rgb(25, 79, 25), rgb(168, 255, 168))` }}>
+          <div className="w-10/12 mx-auto px-4 flex items-center justify-between">
 
             {/* MOBILE MENU */}
             <div className="lg:hidden">
@@ -69,11 +75,11 @@ const SHeader = () => {
                   tabIndex={0}
                   className="menu menu-sm dropdown-content mt-3 z-50 p-2 shadow bg-white rounded-box w-56 relative text-black"
                 >
-                  <li><Link to="/">হোম</Link></li>
+                  <li className=""><Link to="/">হোম</Link></li>
                   <li><Link to="/filterproducts">বই</Link></li>
 
                   {/* MOBILE SUBMENU */}
-                  <li className="relative">
+                  {/* <li className="relative">
                     <button
                       onClick={() => setMobileSubOpen(!mobileSubOpen)}
                       className="flex justify-between w-full"
@@ -90,30 +96,75 @@ const SHeader = () => {
                     >
                       {renderSubcategories()}
                     </ul>
-                  </li>
+                  </li> */}
 
-                  <li><Link to="/">ষ্টেশনারী</Link></li>
+                  <li className="relative group">
+
+                  {/* MENU BUTTON */}
+                  <Link to={'/classbasedbooks'} className="flex items-center gap-1 cursor-pointer pb-1 hover:text-green-600 transition-colors">
+                    শ্রেণি ভিত্তিক বই
+                    <span className=" transition-transform group-hover:rotate-180">
+                      ▼
+                    </span>
+                  </Link>
+
+                  {/* DROPDOWN */}
+                  <div
+                    className="absolute left-0 top-full mt-2 w-[260px] bg-white border border-gray-200 shadow-xl rounded-md opacity-0 invisible group-hover:visible group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-200 ease-out z-50"
+                  >
+                    <ul className="grid grid-cols-1 gap-x-2 gap-y-1 p-3 text-[14px] text-gray-700">
+                      {renderSubcategories()}
+                    </ul>
+                  </div>
+
+                </li>
+
+                  <li><Link to="/stationary">ষ্টেশনারী</Link></li>
+                  <li><Link to="/institutionalorder">প্রাতিষ্ঠানিক অর্ডার</Link></li>
                 </ul>
               </div>
             </div>
 
             {/* DESKTOP MENU */}
-            <nav className="hidden lg:flex text-center">
-              <ul className="menu menu-horizontal gap-2 text-black">
-                <li><Link to="/" className="hover:text-green-600">হোম</Link></li>
 
+            {/* DESKTOP MENU */}
+            <nav className="hidden lg:flex justify-between items-center w-full">
+
+              {/* LEFT MENU */}
+              <ul className="flex items-center gap-6 text-black text-[17px]">
+
+                {/* HOME */}
                 <li>
-                  <Link to="/filterproducts" className="rounded-full hover:bg-green-200">
-                    বই
-                  </Link>
+                  <NavLink to="/" end>
+                    {({ isActive }) => (
+                      <span className="relative pb-1 cursor-pointer hover:text-green-600">
+                        হোম
+                        {isActive && (
+                          <span className="absolute left-0 -bottom-[3px] w-full h-[3px] bg-green-600"></span>
+                        )}
+                      </span>
+                    )}
+                  </NavLink>
                 </li>
 
+                {/* BOOK */}
+                <li>
+                  <NavLink to="/filterproducts">
+                    {({ isActive }) => (
+                      <span className="relative pb-1 cursor-pointer hover:text-green-600">
+                        বই
+                        {isActive && (
+                          <span className="absolute left-0 -bottom-[3px] w-full h-[3px] bg-green-600"></span>
+                        )}
+                      </span>
+                    )}
+                  </NavLink>
+                </li>
 
-                {/* DESKTOP DROPDOWN */}
-                <li className="relative" ref={menuRef}>
+                {/* <li className="relative" ref={menuRef}>
                   <span
                     onClick={() => setOpen(!open)}
-                    className="cursor-pointer hover:text-green-600 select-none "
+                    className="cursor-pointer hover:text-green-600 select-none linkbehave"
                   >
                     শ্রেণি ভিত্তিক বই <span className={`transition ${open ? "rotate-180" : ""}`}>▼</span>
                   </span>
@@ -126,25 +177,86 @@ const SHeader = () => {
                       {renderSubcategories()}
                     </ul>
                   )}
-                </li>
-
-
-                {/* DESKTOP DROPDOWN
-                <li className="relative group">
-                  <span className="cursor-pointer hover:text-green-600">
-                    শ্রেণি ভিত্তিক বই
-                  </span>
-
-                  <ul className="absolute top-full left-0 mt-2 w-60 bg-white shadow-lg rounded-box p-2
-                    opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0
-                    transition-all duration-300 z-50">
-                    {renderSubcategories()}
-                  </ul>
                 </li> */}
 
-                <li><Link to="/" className="hover:text-green-600">ষ্টেশনারী</Link></li>
+
+
+
+                {/* DESKTOP DROPDOWN */}
+                <li className="relative group">
+
+                  {/* MENU BUTTON */}
+                  <Link to={'/classbasedbooks'} className="flex items-center gap-1 cursor-pointer pb-1 hover:text-green-600 transition-colors">
+                    শ্রেণি ভিত্তিক বই
+                    <span className=" transition-transform group-hover:rotate-180">
+                      ▼
+                    </span>
+                  </Link>
+
+                  {/* DROPDOWN */}
+                  <div
+                    className="absolute left-0 top-full mt-2 w-[460px] bg-white border border-gray-200 shadow-xl rounded-md opacity-0 invisible group-hover:visible group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-200 ease-out z-50"
+                  >
+                    <ul className="grid grid-cols-2 gap-x-4 gap-y-2 p-4 text-[14px] text-gray-700">
+                      {renderSubcategories()}
+                    </ul>
+                  </div>
+
+                </li>
+
+                {/* STATIONARY */}
+                <li>
+                  <NavLink to="/stationary">
+                    {({ isActive }) => (
+                      <span className="relative pb-1 cursor-pointer hover:text-green-600">
+                        স্টেশনারী
+                        {isActive && (
+                          <span className="absolute left-0 -bottom-[3px] w-full h-[3px] bg-green-600"></span>
+                        )}
+                      </span>
+                    )}
+                  </NavLink>
+                </li>
+
+                <li>
+                  <NavLink to="/institutionalorder">
+                    {({ isActive }) => (
+                      <span className="relative pb-1 cursor-pointer hover:text-green-600">
+                        প্রাতিষ্ঠানিক অর্ডার
+                        {isActive && (
+                          <span className="absolute left-0 -bottom-[3px] w-full h-[3px] bg-green-600"></span>
+                        )}
+                      </span>
+                    )}
+                  </NavLink>
+                </li>
+
               </ul>
+
+              {/* RIGHT MENU */}
+              <ul className="flex items-center gap-6">
+
+                <li>
+                  <button className="indicator btn btn-ghost btn-circle">
+                    <Link to={`/wishList/${user?.email}`}>
+                      <IoIosHeartEmpty className="text-2xl text-white" />
+                    </Link>
+                    <span className="badge badge-sm bg-green-700 text-white indicator-item">
+                      {identWish || 0}
+                    </span>
+                  </button>
+                </li>
+
+                <li>
+                  <Link to="/ordertrack" className="hover:text-green-600">
+                    অর্ডার ট্র্যাক করুন
+                  </Link>
+                </li>
+
+              </ul>
+
             </nav>
+
           </div>
         </div>
       </div>

@@ -1,52 +1,38 @@
-import React, { useContext, useEffect, useState } from 'react';
-import "./Products.css";
-import { ImBooks } from 'react-icons/im';
-import { FaCartFlatbed } from 'react-icons/fa6';
-// import { RiShoppingBag4Fill } from 'react-icons/ri';
-import { Link } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
-import { Zaitooncontext } from '../../../SecureContext/ContextAuth';
 import axios from 'axios';
-import { FcViewDetails } from 'react-icons/fc';
-import SkeltonLoader from '../../SkeltonLoader/SkeltonLoader';
+import React, { useContext, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { Zaitooncontext } from '../../../../SecureContext/ContextAuth';
 import { motion } from "framer-motion";
-// import BuyNowModal from '../Purchages/InstantPurch/BuyNowModal';
-// import { v4 as uuidv4 } from 'uuid';
-
-const Products = () => {
-    const { user, localDeviceId } = useContext(Zaitooncontext);
+import { ImBooks } from 'react-icons/im';
+import SkeltonLoader from '../../../SkeltonLoader/SkeltonLoader';
+import { Link } from 'react-router-dom';
+import { FcViewDetails } from 'react-icons/fc';
+import { FaCartFlatbed } from 'react-icons/fa6';
+const Stationary = () => {
+const { user, localDeviceId } = useContext(Zaitooncontext);
     // const navigate = useNavigate();
 
     const queryClient = useQueryClient();
 
-    const { data: allbooks = [] } = useQuery({
-        queryKey: ['allbooks'],
+    const { data: allstationary = [] } = useQuery({
+        queryKey: ['allstationary'],
         queryFn: async () => {
-            const res = await fetch(`${process.env.REACT_APP_backendurl}/allProducts`);
+            const res = await fetch(`${process.env.REACT_APP_backendurl}/categoryproducts/stationery`);
             const data = await res.json();
             return data;
         }
     });
 
 
-    const allproducts = Array.isArray(allbooks)
-        ? allbooks.filter(book => book?.state === '' || book?.state === 'Available')
+    const allproducts = Array.isArray(allstationary)
+        ? allstationary.filter(stationary => stationary?.state === '' || stationary?.state === 'Available')
         : [];
-    // const localDeviceId = () => {
-    //     let deviceId = localStorage.getItem('device_id');
-    //     if (!deviceId) {
-    //         deviceId = uuidv4();
-    //         localStorage.setItem('device_id', deviceId);
-    //     }
-    //     return deviceId;
-    // };
+   
 
     const handleAddCart = async (id, offerPrice) => {
         const response = await axios.get(`${process.env.REACT_APP_backendurl}/products/${id}`);
         const product = response?.data[0];
-
-
 
         const cartProducts = {
             id,
@@ -98,78 +84,22 @@ const Products = () => {
 
     const cartMatch = cartItems?.map(cartit => cartit.ProductCode)
 
-
-
-    // Buy Now Purchase Function
-
-    // const [showModal, setShowModal] = useState(false);
-    // const [buyNowProductId, setBuyNowProductId] = useState('');
-
-    // const openBuyNownPurchase = (product) => {
-    // if (!user) {
-    //     toast.error("Please login first to buy now");
-    //     return;
-    // }
-
-    //     setShowModal(true);
-    //     setBuyNowProductId(product);
-    // }
-
-
-    // const addWishList = async (product) => {
-    //     if (!user) {
-    //         toast.error("Please login first to add to wishlist");
-    //         return;
-    //     }
-
-    //     const wishlistItem = {
-    //         email: user?.email,
-    //         product
-    //     };
-
-    //     try {
-    //         const response = await fetch(`${process.env.REACT_APP_backendurl}/wishList`, {
-    //             method: 'POST',
-    //             headers: { 'Content-Type': 'application/json' },
-    //             body: JSON.stringify(wishlistItem)
-    //         });
-
-    //         const data = await response.json();
-    //         if (data.acknowledged) {
-    //             toast.success("Product added to wishlist successfully");
-    //             navigate(`/wishList/${user.email}`);
-    //             refetch();
-    //         } else {
-    //             toast.error("Failed to add product to wishlist");
-    //         }
-    //     } catch (error) {
-    //         console.error("Error adding to wishlist:", error);
-    //         toast.error("An error occurred while adding to wishlist");
-    //     }
-    // }
-
-
-
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        // Simulate fetch delay
-        const timer = setTimeout(() => setLoading(false), 2000);
-        return () => clearTimeout(timer);
-    }, []);
-
-
-
+     const [loading, setLoading] = useState(true);
+    
+        useEffect(() => {
+            // Simulate fetch delay
+            const timer = setTimeout(() => setLoading(false), 2000);
+            return () => clearTimeout(timer);
+        }, []);
     return (
-
-        <div className='lg:w-10/12 md:w-10/12 w-full p-2 mx-auto py-6'>
+       <div className='lg:w-10/12 md:w-10/12 w-full p-2 mx-auto py-6'>
 
             <div className=" text-center mb-12">
                 <motion.h2 className="text-3xl md:text-3xl font-semibold flex justify-center text-black" initial={{ opacity: 0, y: -30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} >
-                    <ImBooks className='text-yellow-300 mr-2' /> All Books </motion.h2>
-                <motion.p className="mt-3 text-gray-600" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }} > Stay tuned for our books and releases </motion.p>
+                    <ImBooks className='text-yellow-300 mr-2' /> All Stationery Item </motion.h2>
+                <motion.p className="mt-3 text-gray-600" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }} > Stay tuned for our Stationery Item and releases </motion.p>
 
-                <p className='text-end text-black font-semibold'>সকল বই সমূহ</p>
+                {/* <p className='text-end text-black font-semibold'>সকল বই সমূহ</p> */}
                 <hr className='border-2 text-green-300 ' />
             </div>
             <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 lg:gap-6 md:gap-6' style={{ color: "black" }}>
@@ -320,8 +250,7 @@ const Products = () => {
                     )}
             </div>
         </div>
-
     );
 };
 
-export default Products;
+export default Stationary;

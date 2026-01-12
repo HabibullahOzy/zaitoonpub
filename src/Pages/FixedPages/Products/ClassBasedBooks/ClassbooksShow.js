@@ -1,17 +1,15 @@
-
-import { useQuery } from '@tanstack/react-query';
 import React, { useContext, useState } from 'react';
-import toast from 'react-hot-toast';
-import { FaCartFlatbed, FaHeartCirclePlus, FaRegEye } from 'react-icons/fa6';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { Zaitooncontext } from '../../../../../SecureContext/ContextAuth';
-import BuyNowModal from '../../../Purchages/InstantPurch/BuyNowModal';
+import BuyNowModal from '../../Purchages/InstantPurch/BuyNowModal';
+import { FaCartFlatbed } from 'react-icons/fa6';
 import { FcViewDetails } from 'react-icons/fc';
+import { Link, useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
+import axios from 'axios';
+import { Zaitooncontext } from '../../../../SecureContext/ContextAuth';
 
-const Play = ({ productCategory }) => {
-
-    const { user, localDeviceId } = useContext(Zaitooncontext)
+const ClassbooksShow = ({productCategory}) => {
+     const { user, localDeviceId } = useContext(Zaitooncontext)
     const navigate = useNavigate();
 
     const { data: nursproductes = [], refetch } = useQuery({
@@ -245,4 +243,4 @@ const Play = ({ productCategory }) => {
     );
 };
 
-export default Play;
+export default ClassbooksShow;

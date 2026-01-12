@@ -70,7 +70,7 @@ const CashOnpurch = ({ cartItems, setShowModal }) => {
         toast.success("Order Successfully Placed!!");
         setShowModal(false)
 
-         // 🚀 clear modal
+         // clear modal
         setShowModal(false);
 
         //  Clear cart from backend
@@ -79,7 +79,7 @@ const CashOnpurch = ({ cartItems, setShowModal }) => {
       );
 
         navigate(`/myorder/${emaile}`)
-        // 🚀 instantly refresh cart
+        // instantly refresh cart
         QueryClient.invalidateQueries(["cartItems", email]);
 
       } else {

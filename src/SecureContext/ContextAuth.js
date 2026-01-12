@@ -14,6 +14,7 @@ const ContextAuth = ({children}) => {
     const [cartdataset, setCartdataset]=useState('');
     const [prices, setPrices] = useState(0);
     const [ident, setIdent] = useState(0);
+    const [identWish, setIdentWish] = useState(0);
     const [producD, setProducD]=useState('')
     const [cashonprodata,setCashonprodata]=useState(null)
 
@@ -90,7 +91,9 @@ const ContextAuth = ({children}) => {
         setProducD,
         cashonprodata,
         setCashonprodata,
-        localDeviceId
+        localDeviceId,
+        identWish,
+        setIdentWish
     }
     return (
         <div>

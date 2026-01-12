@@ -33,19 +33,19 @@ const CeategorySetup = () => {
     ]);
   };
 
-  const onSubmit =async (data) => {
-    
-const imageFile = categoryData.image;
+  const onSubmit = async (data) => {
+
+    const imageFile = categoryData.image;
 
 
-const formData = new FormData();
-formData.append("image", imageFile);
+    const formData = new FormData();
+    formData.append("image", imageFile);
     formData.append("categname", data.categname);
     formData.append("subcategories", subcategories.map((_, index) => data[`subcategory${index + 1}`]));
-    
-   
-    const res =await axios.post(`${process.env.REACT_APP_backendurl}/categoryset`, formData, {
-       headers: { "Content-Type": "multipart/form-data" }
+
+
+    const res = await axios.post(`${process.env.REACT_APP_backendurl}/categoryset`, formData, {
+      headers: { "Content-Type": "multipart/form-data" }
     });
     if (res?.data?.insertedId) {
       toast.success("Category and subcategories added successfully!");

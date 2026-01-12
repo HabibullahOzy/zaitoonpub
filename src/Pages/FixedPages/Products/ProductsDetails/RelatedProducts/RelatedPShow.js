@@ -25,28 +25,28 @@ const RelatedPShow = ({ categorys }) => {
   });
 
   // Memoize first filter
-const nursproduct = useMemo(() => {
-  return Array.isArray(nursproductes)
-    ? nursproductes?.filter(
+  const nursproduct = useMemo(() => {
+    return Array.isArray(nursproductes)
+      ? nursproductes?.filter(
         book => book?.state === '' || book?.state === 'Available'
       )
-    : [];
-}, [nursproductes]);
+      : [];
+  }, [nursproductes]);
 
-// Memoize final products (NO STATE, NO LOOP)
-const products = useMemo(() => {
-  return nursproduct?.filter(p => p?.category === categorys)
-    .slice(0, 20);
-}, [nursproduct, categorys]);
+  // Memoize final products (NO STATE, NO LOOP)
+  const products = useMemo(() => {
+    return nursproduct?.filter(p => p?.category === categorys)
+      .slice(0, 20);
+  }, [nursproduct, categorys]);
 
-//   const nursproduct = (nursproductes).filter(book => book?.state === '' || book?.state === 'Available');
+  //   const nursproduct = (nursproductes).filter(book => book?.state === '' || book?.state === 'Available');
 
-//   useEffect(() => {
-//     if (Array.isArray(nursproduct)) {
-//       const filtered = nursproduct?.filter(p => p?.category === categorys);
-//       setProducts(filtered.slice(0, 20));
-//     }
-//   }, [nursproduct, categorys]);
+  //   useEffect(() => {
+  //     if (Array.isArray(nursproduct)) {
+  //       const filtered = nursproduct?.filter(p => p?.category === categorys);
+  //       setProducts(filtered.slice(0, 20));
+  //     }
+  //   }, [nursproduct, categorys]);
 
 
 
@@ -79,62 +79,74 @@ const products = useMemo(() => {
 
 
   const handleAddCart = async (id) => {
-        try {
-            const response = await axios.get(`${process.env.REACT_APP_backendurl}/products/${id}`)
-            const email = emaile
-            const nameeng = response?.data[0]?.nameeng
-            const namebn = response?.data[0]?.namebn
-            const namearb = response?.data[0]?.namearb
-            const image = response?.data[0]?.image
-            const productPrice = response?.data[0]?.productPrice
-            const category = response?.data[0]?.category
-            const ProductCode = response?.data[0]?.ProductCode
-            const authorName = response?.data[0]?.authorName
-            const edition = response?.data[0]?.edition
-            // const offer = offerPrice
-            const offer = response?.data[0]?.offerprice
-                        ? Math.round(response?.data[0]?.productPrice - (response?.data[0]?.offerprice * response?.data[0]?.productPrice) / 100)
-                        : response?.data[0]?.productPrice;
-            const postDate = response?.data[0]?.postDate
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_backendurl}/products/${id}`)
+      const email = emaile
+      const nameeng = response?.data[0]?.nameeng
+      const namebn = response?.data[0]?.namebn
+      const namearb = response?.data[0]?.namearb
+      const image = response?.data[0]?.image
+      const productPrice = response?.data[0]?.productPrice
+      const category = response?.data[0]?.category
+      const ProductCode = response?.data[0]?.ProductCode
+      const authorName = response?.data[0]?.authorName
+      const edition = response?.data[0]?.edition
+      // const offer = offerPrice
+      const offer = response?.data[0]?.offerprice
+        ? Math.round(response?.data[0]?.productPrice - (response?.data[0]?.offerprice * response?.data[0]?.productPrice) / 100)
+        : response?.data[0]?.productPrice;
+      const postDate = response?.data[0]?.postDate
 
 
-            const cartProducts = {
-                id,
-                email,
-                offer,
-                nameeng,
-                namebn,
-                namearb,
-                image,
-                productPrice,
-                category,
-                ProductCode,
-                authorName,
-                edition,
-                postDate
-            }
-            fetch(`${process.env.REACT_APP_backendurl}/addedCart`, {
-                method: 'POST',
-                headers: {
-                    'content-type': 'application/json'
-                },
-                body: JSON.stringify(cartProducts)
-            })
-                .then(res => res.json())
-                .then(infoe => {
-                    if (infoe.acknowledged) {
-                        toast.success("Producte added to cart succesfully!!");
-                        // navigate('/dashboard/allProducts')
-                    } else {
-                        toast.error("producte can't added please try again")
-                    }
-                })
+      const cartProducts = {
+        id,
+        email,
+        offer,
+        nameeng,
+        namebn,
+        namearb,
+        image,
+        productPrice,
+        category,
+        ProductCode,
+        authorName,
+        edition,
+        postDate
+      }
+      fetch(`${process.env.REACT_APP_backendurl}/addedCart`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify(cartProducts)
+      })
+        .then(res => res.json())
+        .then(infoe => {
+          if (infoe.acknowledged) {
+            toast.success("Producte added to cart succesfully!!");
+            // navigate('/dashboard/allProducts')
+          } else {
+            toast.error("producte can't added please try again")
+          }
+        })
 
-        } catch (error) {
-            console.error(error)
-        }
-
+    } catch (error) {
+      console.error(error)
     }
+
+  }
+
+
+  const email = user?.email || localDeviceId();
+  const { data: cartItems = [] } = useQuery({
+    queryKey: ['cartItems', email],
+    queryFn: async () => {
+      const res = await fetch(`${process.env.REACT_APP_backendurl}/cashOnpurc/${email}`);
+      return res.json();
+    },
+  });
+
+  const cartMatch = cartItems?.map(cartit => cartit.ProductCode)
 
   return (
     <div className="relative py-10">
@@ -162,47 +174,53 @@ const products = useMemo(() => {
           <div
             ref={scrollRef}
             className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4 no-scrollbar"
-          > 
+          >
             {products?.slice() // make a copy
-  .sort((a, b) => {
-    // If ProductCode is a number
-    // return Number(a.ProductCode) - Number(b.ProductCode);
+              .sort((a, b) => {
+                // If ProductCode is a number
+                // return Number(a.ProductCode) - Number(b.ProductCode);
 
-    // If ProductCode is a string
-    return a.ProductCode.localeCompare(b.ProductCode);
-  }).map((product) => (
-              <div
-                key={product._id}
-                className="snap-start shrink-0 w-[85%] sm:w-[45%] md:w-[30%] lg:w-[22%] transition-all duration-300 grid grid-cols-1 place-items-center"
-              ><Link to={`/products/${product?._id}`} target='_blank'>
-                <Card
-                  className="h-full flex flex-col justify-between border border-gray-200 shadow"
-                >
-                  <img
-                    src={product.image}
-                    alt={product.nameeng}
-                    className="w-full object-cover mb-4 rounded-lg"
-                  />
-                  <div className="md:flex lg:flex xl:flex flex justify-center gap-2 mt-auto place-items-center transition-shadow duration-300">
-                    <button
-                      onClick={() => window.open(`/products/${product?._id}`, '_blank')}
-                      className="px-8 py-2 tooltip rounded-full bg-green-400 hover:bg-green-600 text-white tooltip-top tooltip-success"
-                      data-tip="Show Details"
+                // If ProductCode is a string
+                return a.ProductCode.localeCompare(b.ProductCode);
+              }).map((product) => (
+                <div
+                  key={product._id}
+                  className="snap-start shrink-0 w-[85%] sm:w-[45%] md:w-[30%] lg:w-[22%] transition-all duration-300 grid grid-cols-1 place-items-center"
+                ><Link to={`/products/${product?._id}`} target='_blank'>
+                    <Card
+                      className="h-full flex flex-col justify-between border border-gray-200 shadow"
                     >
-                      <FcViewDetails className="w-5 h-5" />
-                    </button>
+                      <img
+                        src={product.image}
+                        alt={product.nameeng}
+                        className="w-full object-cover mb-4 rounded-lg"
+                      />
+                      <div className="md:flex lg:flex xl:flex flex justify-center gap-2 mt-auto place-items-center transition-shadow duration-300">
+                        <button
+                          onClick={() => window.open(`/products/${product?._id}`, '_blank')}
+                          className="px-8 py-2 tooltip rounded-full bg-green-400 hover:bg-green-600 text-white tooltip-top tooltip-success"
+                          data-tip="Show Details"
+                        >
+                          <FcViewDetails className="w-5 h-5" />
+                        </button>
+
+                        {cartMatch?.some(c => c === product?.ProductCode) ? (
+                          <p className="p-2 w-1/2 bg-green-200 text-green-600 flex items-center justify-center font-semibold">
+                            Added
+                          </p>
+                        ) : (
+                          <button
+                            onClick={() => handleAddCart(product?._id)}
+                            className='px-8 py-2 rounded-full bg-green-500 hover:bg-green-700 text-white tooltip tooltip-top tooltip-success' data-tip="Add to Cart"> <FaCartFlatbed className="w-8" /></button>
+                        )}
 
 
-
-                    <button
-                    onClick={() => handleAddCart(product?._id)}
-                    className='px-8 py-2 rounded-full bg-green-500 hover:bg-green-700 text-white tooltip tooltip-top tooltip-success' data-tip="Add to Cart"> <FaCartFlatbed className="w-8" /></button>
-                  </div>
-                  <h5 className="text-md font-bold text-gray-900 text-center">{product.nameeng}</h5>
-                  <p className="text-green-700 text-sm text-center font-semibold">
-                    ৳ {product.productPrice}
-                  </p>
-                  {/* <p className="text-xs text-center">
+                      </div>
+                      <h5 className="text-md font-bold text-gray-900 text-center">{product.nameeng}</h5>
+                      <p className="text-green-700 text-sm text-center font-semibold">
+                        ৳ {product.productPrice}
+                      </p>
+                      {/* <p className="text-xs text-center">
                     {Number(product.quantity) === 0 ? (
                       <span className="text-red-500 font-semibold">OUT OF STOCK</span>
                     ) : Number(product.quantity) <= 10 ? (
@@ -212,10 +230,10 @@ const products = useMemo(() => {
                     )}
                   </p> */}
 
-                </Card>
-                </Link>
-              </div>
-            ))}
+                    </Card>
+                  </Link>
+                </div>
+              ))}
           </div>
         </div>
       )}

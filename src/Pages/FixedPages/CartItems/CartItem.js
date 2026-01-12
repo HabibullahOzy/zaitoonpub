@@ -8,6 +8,7 @@ import { FaTrashAlt } from 'react-icons/fa';
 import PaidPurch from '../Purchages/PaidPurch/PaidPurch';
 import { Modal, ModalBody, ModalHeader } from 'flowbite-react';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
+import axios from 'axios';
 
 const CartItem = () => {
   const { user, setPrices, prices, setIdent, localDeviceId } = useContext(Zaitooncontext);
@@ -23,7 +24,7 @@ const CartItem = () => {
   //  Access queryClient
   const queryClient = useQueryClient();
 
-  const { data: cartItems = [] } = useQuery({
+  const { data: cartItems = [], refetch } = useQuery({
     queryKey: ['cartItems', email],
     queryFn: async () => {
       const res = await fetch(`${process.env.REACT_APP_backendurl}/cashOnpurc/${email}`);
@@ -131,6 +132,11 @@ const CartItem = () => {
       if (data.acknowledged) {
         toast.success("Product added to wishlist successfully");
         setOpenModal(false);
+
+        await axios.delete(
+          `${process.env.REACT_APP_backendurl}/cartItem/delete/${product._id}`
+        );
+        refetch()
         navigate(`/wishList/${user?.email}`);
       } else {
         toast.error("Failed to add product to wishlist");

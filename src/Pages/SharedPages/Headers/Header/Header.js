@@ -4,10 +4,11 @@ import img from "../../../../assets/zaitoonPublication.jpg";
 import img1 from "../../../../assets/profile.png";
 import { RiArrowLeftDoubleLine, RiLogoutCircleFill } from "react-icons/ri";
 import { TiShoppingCart } from "react-icons/ti";
+import { IoIosHeartEmpty } from "react-icons/io";
 import "./Header.css";
 import { Zaitooncontext } from "../../../../SecureContext/ContextAuth";
 import toast from "react-hot-toast";
-import { useTranslation } from "react-i18next";
+// import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useAdmin from "../../../../hooks/adminHooks/useAdmin";
 import useSuperAdmin from "../../../../hooks/superAdmin/superAdmin";
@@ -16,9 +17,7 @@ import CartItem from "../../../FixedPages/CartItems/CartItem";
 // import TranslateLang from "../../LangTranslate/TranslateLang";
 
 const Header = () => {
-    const { logOut, user, prices, ident, localDeviceId } =
-        useContext(Zaitooncontext);
-
+    const { logOut, user, ident, localDeviceId } = useContext(Zaitooncontext);
 
     const queryClient = useQueryClient();
     const [isOpen, setIsOpen] = useState(false);
@@ -57,7 +56,7 @@ const Header = () => {
         },
     });
 
-    const allproducts = (allproductes)?.filter(book => book?.state === 'Available');
+    const allproducts = Array.isArray(allproductes) ? allproductes?.filter(book => book?.state === 'Available') : [];
 
     //  search filter logic
     useEffect(() => {
@@ -230,7 +229,7 @@ const Header = () => {
                         {searchTerm.length > 0 && (
                             <div className="absolute top-14 left-0 right-0 bg-white border border-t-0 shadow-md rounded-b-lg mt-1 max-h-72 overflow-y-auto z-10">
                                 {filteredData.length > 0 ? (
-                                    filteredData.map((item) => (
+                                    filteredData?.map((item) => (
                                         <Link
                                             key={item._id}
                                             to={`/products/${item._id}`}
@@ -258,12 +257,7 @@ const Header = () => {
 
                     {/* right side (cart, profile, login) */}
                     <div className="navbar-end">
-                        <div>
-                            
-                        </div>
-
-
-
+                        
                         {/* cart */}
                         <div className="flex space-x-5">
                             <div className="dropdown dropdown-end">
@@ -351,7 +345,7 @@ const Header = () => {
                     </DrawerItems>
                 </Drawer>
             </div>
-            
+
         </header>
     );
 };
