@@ -69,7 +69,7 @@ const ProductsFilter = () => {
   // Language is comma separated
   const getUniqueLanguages = (data) => {
     const langs = data?.flatMap((p) =>
-      p.language?.split(",").map((l) => l.trim())
+      p.language?.split(",")?.map((l) => l.trim())
     );
     return [...new Set(langs)];
   };
@@ -94,13 +94,13 @@ const ProductsFilter = () => {
   // Toggle checkbox helper
   const toggleFilter = (value, selected, setSelected) => {
     setSelected((prev) =>
-      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+      prev.includes(value) ? prev?.filter((v) => v !== value) : [...prev, value]
     );
   };
 
   // Filtering Logic
   const filteredProducts = useMemo(() => {
-    return productsData.filter((p) => {
+    return productsData?.filter((p) => {
       const langs = p.language?.split(",").map((l) => l.trim());
 
       return (

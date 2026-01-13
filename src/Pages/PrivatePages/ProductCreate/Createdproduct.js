@@ -134,7 +134,7 @@ const Createdproduct = () => {
 
         try {
             const response = await axios.post(`${process.env.REACT_APP_backendurl}/profile`, formData, {
-            // const response = await axios.post(`http://localhost:5000/profile`, formData, {
+                // const response = await axios.post(`http://localhost:5000/profile`, formData, {
                 headers: { "Content-Type": "multipart/form-data" }
             });
             if (response.data.insertedId) {
@@ -463,7 +463,7 @@ const Createdproduct = () => {
 
                                 {/* Select Subcategory */}
 
-                                <div className="form-control">
+                                {/* <div className="form-control">
                                     <label className="label">
                                         <span className='label-text text-black'>Sub Category <small className='text-red-600 text-sm ml-1'>*</small></span>
                                     </label>
@@ -487,7 +487,51 @@ const Createdproduct = () => {
                                     {errors.subcategory && (
                                         <span className="text-red-500">This field is required</span>
                                     )}
+                                </div> */}
+
+
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text text-black">
+                                            Sub Category <small className="text-red-600 ml-1">*</small>
+                                        </span>
+                                    </label>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 bg-[#baefba] p-3 rounded">
+
+                                        {allcategory.map((category) => {
+                                            const subs = category?.subcategories
+                                                ?.split(',')
+                                                .map(s => s.trim())
+                                                .filter(Boolean);
+
+                                            return subs.map((subcat, index) => (
+                                                <label
+                                                    key={`${category._id}-${index}`}
+                                                    className="flex items-center gap-2 cursor-pointer"
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        value={subcat}
+                                                        {...register("subcategory", {
+                                                            required: "Please select at least one subcategory"
+                                                        })}
+                                                        className="checkbox checkbox-success"
+                                                    />
+                                                    <span className="text-black">{subcat}</span>
+                                                </label>
+                                            ));
+                                        })}
+
+                                    </div>
+
+                                    {errors.subcategory && (
+                                        <span className="text-red-500 text-sm mt-1">
+                                            {errors.subcategory.message}
+                                        </span>
+                                    )}
                                 </div>
+
                                 {/* Product Picture */}
                                 {/* <div className="form-control">
                                     <label className="label">

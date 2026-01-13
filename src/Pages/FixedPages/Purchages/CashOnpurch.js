@@ -6,6 +6,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { QueryClient } from '@tanstack/react-query';
+import { CheckCircleIcon } from 'lucide-react';
 
 const CashOnpurch = ({ cartItems, setShowModal }) => {
   const { user, prices, localDeviceId } = useContext(Zaitooncontext);
@@ -67,16 +68,50 @@ const CashOnpurch = ({ cartItems, setShowModal }) => {
       const response = await axios.post(`${process.env.REACT_APP_backendurl}/purchage`, cashOndata)
 
       if (response?.data?.insertedId) {
-        toast.success("Order Successfully Placed!!");
+        toast.custom((t) => (
+          <div
+            className={`${t.visible ? "animate-custom-enter" : "animate-custom-leave"
+              } max-w-md w-full bg-white shadow-lg rounded-xl pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+          >
+            <div className="flex-1 p-4">
+              <div className="flex items-start">
+                {/* ICON */}
+                <div className="flex-shrink-0">
+                  <CheckCircleIcon className="h-10 w-10 text-green-500" />
+                </div>
+
+                {/* TEXT */}
+                <div className="ml-3">
+                  <p className="text-sm font-semibold text-gray-900">
+                    Success
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Your order successfully placed!
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* CLOSE BUTTON */}
+            <div className="flex border-l border-gray-200">
+              <button
+                onClick={() => toast.dismiss(t.id)}
+                className="px-4 text-sm font-medium text-indigo-600 hover:text-indigo-500"
+              >
+                ❌
+              </button>
+            </div>
+          </div>
+        ));
         setShowModal(false)
 
-         // clear modal
+        // clear modal
         setShowModal(false);
 
         //  Clear cart from backend
-      await axios.delete(
-        `${process.env.REACT_APP_backendurl}/cart/clear/${email}`
-      );
+        await axios.delete(
+          `${process.env.REACT_APP_backendurl}/cart/clear/${email}`
+        );
 
         navigate(`/myorder/${emaile}`)
         // instantly refresh cart
@@ -194,7 +229,7 @@ const CashOnpurch = ({ cartItems, setShowModal }) => {
           </div> */}
 
           {/* Full Address */}
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               ঠিকানা <span className="text-red-600">*</span>

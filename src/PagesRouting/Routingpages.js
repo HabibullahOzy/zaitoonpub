@@ -48,6 +48,7 @@ import Tracer from "../Pages/SharedPages/Headers/OrderTracer/Tracer";
 import Stationary from "../Pages/FixedPages/Products/Stationary/Stationary";
 import Classbooks from "../Pages/FixedPages/Products/ClassBasedBooks/Classbooks";
 import Institutional from "../Pages/FixedPages/Purchages/InstitutionalOrder/Institutional";
+import ClasslinkBasedShow from "../Pages/FixedPages/Products/ClassBasedBooks/ClasslinkBasedShow";
 
 const router = createBrowserRouter([
     {
@@ -120,9 +121,13 @@ const router = createBrowserRouter([
             element: <Stationary></Stationary>
         },
         {
-            path: "/subcategoryproducts/:subcategory",
+            path: "/subcategoryproducts",
             element: <Classbooks></Classbooks>,
-            loader: ({params}) => fetch(`${process.env.REACT_APP_backendurl}/subcategoryproducts/${encodeURIComponent(params.subCategory)}`)
+        },
+        {
+            path: "/subcategoryproducts/:subCategory",
+            element: <ClasslinkBasedShow></ClasslinkBasedShow>,
+            loader: ({params}) => fetch(`${process.env.REACT_APP_backendurl}/subcategoryproducts/${params.subCategory}`)
         },
         {
             path: "/institutionalorder",

@@ -25,14 +25,21 @@ const SHeader = () => {
       return <li className="text-center py-2">Loading...</li>;
     }
 
-    const categories =Array.isArray(allcategory) ? allcategory : [];
+    const categories = Array.isArray(allcategory) ? allcategory : [];
+    console.log(categories)
 
     return categories?.flatMap((category) => {
-      const subs = category?.subcategories?.split(",").map((s) => s.trim());
-      return subs?.map((sub, i) => (
+      if (!category?.subcategories) return [];
+
+      const subs = category.subcategories
+        .split(",")
+        .map(s => s.trim())
+        .filter(s => s !== "" && s !== "stationery");
+
+      return subs.map((sub, i) => (
         <li key={`${category._id}-${i}`}>
           <Link
-            to={`/subcategoryproducts/${encodeURIComponent(sub)}`}
+            to={`/subcategoryproducts/${sub}`}
             className="block px-3 py-2 rounded hover:bg-green-100"
           >
             {sub}
@@ -41,6 +48,7 @@ const SHeader = () => {
       ));
     });
   };
+
 
 
 
@@ -100,24 +108,24 @@ const SHeader = () => {
 
                   <li className="relative group">
 
-                  {/* MENU BUTTON */}
-                  <Link to={'/classbasedbooks'} className="flex items-center gap-1 cursor-pointer pb-1 hover:text-green-600 transition-colors">
-                    শ্রেণি ভিত্তিক বই
-                    <span className=" transition-transform group-hover:rotate-180">
-                      ▼
-                    </span>
-                  </Link>
+                    {/* MENU BUTTON */}
+                    <Link to={'/subcategoryproducts'} className="flex items-center gap-1 cursor-pointer pb-1 hover:text-green-600 transition-colors">
+                      শ্রেণি ভিত্তিক বই
+                      <span className=" transition-transform group-hover:rotate-180">
+                        ▼
+                      </span>
+                    </Link>
 
-                  {/* DROPDOWN */}
-                  <div
-                    className="absolute left-0 top-full mt-2 w-[260px] bg-white border border-gray-200 shadow-xl rounded-md opacity-0 invisible group-hover:visible group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-200 ease-out z-50"
-                  >
-                    <ul className="grid grid-cols-1 gap-x-2 gap-y-1 p-3 text-[14px] text-gray-700">
-                      {renderSubcategories()}
-                    </ul>
-                  </div>
+                    {/* DROPDOWN */}
+                    <div
+                      className="absolute left-0 top-full mt-2 w-[260px] bg-white border border-gray-200 shadow-xl rounded-md opacity-0 invisible group-hover:visible group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-200 ease-out z-50"
+                    >
+                      <ul className="grid grid-cols-1 gap-x-2 gap-y-1 p-3 text-[14px] text-gray-700">
+                        {renderSubcategories()}
+                      </ul>
+                    </div>
 
-                </li>
+                  </li>
 
                   <li><Link to="/stationary">ষ্টেশনারী</Link></li>
                   <li><Link to="/institutionalorder">প্রাতিষ্ঠানিক অর্ডার</Link></li>
@@ -186,7 +194,7 @@ const SHeader = () => {
                 <li className="relative group">
 
                   {/* MENU BUTTON */}
-                  <Link to={'/classbasedbooks'} className="flex items-center gap-1 cursor-pointer pb-1 hover:text-green-600 transition-colors">
+                  <Link to={'/subcategoryproducts'} className="flex items-center gap-1 cursor-pointer pb-1 hover:text-green-600 transition-colors">
                     শ্রেণি ভিত্তিক বই
                     <span className=" transition-transform group-hover:rotate-180">
                       ▼
