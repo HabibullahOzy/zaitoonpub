@@ -4,7 +4,7 @@ import img from "../../../../assets/zaitoonPublication.jpg";
 import img1 from "../../../../assets/profile.png";
 import { RiArrowLeftDoubleLine, RiLogoutCircleFill } from "react-icons/ri";
 import { TiShoppingCart } from "react-icons/ti";
-import { IoIosHeartEmpty } from "react-icons/io";
+// import { IoIosHeartEmpty } from "react-icons/io";
 import "./Header.css";
 import { Zaitooncontext } from "../../../../SecureContext/ContextAuth";
 import toast from "react-hot-toast";
@@ -47,7 +47,7 @@ const Header = () => {
 
     //  fetch products
     const { data: allproductes = [] } = useQuery({
-        queryKey: ["allproducts"],
+        queryKey: ["allproductes"],
         queryFn: async () => {
             const res = await fetch(
                 `${process.env.REACT_APP_backendurl}/allProducts`

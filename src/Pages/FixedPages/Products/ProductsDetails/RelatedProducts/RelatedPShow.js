@@ -9,6 +9,7 @@ import { Zaitooncontext } from '../../../../../SecureContext/ContextAuth';
 import axios from 'axios';
 import { FcViewDetails } from 'react-icons/fc';
 import { FaCartFlatbed } from 'react-icons/fa6';
+import { CheckCircleIcon } from 'lucide-react';
 
 const RelatedPShow = ({ categorys }) => {
   const { user, producD, setProducD, localDeviceId } = useContext(Zaitooncontext);
@@ -123,7 +124,41 @@ const RelatedPShow = ({ categorys }) => {
         .then(res => res.json())
         .then(infoe => {
           if (infoe.acknowledged) {
-            toast.success("Producte added to cart succesfully!!");
+            toast.custom((t) => (
+                        <div
+                            className={`${t.visible ? "animate-custom-enter" : "animate-custom-leave"
+                                } max-w-md w-full bg-white shadow-lg rounded-xl pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+                        >
+                            <div className="flex-1 p-4">
+                                <div className="flex items-start">
+                                    {/* ICON */}
+                                    <div className="flex-shrink-0">
+                                        <CheckCircleIcon className="h-10 w-10 text-green-500" />
+                                    </div>
+
+                                    {/* TEXT */}
+                                    <div className="ml-3">
+                                        <p className="text-sm font-semibold text-gray-900">
+                                            Success
+                                        </p>
+                                        <p className="text-sm text-gray-600">
+                                            Producte added to cart succesfully!!
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* CLOSE BUTTON */}
+                            <div className="flex border-l border-gray-200">
+                                <button
+                                    onClick={() => toast.dismiss(t.id)}
+                                    className="px-4 text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                                >
+                                    ❌
+                                </button>
+                            </div>
+                        </div>
+                    ));
             // navigate('/dashboard/allProducts')
           } else {
             toast.error("producte can't added please try again")

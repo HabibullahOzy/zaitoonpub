@@ -1,13 +1,14 @@
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { useContext, useState } from 'react';
 import toast from 'react-hot-toast';
-import { FaCartFlatbed, FaHeartCirclePlus, FaRegEye } from 'react-icons/fa6';
+import { FaCartFlatbed } from 'react-icons/fa6';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Zaitooncontext } from '../../../../../SecureContext/ContextAuth';
 import BuyNowModal from '../../../Purchages/InstantPurch/BuyNowModal';
 import { FcViewDetails } from 'react-icons/fc';
+import { CheckCircleIcon } from 'lucide-react';
 
 const Play = ({ productCategory }) => {
 
@@ -23,7 +24,7 @@ const Play = ({ productCategory }) => {
         }
     });
 
-
+const queryClient = useQueryClient();
     const nursproduct = Array.isArray(nursproductes) 
     ? nursproductes?.filter(book => book?.state === '' || book?.state === 'Available')
     : [];
@@ -37,7 +38,10 @@ const Play = ({ productCategory }) => {
             id,
             email: user.email,
             offer: offerPrice,
-            name: product?.nameeng,
+            // name: product?.nameeng,
+            nameeng: product?.nameeng,
+            namebn: product?.namebn,
+            namearb: product?.namearb,
             image: product?.image,
             productPrice: product?.productPrice,
             category: product?.category,
@@ -55,7 +59,42 @@ const Play = ({ productCategory }) => {
             .then(res => res.json())
             .then(infoe => {
                 if (infoe.acknowledged) {
-                    toast.success("Your Product added successfully");
+                    toast.custom((t) => (
+                        <div
+                            className={`${t.visible ? "animate-custom-enter" : "animate-custom-leave"
+                                } max-w-md w-full bg-white shadow-lg rounded-xl pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+                        >
+                            <div className="flex-1 p-4">
+                                <div className="flex items-start">
+                                    {/* ICON */}
+                                    <div className="flex-shrink-0">
+                                        <CheckCircleIcon className="h-10 w-10 text-green-500" />
+                                    </div>
+
+                                    {/* TEXT */}
+                                    <div className="ml-3">
+                                        <p className="text-sm font-semibold text-gray-900">
+                                            Success
+                                        </p>
+                                        <p className="text-sm text-gray-600">
+                                            Producte added to cart succesfully!!
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* CLOSE BUTTON */}
+                            <div className="flex border-l border-gray-200">
+                                <button
+                                    onClick={() => toast.dismiss(t.id)}
+                                    className="px-4 text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                                >
+                                    ❌
+                                </button>
+                            </div>
+                        </div>
+                    ));
+                    queryClient.clear();
                 } else {
                     toast.error("Your product can't be added, please try again");
                 }

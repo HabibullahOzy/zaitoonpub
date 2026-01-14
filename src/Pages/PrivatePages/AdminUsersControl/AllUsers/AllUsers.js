@@ -25,7 +25,7 @@ const AllUsers = () => {
         axios.put(`${process.env.REACT_APP_backendurl}/users/admin/${id}`)
             .then(() => {
                 toast.success('Successfully admin Created');
-                setAlluser(prev => prev.map(u => u._id === id ? { ...u, role: 'admin' } : u));
+                setAlluser(prev => prev?.map(u => u._id === id ? { ...u, role: 'admin' } : u));
             })
             .catch((error) => {
                 toast.error(error.message);
@@ -37,7 +37,7 @@ const AllUsers = () => {
             .then(res => {
                 if (res.data.acknowledged === true) {
                     toast.success("User Successfully deleted");
-                    setAlluser(prev => (prev || []).filter(u => u._id !== id));
+                    setAlluser(prev => prev?.filter(u => u._id !== id));
                 }
             })
             .catch((error) => {

@@ -1,22 +1,25 @@
 import React, { useContext, useState } from 'react';
-import BuyNowModal from '../../Purchages/InstantPurch/BuyNowModal';
+// import BuyNowModal from '../../Purchages/InstantPurch/BuyNowModal';
 import { FaCartFlatbed } from 'react-icons/fa6';
 import { FcViewDetails } from 'react-icons/fc';
-import { Link, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { Zaitooncontext } from '../../../../SecureContext/ContextAuth';
+import { CheckCircleIcon } from 'lucide-react';
 
 const ClassbooksShow = ({ productCategory }) => {
 
   const { user, localDeviceId } = useContext(Zaitooncontext);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  
 
   /* =======================
      FIX #1: queryKey depends on productCategory
   ======================== */
-  const { data: classicproducts = [], refetch } = useQuery({
+  const queryClient = useQueryClient();
+  const { data: classicproducts = [] } = useQuery({
     queryKey: ['classicproducts', productCategory],
     enabled: !!productCategory,
     queryFn: async () => {
@@ -32,16 +35,17 @@ const ClassbooksShow = ({ productCategory }) => {
   ======================== */
   const nursproduct = Array.isArray(classicproducts)
     ? classicproducts.filter(
-        book => book?.state === '' || book?.state === 'Available'
-      )
+      book => book?.state === '' || book?.state === 'Available'
+    )
     : [];
 
   /* =======================
      Add to cart (FIX #3)
   ======================== */
+
+  const emaile = user?.email || localDeviceId()
+
   const handleAddCart = async (id, offerPrice) => {
-
-
     const response = await axios.get(
       `${process.env.REACT_APP_backendurl}/products/${id}`
     );
@@ -49,15 +53,17 @@ const ClassbooksShow = ({ productCategory }) => {
 
     const cartProducts = {
       id,
-      email: user?.email || localDeviceId(),
-      offer: offerPrice,
-      name: product?.nameeng,
+      email: emaile,
+      nameeng: product?.nameeng,
+      namebn: product?.namebn,
+      namearb: product?.namearb,
       image: product?.image,
       productPrice: product?.productPrice,
       category: product?.category,
       ProductCode: product?.ProductCode,
       authorName: product?.authorName,
       edition: product?.edition,
+      offer: offerPrice,
       postDate: product?.postDate
     };
 
@@ -68,10 +74,49 @@ const ClassbooksShow = ({ productCategory }) => {
     });
 
     const info = await res.json();
-    info?.acknowledged
-      ? toast.success("Product added successfully")
-      : toast.error("Failed to add product");
+    if (info?.acknowledged) {
+      toast.custom((t) => (
+        <div
+          className={`${t.visible ? "animate-custom-enter" : "animate-custom-leave"
+            } max-w-md w-full bg-white shadow-lg rounded-xl pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+        >
+          <div className="flex-1 p-4">
+            <div className="flex items-start">
+              {/* ICON */}
+              <div className="flex-shrink-0">
+                <CheckCircleIcon className="h-10 w-10 text-green-500" />
+              </div>
+
+              {/* TEXT */}
+              <div className="ml-3">
+                <p className="text-sm font-semibold text-gray-900">
+                  Success
+                </p>
+                <p className="text-sm text-gray-600">
+                  Producte added to cart succesfully!!
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* CLOSE BUTTON */}
+          <div className="flex border-l border-gray-200">
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              className="px-4 text-sm font-medium text-indigo-600 hover:text-indigo-500"
+            >
+              ❌
+            </button>
+          </div>
+        </div>
+      ));
+      queryClient.clear();
+    }
+    else {
+      toast.error("Failed to add product");
+    }
   };
+
 
   /* =======================
      Cart query
@@ -108,78 +153,78 @@ const ClassbooksShow = ({ productCategory }) => {
 
             const offerPrice = product?.offerprice
               ? Math.round(
-                  product.productPrice -
-                    (product.offerprice * product.productPrice) / 100
-                )
+                product.productPrice -
+                (product.offerprice * product.productPrice) / 100
+              )
               : product.productPrice;
 
             return (
               <div key={i} className="flex flex-col h-full">
 
-                                <div className="relative group card hover:shadow-md hover:shadow-lime-400 overflow-hidden flex flex-col h-full text-black">
-                                    {/* --- keep everything inside same as you provided --- */}
-                                    {/* Example badge */}
-                                    {product?.offerprice && (
-                                        <span className="example">{product?.offerprice}%</span>
-                                    )}
+                <div className="relative group card hover:shadow-md hover:shadow-lime-400 overflow-hidden flex flex-col h-full text-black">
+                  {/* --- keep everything inside same as you provided --- */}
+                  {/* Example badge */}
+                  {product?.offerprice && (
+                    <span className="example">{product?.offerprice}%</span>
+                  )}
 
-                                    {/* Product image */}
-                                    <figure>
-                                        <Link to={`/products/${product?._id}`}>
-                                            <img src={product.image} alt="product" className="object-cover" />
-                                        </Link>
-                                    </figure>
+                  {/* Product image */}
+                  <figure>
+                    <Link to={`/products/${product?._id}`}>
+                      <img src={product.image} alt="product" className="object-cover" />
+                    </Link>
+                  </figure>
 
-                                    {/* Bottom Buttons */}
-                                    <div className="flex">
-                                        <Link
-                                            to={`/products/${product._id}`}
-                                            className="p-2 w-1/2 bg-green-100 text-green-600 flex items-center justify-center tooltip tooltip-success"
-                                            data-tip="View Details "
-                                        >
-                                            <FcViewDetails className="w-5 h-5" />View Details
-                                        </Link>
+                  {/* Bottom Buttons */}
+                  <div className="flex">
+                    <Link
+                      to={`/products/${product._id}`}
+                      className="p-2 w-1/2 bg-green-100 text-green-600 flex items-center justify-center tooltip tooltip-success"
+                      data-tip="View Details "
+                    >
+                      <FcViewDetails className="w-5 h-5" />View Details
+                    </Link>
 
-                                        {cartMatch?.some(c => c === product.ProductCode) ? (
-                                            <p className="p-2 w-1/2 bg-green-200 text-green-600 flex items-center justify-center font-semibold">
-                                                Added
-                                            </p>
-                                        ) : (
-                                            <button
-                                                onClick={() => handleAddCart(product._id, offerPrice)}
-                                                className="p-2 w-1/2 bg-green-200 text-green-600 flex items-center justify-center tooltip tooltip-success"
-                                                data-tip="Add to Cart"
-                                            >
-                                                <FaCartFlatbed className="w-8" />Add to Cart
-                                            </button>
-                                        )}
+                    {cartMatch?.some(c => c === product.ProductCode) ? (
+                      <p className="p-2 w-1/2 bg-green-200 text-green-600 flex items-center justify-center font-semibold">
+                        Added
+                      </p>
+                    ) : (
+                      <button
+                        onClick={() => handleAddCart(product._id, offerPrice)}
+                        className="p-2 w-1/2 bg-green-200 text-green-600 flex items-center justify-center tooltip tooltip-success"
+                        data-tip="Add to Cart"
+                      >
+                        <FaCartFlatbed className="w-8" />Add to Cart
+                      </button>
+                    )}
 
 
-                                    </div>
+                  </div>
 
-                                    {/* Product Info */}
-                                    <div className="card-body bg-[#baefba] relative overflow-hidden flex-grow flex flex-col justify-between">
-                                        <div>
-                                            <p className="lg:text-center md:text-center text-start text-md font-bold">{product.namebn}</p>
-                                            <p className="lg:text-center md:text-center text-start text-lg">{product.category}</p>
-                                            <p className="lg:text-center md:text-center text-start text-sm">{product.subCategory}</p>
-                                        </div>
+                  {/* Product Info */}
+                  <div className="card-body bg-[#baefba] relative overflow-hidden flex-grow flex flex-col justify-between">
+                    <div>
+                      <p className="lg:text-center md:text-center text-start text-md font-bold">{product.namebn}</p>
+                      <p className="lg:text-center md:text-center text-start text-lg">{product.category}</p>
+                      <p className="lg:text-center md:text-center text-start text-sm">{product.subCategory}</p>
+                    </div>
 
-                                        <div className="flex justify-center items-center gap-2 mt-2">
-                                            {product?.offerprice ? (
-                                                <>
-                                                    <p className="text-xl font-semibold text-gray-400 line-through" style={{ textDecorationColor: "red" }}>
-                                                        {product.productPrice}৳
-                                                    </p>
-                                                    <p className="text-2xl font-semibold text-red-400">{offerPrice}৳</p>
-                                                </>
-                                            ) : (
-                                                <p className="text-xl font-semibold text-green-600">{product.productPrice} ৳</p>
-                                            )}
-                                        </div>
+                    <div className="flex justify-center items-center gap-2 mt-2">
+                      {product?.offerprice ? (
+                        <>
+                          <p className="text-xl font-semibold text-gray-400 line-through" style={{ textDecorationColor: "red" }}>
+                            {product.productPrice}৳
+                          </p>
+                          <p className="text-2xl font-semibold text-red-400">{offerPrice}৳</p>
+                        </>
+                      ) : (
+                        <p className="text-xl font-semibold text-green-600">{product.productPrice} ৳</p>
+                      )}
+                    </div>
 
-                                        {/* Hover Buttons Over Image */}
-                                        {/* <div className="absolute inset-0 flex items-center justify-center gap-4 bg-black/0 group-hover:bg-black/10 transition-all duration-500">
+                    {/* Hover Buttons Over Image */}
+                    {/* <div className="absolute inset-0 flex items-center justify-center gap-4 bg-black/0 group-hover:bg-black/10 transition-all duration-500">
                                                     <div className="flex gap-4 opacity-0 group-hover:opacity-100 translate-y-6 group-hover:translate-y-0 transition-all duration-600 ease-out">
                                                         <Link
                                                             to={`/products/${product._id}`}
@@ -190,12 +235,12 @@ const ClassbooksShow = ({ productCategory }) => {
                                                         </Link>
                                                     </div>
                                                 </div> */}
-                                    </div>
-                                </div>
+                  </div>
+                </div>
 
-                                {/* Modal */}
-                            
-                            </div>
+                {/* Modal */}
+
+              </div>
             );
           })}
       </div>
@@ -221,7 +266,7 @@ export default ClassbooksShow;
 //     });
 
 // console.log(classicproducts)
-//     const nursproduct = Array.isArray(classicproducts) 
+//     const nursproduct = Array.isArray(classicproducts)
 //     ? classicproducts?.filter(book => book?.state === '' || book?.state === 'Available')
 //     : [];
 

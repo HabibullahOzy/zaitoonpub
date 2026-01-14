@@ -16,7 +16,7 @@ const CommingSoon = () => {
         }
     });
 
-    const books = (allproducts || []).filter(book => book.state === 'Coming Soon' || book.state === 'Preorder');
+    const books =Array.isArray(allproducts) ? allproducts.filter(book => book.state === 'Coming Soon' || book.state === 'Preorder') : [];
 
 
     return (
