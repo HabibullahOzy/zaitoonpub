@@ -33,7 +33,7 @@ const InstRequestHistory = ({ instOrdersHist = [] }) => {
 
   return (
     <div className="overflow-x-auto bg-white shadow p-4 rounded">
-      <h2 className="text-2xl font-bold mb-4">Institution Request History</h2>
+      <h2 className="text-black text-2xl font-bold mb-4">{instOrdersHist[0]?.institutionName || "Institution"} Request History</h2>
 
       <table className="min-w-full border border-gray-300 text-sm">
         <thead className="bg-gray-100">

@@ -11,6 +11,7 @@ import { Modal, ModalBody, ModalHeader } from 'flowbite-react';
 import { HiOutlineTag } from 'react-icons/hi';
 import { useForm } from 'react-hook-form';
 import { Zaitooncontext } from '../../../../SecureContext/ContextAuth';
+import PaymenHistory from './PaymenHistory';
 
 const ConfirmList = () => {
 
@@ -42,7 +43,7 @@ const ConfirmList = () => {
 
   const handleOrderComplete = async (id) => {
     const response = await axios.put(`${process.env.REACT_APP_backendurl}/ordercompletetatus/${id}`);
-   
+
     response?.status
       ? toast.success("Complete Order Placed!")
       : toast.error("Order not placed, please try again");
@@ -57,7 +58,7 @@ const ConfirmList = () => {
 
   const handleOrderpayment = (id) => {
     setShowPaymodal(true)
-    
+
     setOrderPaymentData(id)
   }
 
@@ -84,7 +85,7 @@ const ConfirmList = () => {
     }
 
     const res = await axios.put(`${process.env.REACT_APP_backendurl}/orderoffer/${orderoffer}`, paymentData)
-    
+
     res?.status ? toast.success('Offer Data Added Successfully') : toast.error('Something went wrong, please try again later');
     reset();
     setOpenoffermodal(false)
@@ -144,14 +145,11 @@ const ConfirmList = () => {
               <th className="border px-1 py-2">Location</th>
               <th className="border px-1 py-2">Order Note</th>
               <th className="border px-1 py-2">SubTotal</th>
-              <th className="border px-1 py-2">Deli Charge</th>
+              <th className="border px-1 py-2">Deliv: Charge</th>
               <th className="border px-1 py-2">Offer</th>
-              <th className="border px-1 py-2">PayTotal</th>
-              <th className="border px-1 py-2">Pay Method</th>
-              <th className="border px-1 py-2">Pay Amount</th>
-              <th className="border px-1 py-2">Transaction ID</th>
-              <th className="border px-1 py-2">Pay Date</th>
-              <th className="border px-1 py-2">Pay Note</th>
+              <th className="border px-1 py-2">Payable</th>
+              <th className="border px-1 py-2">Due</th>
+              <th className="border px-1 py-2">Total Paid</th>
               <th className="border px-1 py-2">Updated</th>
               <th className="border px-1 py-2 text-center">Action</th>
             </tr>
@@ -165,6 +163,14 @@ const ConfirmList = () => {
               const offerPrice = cashdata?.offer
                 ? Math.round(ordoffer - (offerperc * ordoffer) / 100) + Number(cashdata?.delicharge)
                 : ordoffer + Number(cashdata?.delicharge || 0);
+
+
+              const totalPaid = cashdata?.payments?.reduce(
+                (sum, p) => sum + Number(p.amount || 0),
+                0
+              ) || 0;
+
+              const dueAmount = Math.max(offerPrice - totalPaid, 0);
               return (
                 <React.Fragment key={cashdata._id}>
                   {/* Parent Row */}
@@ -201,27 +207,21 @@ const ConfirmList = () => {
                     <td className="border py-1 text-center">
                       {cashdata?.delicharge}
                     </td>
-                
+
                     <td className="border py-1 text-red-500 text-center">
                       {cashdata?.offer}
                     </td>
                     <td className="border py-1 text-center">
                       {offerPrice}
                     </td>
-                    <td className="border py-1 text-center">
-                      {cashdata?.payMethod}
+
+                    <td className={`text-red-900 font-semibold
+    ${dueAmount === 0 ? "text-green-400 font-semibold" : ""}`}>
+                      {dueAmount}
                     </td>
+
                     <td className="border py-1 text-center">
-                      {cashdata?.amount}
-                    </td>
-                    <td className="border py-1 text-center">
-                      {cashdata?.transactionId}
-                    </td>
-                    <td className="border py-1 text-center">
-                      {cashdata?.paymentDate}
-                    </td>
-                    <td className="border py-1 text-center">
-                      {cashdata?.paidnote}
+                      <PaymenHistory payments={cashdata?.payments} />
                     </td>
                     <td className="border py-1 text-center">
                       {cashdata?.updatedAt}
@@ -259,11 +259,11 @@ const ConfirmList = () => {
                           <FaFileInvoiceDollar className="text-2xl" />
                         </button>
                         <button
-                            onClick={() => handleCancelOrder(cashdata?._id)}
-                            className="btn btn-error btn-xs text-white"
-                          >
-                            cancel
-                          </button>
+                          onClick={() => handleCancelOrder(cashdata?._id)}
+                          className="btn btn-error btn-xs text-white"
+                        >
+                          cancel
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -315,8 +315,8 @@ const ConfirmList = () => {
                                     {prodata.category}
                                   </td>
                                   <td className="border px-2 py-1 text-center">{prodata?.subcategory}</td>
-                              <td className="border px-2 py-1 text-center">{prodata?.authorName}</td>
-                              <td className="border px-2 py-1 text-center">{prodata?.edition}</td>
+                                  <td className="border px-2 py-1 text-center">{prodata?.authorName}</td>
+                                  <td className="border px-2 py-1 text-center">{prodata?.edition}</td>
                                   <td className="border px-2 py-1 text-center">
                                     {prodata.quantity}
                                   </td>

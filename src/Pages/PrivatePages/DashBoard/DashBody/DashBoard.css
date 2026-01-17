@@ -13,7 +13,7 @@
 
 
 .cardb {
-      background: linear-gradient(to right, #4ade80, #22c55e);
+      background: linear-gradient(to right, #3ea464, #22c55e);
       color: white;
       /* padding: 2rem;
       border-radius: 1rem;
@@ -24,6 +24,10 @@
       margin: 2rem auto;
       font-family: sans-serif;
       transition: transform 0.3s ease-in-out; */
+    }
+
+    .cardbg{
+      background: linear-gradient(to right, #16d495, #13d45a);
     }
 
     .cardb:hover {

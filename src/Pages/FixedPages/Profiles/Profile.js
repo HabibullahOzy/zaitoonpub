@@ -55,9 +55,6 @@ const Profile = () => {
             {/* ===== Institutional Requests Section ===== */}
             {
                 !isLoading && instOrdersHist.length === 0 ? " " : <div className="mt-10">
-                <h3 className="text-xl font-bold text-gray-800 mb-4">
-                    Institutional Order History
-                </h3>
 
                 {/* Loading */}
                 {isLoading && (

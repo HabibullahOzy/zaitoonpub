@@ -6,9 +6,11 @@ import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
 import { GiBookshelf } from "react-icons/gi";
 import { Zaitooncontext } from "../../../../SecureContext/ContextAuth";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Institutional = () => {
 const {user}=useContext(Zaitooncontext)
+const navigate =useNavigate()
 
   const {
     register,
@@ -56,6 +58,7 @@ const {user}=useContext(Zaitooncontext)
       );
       toast.success("Institutional order submitted successfully!");
       reset()
+      navigate('/profile')
     } catch (error) {
       toast.error("Submission failed");
     }

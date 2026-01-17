@@ -488,7 +488,7 @@ const DashBody = () => {
 
                         {/* Institutional Orders Request */}
                         <Link to={'/dashboard/institutionalorder'}>
-                            <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl p-6 flex flex-col justify-between transform transition-all duration-300 hover:scale-105 cardb">
+                            <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl p-6 flex flex-col justify-between transform transition-all duration-300 hover:scale-105">
                                 <div className="flex items-center justify-between">
                                     <div className="p-3 bg-white/20 rounded-xl text-white">
                                         <CheckCircle size={24} />
@@ -717,7 +717,7 @@ const DashBody = () => {
 
                          {/* Institutional Orders Request */}
                         <Link to={'/dashboard/superadmin/institutionalorder'}>
-                            <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl p-6 flex flex-col justify-between transform transition-all duration-300 hover:scale-105 bg-gradient-to-r bg-[#4ade9e] bg-gradient-to-l bg-[#21c529]">
+                            <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl p-6 flex flex-col justify-between transform transition-all duration-300 hover:scale-105 cardbg">
                                 <div className="flex items-center justify-between">
                                     <div className="p-3 bg-white/20 rounded-xl text-white">
                                         <CheckCircle size={24} />
