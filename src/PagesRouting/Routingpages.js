@@ -49,6 +49,7 @@ import Stationary from "../Pages/FixedPages/Products/Stationary/Stationary";
 import Classbooks from "../Pages/FixedPages/Products/ClassBasedBooks/Classbooks";
 import Institutional from "../Pages/FixedPages/Purchages/InstitutionalOrder/Institutional";
 import ClasslinkBasedShow from "../Pages/FixedPages/Products/ClassBasedBooks/ClasslinkBasedShow";
+import InstitutOrder from "../Pages/PrivatePages/OrderSummery/IntitutionalOrder/InstitutOrder";
 
 const router = createBrowserRouter([
     {
@@ -292,6 +293,14 @@ const router = createBrowserRouter([
             {
                 path: "/dashboard/superadmin/previousproduct",
                 element: <SuperAdmin><Previousproduct></Previousproduct></SuperAdmin>
+            },
+            {
+                path: "/dashboard/institutionalorder",
+                element: <AdminSecurPages><InstitutOrder></InstitutOrder></AdminSecurPages>
+            },
+            {
+                path: "/dashboard/superadmin/institutionalorder",
+                element: <SuperAdmin><InstitutOrder></InstitutOrder></SuperAdmin>
             }
         ]
     },

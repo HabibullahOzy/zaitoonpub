@@ -128,9 +128,9 @@ const Createdproduct = () => {
 
 
 
-        for (let [key, value] of formData.entries()) {
-            console.log(value)
-        }
+        // for (let [key, value] of formData.entries()) {
+        //     console.log(value)
+        // }
 
         try {
             const response = await axios.post(`${process.env.REACT_APP_backendurl}/profile`, formData, {

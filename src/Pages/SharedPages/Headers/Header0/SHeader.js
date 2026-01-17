@@ -26,7 +26,7 @@ const SHeader = () => {
     }
 
     const categories = Array.isArray(allcategory) ? allcategory : [];
-    console.log(categories)
+    // console.log(categories)
 
     return categories?.flatMap((category) => {
       if (!category?.subcategories) return [];

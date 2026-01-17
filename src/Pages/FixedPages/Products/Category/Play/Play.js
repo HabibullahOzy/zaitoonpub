@@ -38,7 +38,6 @@ const queryClient = useQueryClient();
             id,
             email: user.email,
             offer: offerPrice,
-            // name: product?.nameeng,
             nameeng: product?.nameeng,
             namebn: product?.namebn,
             namearb: product?.namearb,

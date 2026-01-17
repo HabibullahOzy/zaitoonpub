@@ -14,6 +14,7 @@ const {user}=useContext(Zaitooncontext)
     register,
     handleSubmit,
     formState: { errors },
+    reset
   } = useForm();
 
   const [file, setFile] = useState(null);
@@ -22,7 +23,7 @@ const {user}=useContext(Zaitooncontext)
   const [isHuman, setIsHuman] = useState(false);
   const [captchaError, setCaptchaError] = useState(false);
 
-  /* ---------- FILE HANDLING ---------- */
+  
   const handleFile = (f) => {
     if (!f) return;
     setFile(f);
@@ -35,7 +36,6 @@ const {user}=useContext(Zaitooncontext)
     handleFile(e.dataTransfer.files[0]);
   };
 
-  /* ---------- SUBMIT ---------- */
   const onSubmit = async (data) => {
     if (!isHuman) {
       setCaptchaError(true);
@@ -51,10 +51,11 @@ const {user}=useContext(Zaitooncontext)
 
     try {
       await axios.post(
-        `${process.env.REACT_APP_backendurl}institutionalorderreq`,
+        `${process.env.REACT_APP_backendurl}/institutionalorderreq`,
         formData
       );
       toast.success("Institutional order submitted successfully!");
+      reset()
     } catch (error) {
       toast.error("Submission failed");
     }

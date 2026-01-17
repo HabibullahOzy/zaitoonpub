@@ -44,7 +44,7 @@ const Classbooks = () => {
     if (!activeCategoryData?.subcategories) return [];
     return activeCategoryData.subcategories
       .split(',')
-      .map(s => s.trim())
+      ?.map(s => s.trim())
       .filter(s => s && s !== 'stationery');
   }, [activeCategoryData]);
 

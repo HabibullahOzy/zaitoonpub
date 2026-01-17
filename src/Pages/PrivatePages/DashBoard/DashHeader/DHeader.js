@@ -32,7 +32,7 @@ import {
     HiShoppingBag,
     HiUsers,
 } from "react-icons/hi";
-import {FcVideoCall} from 'react-icons/fc';
+import { FcVideoCall } from 'react-icons/fc';
 import {
     MdRateReview
 } from "react-icons/md"
@@ -93,7 +93,7 @@ const DHeader = () => {
             </div>
             <Drawer backdrop={true} open={isOpen} onClose={handleClose} style={{ backgroundColor: "rgb(179, 255, 179)" }}>
                 <DrawerHeader title="" titleIcon={() => <><Link to={'/'} className="btn btn-circle"><img className=' w-20 rounded-full' src={img} alt=''></img></Link>
-                    <h1 className='colortext px-2 font-bold text-xl logowrihidden'>ZAIT<span className='text-yellow-400'>OO</span>N PUBLICATION</h1></>} />
+                    <p className='colortext px-2 font-bold text-xl logowrihidden'>ZAIT<span className='text-yellow-400'>OO</span>N PUBLICATION</p></>} />
                 <DrawerItems>
                     <Sidebar
                         aria-label="Sidebar with multi-level dropdown example"
@@ -117,7 +117,10 @@ const DHeader = () => {
                                                     {/* <Link to={'/dashboard/paidorderplaced'}><SidebarItem href="#">Paid Orders</SidebarItem></Link> */}
                                                     <Link to={'/dashboard/confirmOrderlist'}><SidebarItem >Confirm Orders</SidebarItem></Link>
                                                     <Link to={'/dashboard/completelist'}><SidebarItem >Complete Orders</SidebarItem></Link>
-                                                    <Link to={'/dashboard/cancelOrderlist'}><SidebarItem className='text-red-400'>Cancelled Orders</SidebarItem></Link>
+                                                    <Link to={'/dashboard/cancelOrderlist'}><SidebarItem className='text-red-400'>Cancelled Orders</SidebarItem>
+                                                    </Link>
+                                                    <Link to={'/dashboard/institutionalorder'}><SidebarItem className='text-red-400'>institutionalorder</SidebarItem>
+                                                    </Link>
                                                 </SidebarCollapse>
 
                                                 <SidebarCollapse
@@ -144,7 +147,7 @@ const DHeader = () => {
 
                                                     <Link to={'/dashboard/author'}>
                                                         <SidebarItem icon={ImProfile}>
-                                                           Add Author
+                                                            Add Author
                                                         </SidebarItem>
                                                     </Link>
                                                 </SidebarCollapse>
@@ -190,7 +193,10 @@ const DHeader = () => {
                                                     {/* <Link to={'/dashboard/paidorderplaced'}><SidebarItem href="#">Paid Orders</SidebarItem></Link> */}
                                                     <Link to={'/dashboard/superadmin/confirmOrderlist'}><SidebarItem >Confirmed Orders</SidebarItem></Link>
                                                     <Link to={'/dashboard/superadmin/completelist'}><SidebarItem >Completed Orders</SidebarItem></Link>
-                                                    <Link to={'/dashboard/superadmin/cancelOrderlist'}><SidebarItem className='text-red-400'>Cancelled Orders</SidebarItem></Link>
+                                                    <Link to={'/dashboard/superadmin/cancelOrderlist'}><SidebarItem className='text-red-400'>Cancelled Orders</SidebarItem>
+                                                    </Link>
+                                                    <Link to={'/dashboard/superadmin/institutionalorder'}><SidebarItem className='font-semibold'>Institutional Order</SidebarItem>
+                                                    </Link>
                                                 </SidebarCollapse>
 
                                                 <SidebarCollapse
@@ -222,7 +228,7 @@ const DHeader = () => {
 
                                                     <Link to={'/dashboard/superadmin/author'}>
                                                         <SidebarItem icon={ImProfile}>
-                                                           Add Author
+                                                            Add Author
                                                         </SidebarItem>
                                                     </Link>
 

@@ -8,7 +8,7 @@ const Pauthor = ({data}) => {
     visible: { opacity: 1, y: 0 },
   };
 
-  console.log(data.authorName)
+  // console.log(data.authorName)
 
   const { data: authors = [], refetch } = useQuery({
     queryKey: ['authors'],
@@ -18,7 +18,7 @@ const Pauthor = ({data}) => {
     }
   });
 
-  console.log(authors)
+  // console.log(authors)
 
 
   return (

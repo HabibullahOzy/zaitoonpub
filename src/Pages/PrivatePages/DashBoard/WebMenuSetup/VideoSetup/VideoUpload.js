@@ -57,7 +57,7 @@ const VideoUpload = () => {
       formData.append("title", data.title);
       formData.append("srce", data.videoLink);
       formData.append("email", user?.email);
-      console.log(formData)
+      // console.log(formData)
 
       const response = await axios.post(
         `${process.env.REACT_APP_backendurl}`,
