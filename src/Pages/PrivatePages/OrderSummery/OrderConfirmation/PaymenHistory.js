@@ -34,7 +34,7 @@ const PaymenHistory = ({ payments = [] }) => {
       {open && (
         <div className="mt-2 border rounded-lg overflow-hidden">
           <table className="w-full text-sm border-collapse">
-            <thead className="bg-gray-200">
+            <thead className="bg-gray-200 text-gray-700">
               <tr>
                 <th className="border px-2 py-1">Name</th>
                 <th className="border px-2 py-1">Method</th>
@@ -51,7 +51,7 @@ const PaymenHistory = ({ payments = [] }) => {
                   (a, b) =>
                     new Date(b.paymentDate) - new Date(a.paymentDate)
                 )
-                .map((p, i) => (
+                ?.map((p, i) => (
                   <tr key={i} className="hover:bg-gray-50">
                     <td className="border px-2 py-1 text-center">
                       {p.rname}

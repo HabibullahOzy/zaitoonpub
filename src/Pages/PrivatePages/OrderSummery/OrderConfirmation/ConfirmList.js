@@ -215,8 +215,8 @@ const ConfirmList = () => {
                       {offerPrice}
                     </td>
 
-                    <td className={`text-red-900 font-semibold
-    ${dueAmount === 0 ? "text-green-400 font-semibold" : ""}`}>
+                    <td className={` font-semibold
+    ${dueAmount === 0 ? "text-green-400 font-semibold" : "text-red-900"}`}>
                       {dueAmount}
                     </td>
 
