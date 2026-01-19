@@ -9,6 +9,8 @@ import './BuyNowpdModa.css';
 
 
 const BuyNowpdModa = ({ dataes }) => {
+
+  console.log(dataes)
   // const dataes =dataes
   const { user, localDeviceId } = useContext(Zaitooncontext);
   const navigate = useNavigate();
@@ -19,17 +21,17 @@ const BuyNowpdModa = ({ dataes }) => {
   // const deliveryCharge = 150;
   const [totalPrice, setTotalPrice] = useState(0);
 
-  const offerPrice = dataes?.offerprice
+  const offer = dataes?.offerprice
     ? Math.round(dataes?.productPrice - (dataes?.offerprice * dataes?.productPrice) / 100)
     : dataes?.productPrice;
 
   // Update subtotal and total price when quantity changes
   useEffect(() => {
-    const subtotal = offerPrice * quantity;
+    const subtotal =( offer || dataes?.offer) * quantity;
     setSubPrice(subtotal);
     setTotalPrice(subtotal);
     // setTotalPrice(subtotal + deliveryCharge);
-  }, [quantity, offerPrice]);
+  }, [quantity, offer]);
 
   // const handleQuantityChange = (change) => {
   //     setQuantity((prev) => Math.max(1, prev + change));
@@ -87,7 +89,7 @@ const BuyNowpdModa = ({ dataes }) => {
         namebn: dataes?.namebn,
         offerprice: dataes?.offerprice,
         productPrice: dataes?.productPrice,
-        offer: offerPrice,
+        offer: offer || dataes?.offer,
         total: subPrice,
         quantity,
         _id: dataes?._id,
@@ -193,7 +195,7 @@ const BuyNowpdModa = ({ dataes }) => {
             <div className="space-y-4 text-gray-700 text-base">
               <div className="flex justify-between">
                 <span>প্রতি পিস</span>
-                <span>{offerPrice}৳</span>
+                <span>{offer || dataes?.offer}৳</span>
               </div>
               <div className="flex justify-between">
                 <span>পরিমাণ</span>

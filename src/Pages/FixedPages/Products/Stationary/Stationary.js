@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import { FcViewDetails } from 'react-icons/fc';
 import { FaCartFlatbed } from 'react-icons/fa6';
 const Stationary = () => {
-const { user, localDeviceId } = useContext(Zaitooncontext);
+    const { user, localDeviceId } = useContext(Zaitooncontext);
     // const navigate = useNavigate();
 
     const queryClient = useQueryClient();
@@ -28,7 +28,7 @@ const { user, localDeviceId } = useContext(Zaitooncontext);
     const allproducts = Array.isArray(allstationary)
         ? allstationary.filter(stationary => stationary?.state === '' || stationary?.state === 'Available')
         : [];
-   
+
 
     const handleAddCart = async (id, offerPrice) => {
         const response = await axios.get(`${process.env.REACT_APP_backendurl}/products/${id}`);
@@ -84,15 +84,15 @@ const { user, localDeviceId } = useContext(Zaitooncontext);
 
     const cartMatch = cartItems?.map(cartit => cartit.ProductCode)
 
-     const [loading, setLoading] = useState(true);
-    
-        useEffect(() => {
-            // Simulate fetch delay
-            const timer = setTimeout(() => setLoading(false), 2000);
-            return () => clearTimeout(timer);
-        }, []);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        // Simulate fetch delay
+        const timer = setTimeout(() => setLoading(false), 2000);
+        return () => clearTimeout(timer);
+    }, []);
     return (
-       <div className='lg:w-10/12 md:w-10/12 w-full p-2 mx-auto py-6'>
+        <div className='lg:w-10/12 md:w-10/12 w-full p-2 mx-auto py-6'>
 
             <div className=" text-center mb-12">
                 <motion.h2 className="text-3xl md:text-3xl font-semibold flex justify-center text-black" initial={{ opacity: 0, y: -30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} >
@@ -196,7 +196,11 @@ const { user, localDeviceId } = useContext(Zaitooncontext);
                                                         <p className="text-center text-md font-bold">{product.namebn}</p>
                                                         <p className="text-center text-lg">{product.category}</p>
                                                         {/* <p className="text-center text-lg">{product.ProductCode}</p> */}
-                                                        <p className="text-center text-sm">{product.subCategory}</p>
+                                                        <p className="lg:text-center md:text-center text-start text-sm">
+                                                            {Array.isArray(product?.subCategory)
+                                                                ? product.subCategory.join(", ")
+                                                                : String(product?.subCategory || "")}
+                                                        </p>
                                                     </div>
 
                                                     <div className="flex justify-center items-center gap-2 mt-2">

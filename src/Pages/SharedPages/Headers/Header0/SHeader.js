@@ -69,7 +69,7 @@ const SHeader = () => {
     <header className="w-full">
       {/* NAVBAR */}
       <div className="shadow-1 shadow-lime-600">
-        <div className="" style={{ background: `linear-gradient(to left, rgb(25, 79, 25), rgb(168, 255, 168))` }}>
+        <div className="backgroundColorin">
           <div className="w-10/12 mx-auto px-4 flex items-center justify-between">
 
             {/* MOBILE MENU */}
@@ -120,7 +120,7 @@ const SHeader = () => {
                     <div
                       className="absolute left-0 top-full mt-2 w-[260px] bg-white border border-gray-200 shadow-xl rounded-md opacity-0 invisible group-hover:visible group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-200 ease-out z-50"
                     >
-                      <ul className="grid grid-cols-1 gap-x-2 gap-y-1 p-3 text-[14px] text-gray-700">
+                      <ul className="grid grid-cols-1 gap-x-2 gap-y-1 p-3 text-[20px] text-gray-700">
                         {renderSubcategories()}
                       </ul>
                     </div>
@@ -203,9 +203,9 @@ const SHeader = () => {
 
                   {/* DROPDOWN */}
                   <div
-                    className="absolute left-0 top-full mt-2 w-[460px] bg-white border border-gray-200 shadow-xl rounded-md opacity-0 invisible group-hover:visible group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-200 ease-out z-50"
+                    className="absolute left-0 top-full mt-2 w-[560px] bg-white border border-gray-200 shadow-xl rounded-md opacity-0 invisible group-hover:visible group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-200 ease-out z-50"
                   >
-                    <ul className="grid grid-cols-2 gap-x-4 gap-y-2 p-4 text-[14px] text-gray-700">
+                    <ul className="grid grid-cols-2 gap-x-4 gap-y-2 p-4 text-md text-gray-700">
                       {renderSubcategories()}
                     </ul>
                   </div>
@@ -256,7 +256,7 @@ const SHeader = () => {
                 </li>
 
                 <li>
-                  <Link to="/ordertrack" className="hover:text-green-600">
+                  <Link to="/ordertrack" className="">
                     অর্ডার ট্র্যাক করুন
                   </Link>
                 </li>

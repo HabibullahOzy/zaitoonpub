@@ -56,16 +56,16 @@ const Header = () => {
         },
     });
 
-    const allproducts = Array.isArray(allproductes) ? allproductes?.filter(book => book?.state === 'Available') : [];
+    // const allproducts = Array.isArray(allproductes) ? allproductes?.filter(book => book?.state === 'Available') : [];
 
     //  search filter logic
     useEffect(() => {
-        if (!allproducts.length) return;
+        if (!allproductes.length) return;
 
         setIsFetching(true);
         const delay = setTimeout(() => {
             const lower = searchTerm.toLowerCase();
-            const results = (allproducts)?.filter((item) => {
+            const results = (allproductes)?.filter((item) => {
                 const namebn = item.namebn?.toLowerCase() || "";
                 const nameeng = item.nameeng?.toLowerCase() || "";
                 const namearb = item.namearb?.toLowerCase() || "";
@@ -90,7 +90,7 @@ const Header = () => {
         }, 400);
 
         return () => clearTimeout(delay);
-    }, [searchTerm, allproducts]);
+    }, [searchTerm, allproductes]);
 
     // sticky header
     const [scrolled, setScrolled] = useState(false);

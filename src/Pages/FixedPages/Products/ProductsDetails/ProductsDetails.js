@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link, useLoaderData, useNavigate } from 'react-router-dom';
+import { Link, useLoaderData } from 'react-router-dom';
 import { Zaitooncontext } from '../../../../SecureContext/ContextAuth';
 import { FaCartFlatbed } from 'react-icons/fa6';
 import toast from 'react-hot-toast';
@@ -10,9 +10,8 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import PSummer from './PSummer';
 import Pspecifica from './Pspecifica';
 import Pauthor from './Pauthor';
-import rearrow from '../../../../assets/redo-arrow.png';
 import { HiShare } from 'react-icons/hi';
-import { PiArrowBendDownLeftFill, PiArrowBendRightDownBold } from 'react-icons/pi';
+import { PiArrowBendRightDownBold } from 'react-icons/pi';
 // import { FcReading } from 'react-icons/fc'
 // import { FaStar } from 'react-icons/fa';
 // import CustomerReview from '../../Review/CustomerReview';
@@ -34,7 +33,7 @@ const ProductsDetails = () => {
     const [reviewinfo, setReviewinfo] = useState()
     const [activeTab, setActiveTab] = useState('summary');
     const [redata, setRedata] = useState()
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
 
 
@@ -173,44 +172,62 @@ const ProductsDetails = () => {
         //     return;
         // }
 
+         // calculate total price
+      const productsWithPrice = dataes.map((p) => {
+        const finalPrice = p?.offerprice
+          ? Math.round(Number(p.productPrice) - (Number(p.offerprice) * Number(p.productPrice)) / 100)
+          : p.productPrice;
+
+        return {
+          price: finalPrice,
+        };
+      });
+
+      const totalProductPrice = productsWithPrice.reduce(
+        (sum, p) => sum + Number(p.price),
+        0
+      );
+
+      const offer =totalProductPrice
+
         setShowbuyModal(true);
-        setBuyNowProduct(produc);
+        setBuyNowProduct(produc, offer);
     }
 
 
     // Wish list section
 
-    const addpdWishList = async (product) => {
-        if (!user) {
-            toast.error("Please login first to add to wishlist");
-            return;
-        }
+    // const addpdWishList = async (product) => {
+    //     if (!user) {
+    //         toast.error("Please login first to add to wishlist");
+    //         return;
+    //     }
 
-        const wishlistItem = {
-            email: user?.email,
-            product
-        };
+    //     const wishlistItem = {
+    //         email: user?.email,
+    //         product
+    //     };
 
-        try {
-            const response = await fetch(`${process.env.REACT_APP_backendurl}/wishList`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(wishlistItem)
-            });
+    //     try {
+    //         const response = await fetch(`${process.env.REACT_APP_backendurl}/wishList`, {
+    //             method: 'POST',
+    //             headers: { 'Content-Type': 'application/json' },
+    //             body: JSON.stringify(wishlistItem)
+    //         });
 
-            const data = await response.json();
-            if (data.acknowledged) {
-                toast.success("Product added to wishlist successfully");
-                navigate(`/wishList/${user?.email}`);
-                // refetch();
-            } else {
-                toast.error("Failed to add product to wishlist");
-            }
-        } catch (error) {
-            console.error("Error adding to wishlist:", error);
-            toast.error("An error occurred while adding to wishlist");
-        }
-    }
+    //         const data = await response.json();
+    //         if (data.acknowledged) {
+    //             toast.success("Product added to wishlist successfully");
+    //             navigate(`/wishList/${user?.email}`);
+    //             // refetch();
+    //         } else {
+    //             toast.error("Failed to add product to wishlist");
+    //         }
+    //     } catch (error) {
+    //         console.error("Error adding to wishlist:", error);
+    //         toast.error("An error occurred while adding to wishlist");
+    //     }
+    // }
 
 
     // Share with social media section
@@ -366,7 +383,7 @@ const ProductsDetails = () => {
 
                                     <div className='flex gap-2'>
                                         <FcOk /> In Stock<>{
-                                            orderCou?.totalQuantity ? <p className='text-green-600 font-semibold'>{`${data?.quantity - orderCou?.totalQuantity}`}</p> : <p className='text-green-600 font-semibold'>{data?.quantity}</p>
+                                            orderCou?.totalQuantity ? <p className={`text-green-600 font-semibold ${(data?.quantity - orderCou?.totalQuantity) === 0 || (data?.quantity - orderCou?.totalQuantity) < 0 ? 'text-red-600' : ''}`}>{`${data?.quantity - orderCou?.totalQuantity}`}</p> : <p className='text-green-600 font-semibold'>{data?.quantity}</p>
                                         }</> + copies available
                                     </div>
 
@@ -374,7 +391,10 @@ const ProductsDetails = () => {
                                     {/* products action button */}
                                     <div className=" p-2">
 
-                                        <div className='flex gap-5'>
+                                        {
+                                            data?.state === "Previous" 
+                                            ? <p className='text-red-700 font-semibold'>Out Of Stock</p> 
+                                            : <div className='flex gap-5'>
 
                                             <button
                                                 onClick={() => openBuyNownPurchase(data)}
@@ -399,7 +419,9 @@ const ProductsDetails = () => {
                                                 </button>
                                             )}
 
-                                        </div>
+                                        </div> 
+                                        }
+
 
                                         {/* <button
                                                 onClick={() => addpdWishList(data)}

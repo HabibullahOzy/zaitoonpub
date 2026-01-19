@@ -24,10 +24,10 @@ const Play = ({ productCategory }) => {
         }
     });
 
-const queryClient = useQueryClient();
-    const nursproduct = Array.isArray(nursproductes) 
-    ? nursproductes?.filter(book => book?.state === '' || book?.state === 'Available')
-    : [];
+    const queryClient = useQueryClient();
+    const nursproduct = Array.isArray(nursproductes)
+        ? nursproductes?.filter(book => book?.state === '' || book?.state === 'Available')
+        : [];
 
 
     const handleAddCart = async (id, offerPrice) => {
@@ -93,7 +93,8 @@ const queryClient = useQueryClient();
                             </div>
                         </div>
                     ));
-                    queryClient.clear();
+
+                    queryClient.invalidateQueries(["id"]);
                 } else {
                     toast.error("Your product can't be added, please try again");
                 }
@@ -232,7 +233,11 @@ const queryClient = useQueryClient();
                                         <div>
                                             <p className="lg:text-center md:text-center text-start text-md font-bold">{product.namebn}</p>
                                             <p className="lg:text-center md:text-center text-start text-lg">{product.category}</p>
-                                            <p className="lg:text-center md:text-center text-start text-sm">{product.subCategory}</p>
+                                            <p className="lg:text-center md:text-center text-start text-sm">
+                                                {Array.isArray(product?.subCategory)
+                                                    ? product.subCategory.join(", ")
+                                                    : String(product?.subCategory || "")}
+                                            </p>
                                         </div>
 
                                         <div className="flex justify-center items-center gap-2 mt-2">

@@ -108,7 +108,9 @@ const Products = () => {
                             </div>
                         </div>
                     ));
-                    queryClient.clear();
+
+                    queryClient.invalidateQueries(["id"]);
+                    // queryClient.clear();
                     // refetch()
                 } else {
                     toast.error("Your product can't be added, please try again");
@@ -301,7 +303,11 @@ const Products = () => {
                                                         <p className="text-center text-md font-bold">{product.namebn}</p>
                                                         <p className="text-center text-lg">{product.category}</p>
                                                         {/* <p className="text-center text-lg">{product.ProductCode}</p> */}
-                                                        <p className="text-center text-sm">{product.subCategory}</p>
+                                                        <p className="lg:text-center md:text-center text-start text-sm">
+                                                            {Array.isArray(product?.subCategory)
+                                                                ? product.subCategory.join(", ")
+                                                                : String(product?.subCategory || "")}
+                                                        </p>
                                                     </div>
 
                                                     <div className="flex justify-center items-center gap-2 mt-2">

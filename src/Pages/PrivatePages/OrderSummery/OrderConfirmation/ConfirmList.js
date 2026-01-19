@@ -51,7 +51,7 @@ const ConfirmList = () => {
   };
 
 
-  // Offer set start
+  // Payment set start
 
   const [showPaymodal, setShowPaymodal] = useState(false);
   const [orderPaymentData, setOrderPaymentData] = useState();
@@ -60,17 +60,20 @@ const ConfirmList = () => {
     setShowPaymodal(true)
 
     setOrderPaymentData(id)
+    refetch()
   }
+  // payment set start
 
-
-
+  // Offer set start
   const [openoffermodal, setOpenoffermodal] = useState(false);
   const [orderoffer, setOrderoffer] = useState();
+  const [orderofferdata, setOrderofferdata] = useState();
 
 
-  const handlesetoffer = (id) => {
+  const handlesetoffer = (id, cadata) => {
     setOpenoffermodal(true)
     setOrderoffer(id)
+    setOrderofferdata(cadata)
 
   }
 
@@ -79,17 +82,24 @@ const ConfirmList = () => {
   const onSubmit = async (data) => {
     const offerCr = user?.email
     const offer = data.offerord
+    const specialoffer = data.specialoffertk
     const paymentData = {
       offerCr,
-      offer
+      offer,
+      specialoffer
     }
 
     const res = await axios.put(`${process.env.REACT_APP_backendurl}/orderoffer/${orderoffer}`, paymentData)
 
-    res?.status ? toast.success('Offer Data Added Successfully') : toast.error('Something went wrong, please try again later');
-    reset();
+    if (res?.status) {
+      toast.success('Offer Data Added Successfully')
+      refetch()
+    } else {
+      toast.error('Something went wrong, please try again later');
+    }
+    reset()
+    refetch();
     setOpenoffermodal(false)
-    toast.success('Offer Set Successfully')
   }
 
 
@@ -137,31 +147,31 @@ const ConfirmList = () => {
         <table className="table w-full">
           <thead className="bg-gray-100 text-xs md:text-sm font-semibold text-gray-700">
             <tr>
-              <th className="border px-1 py-2">SL</th>
-              <th className="border px-1 py-2">Order Id</th>
-              <th className="border px-1 py-2">Customer</th>
-              <th className="border px-1 py-2">Email</th>
-              <th className="border px-1 py-2">Phone</th>
-              <th className="border px-1 py-2">Location</th>
-              <th className="border px-1 py-2">Order Note</th>
-              <th className="border px-1 py-2">SubTotal</th>
-              <th className="border px-1 py-2">Deliv: Charge</th>
-              <th className="border px-1 py-2">Offer</th>
-              <th className="border px-1 py-2">Payable</th>
-              <th className="border px-1 py-2">Due</th>
-              <th className="border px-1 py-2">Total Paid</th>
-              <th className="border px-1 py-2">Updated</th>
-              <th className="border px-1 py-2 text-center">Action</th>
+              <th className="border text-center py-2">SL</th>
+              <th className="border text-center py-2">Order Id</th>
+              <th className="border text-center py-2">Customer</th>
+              <th className="border text-center py-2">Email</th>
+              <th className="border text-center py-2">Phone</th>
+              <th className="border text-center py-2">Location</th>
+              <th className="border text-center py-2">Order Note</th>
+              <th className="border text-center py-2">SubTotal</th>
+              <th className="border text-center py-2">Deliv: Charge</th>
+              <th className="border text-center py-2">Offer</th>
+              <th className="border text-center py-2">Payable</th>
+              <th className="border text-center py-2">Due</th>
+              <th className="border text-center py-2">Total Paid</th>
+              <th className="border text-center py-2">Updated</th>
+              <th className="border text-center py-2">Action</th>
             </tr>
           </thead>
           <tbody>
-            {paginatedData.map((cashdata, i) => {
+            {paginatedData?.map((cashdata, i) => {
               const isExpanded = expandedRow === cashdata._id;
               // calculate offer price if needed
               const ordoffer = cashdata?.totalPrice;
               const offerperc = Number(cashdata?.offer) || 0;
-              const offerPrice = cashdata?.offer
-                ? Math.round(ordoffer - (offerperc * ordoffer) / 100) + Number(cashdata?.delicharge)
+              const offerPrice = cashdata?.offer || cashdata?.specialoffer
+                ? Math.round(ordoffer - (offerperc * ordoffer) / 100) - Number(cashdata?.specialoffer || "") + Number(cashdata?.delicharge)
                 : ordoffer + Number(cashdata?.delicharge || 0);
 
 
@@ -170,7 +180,7 @@ const ConfirmList = () => {
                 0
               ) || 0;
 
-              const dueAmount = Math.max(offerPrice - totalPaid, 0);
+              const dueAmount = Math.max(offerPrice - totalPaid);
               return (
                 <React.Fragment key={cashdata._id}>
                   {/* Parent Row */}
@@ -216,7 +226,7 @@ const ConfirmList = () => {
                     </td>
 
                     <td className={` font-semibold
-    ${dueAmount === 0 ? "text-green-400 font-semibold" : "text-red-900"}`}>
+    ${dueAmount === 0 || dueAmount < 0 ? "text-green-400 font-semibold" : "text-red-900"}`}>
                       {dueAmount}
                     </td>
 
@@ -244,7 +254,7 @@ const ConfirmList = () => {
                         </button>
 
                         <button
-                          onClick={() => handlesetoffer(cashdata?._id)}
+                          onClick={() => handlesetoffer(cashdata?._id, cashdata)}
                           className=" text-red-400 px-1 tooltip tooltip-success tooltip-top"
                           data-tip="Set Offer"
                         >
@@ -321,7 +331,7 @@ const ConfirmList = () => {
                                     {prodata.quantity}
                                   </td>
                                   <td className="border px-2 py-1 text-center">
-                                    {prodata.productPrice}
+                                    {prodata?.offer}
                                   </td>
                                   <td className="border px-2 py-1 text-center">
                                     {prodata.total}
@@ -393,25 +403,42 @@ const ConfirmList = () => {
       <Modal show={openoffermodal} size="md" onClose={() => setOpenoffermodal(false)} popup>
         <ModalHeader />
         <ModalBody>
-          <div className="text-center">
-            <HiOutlineTag className="mx-auto mb-4 h-14 w-14 text-green-500" />
-            <h3 className="mb-5 text-lg font-semibold text-black">
-              Set offers for this order
-            </h3>
+          <div>
+            <div className="text-center">
+              <HiOutlineTag className="mx-auto mb-4 h-14 w-14 text-green-500" />
+              <h3 className="mb-5 text-lg font-semibold text-black">
+                Set offers for this order
+              </h3>
+            </div>
 
             <form onSubmit={handleSubmit(onSubmit)}>
-              {/* Input field */}
-              <input
-                type="number"
-                placeholder="Offer %"
-                {...register("offerord", { required: true, min: 1, max: 100 })}
-                className="w-full p-2 border text-black border-gray-300 rounded-lg 
-                         focus:ring-2 focus:ring-green-400 outline-none mb-2"
-              />
 
-              {errors.offerord && (
-                <p className="text-red-500 text-sm mb-3">Offer must be between 1% and 100%</p>
-              )}
+              <div>
+                <label className='block text-gray-700 font-medium mb-1'>Offer only (%)</label>
+                {/* Input field */}
+                <input
+                  type="number"
+                  defaultValue={orderofferdata?.offer}
+                  placeholder="Offer %"
+                  {...register("offerord", { min: 1, max: 100 })}
+                  className="w-full p-2 border text-black border-gray-300 rounded-lg 
+                         focus:ring-2 focus:ring-green-400 outline-none mb-2"
+                />
+              </div>
+
+
+              {/* special discount */}
+              <div>
+                <label className='block text-gray-700 font-medium mb-1'>special discount amount(TK)</label>
+                <input
+                  type="number"
+                  defaultValue={orderofferdata?.specialoffer}
+                  placeholder="Offer only (Tk)"
+                  {...register("specialoffertk", { min: 1 })}
+                  className="w-full p-2 border text-black border-gray-300 rounded-lg 
+                         focus:ring-2 focus:ring-green-400 outline-none mb-2"
+                />
+              </div>
 
               {/* Buttons */}
               <div className="flex justify-center gap-4">

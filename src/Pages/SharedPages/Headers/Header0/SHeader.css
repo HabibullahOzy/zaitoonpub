@@ -16,6 +16,14 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     padding: 10px 0;
 } */
+ .backgroundColorin {
+  background: linear-gradient(
+    135deg,
+    #a8ffa8 0%,
+    #4caf50 50%,
+    #194f19 100% 
+  );
+}
 
 .container {
     max-width: 100%;

@@ -1,17 +1,18 @@
 import React, { useContext, useState } from 'react';
-import BuyNowModal from '../../Purchages/InstantPurch/BuyNowModal';
 import { FaCartFlatbed } from 'react-icons/fa6';
 import { FcViewDetails } from 'react-icons/fc';
-import { Link, useLoaderData, useNavigate } from 'react-router-dom';
+import { Link, useLoaderData } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { Zaitooncontext } from '../../../../SecureContext/ContextAuth';
 import { CheckCircleIcon } from 'lucide-react';
+import { FaShoppingBag } from 'react-icons/fa';
+import BuyNowpdModa from '../ProductsDetails/BuyNowpdModal/BuyNowpdModa';
 
 const ClasslinkBasedShow = () => {
     const { user, localDeviceId } = useContext(Zaitooncontext)
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     // const { data: nursproductes = [], refetch } = useQuery({
     //     queryKey: ['nursproduct'],
@@ -98,7 +99,7 @@ const ClasslinkBasedShow = () => {
                             </div>
                         </div>
                     ));
-                    queryClient.clear();
+                    queryClient.invalidateQueries(["cartItems"]);
                 } else {
                     toast.error("Your product can't be added, please try again");
                 }
@@ -107,54 +108,37 @@ const ClasslinkBasedShow = () => {
 
 
 
+    // const addWishList = async (product) => {
+    //     if (!user) {
+    //         toast.error("Please login first to add to wishlist");
+    //         return;
+    //     }
 
-    // Buy Now Purchase Function
+    //     const wishlistItem = {
+    //         email: user?.email,
+    //         product
+    //     };
 
-    const [showModal, setShowModal] = useState(false);
-    const [buyNowProductId, setBuyNowProductId] = useState('');
+    //     try {
+    //         const response = await fetch(`${process.env.REACT_APP_backendurl}/wishList`, {
+    //             method: 'POST',
+    //             headers: { 'Content-Type': 'application/json' },
+    //             body: JSON.stringify(wishlistItem)
+    //         });
 
-    const openBuyNownPurchase = (product) => {
-        if (!user) {
-            toast.error("Please login first to buy now");
-            return;
-        }
-
-        setShowModal(true);
-        setBuyNowProductId(product);
-    }
-
-
-    const addWishList = async (product) => {
-        if (!user) {
-            toast.error("Please login first to add to wishlist");
-            return;
-        }
-
-        const wishlistItem = {
-            email: user?.email,
-            product
-        };
-
-        try {
-            const response = await fetch(`${process.env.REACT_APP_backendurl}/wishList`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(wishlistItem)
-            });
-
-            const data = await response.json();
-            if (data.acknowledged) {
-                toast.success("Product added to wishlist successfully");
-                navigate(`/wishList/${user.email}`);
-                refetch();
-            } else {
-                toast.error("Failed to add product to wishlist");
-            }
-        } catch (error) {
-            console.error("Error adding to wishlist:", error);
-            toast.error("An error occurred while adding to wishlist");
-        }
-    }
+    //         const data = await response.json();
+    //         if (data.acknowledged) {
+    //             toast.success("Product added to wishlist successfully");
+    //             navigate(`/wishList/${user.email}`);
+    //             refetch();
+    //         } else {
+    //             toast.error("Failed to add product to wishlist");
+    //         }
+    //     } catch (error) {
+    //         console.error("Error adding to wishlist:", error);
+    //         toast.error("An error occurred while adding to wishlist");
+    //     }
+    // }
 
 
     const email = user?.email || localDeviceId();
@@ -170,10 +154,185 @@ const ClasslinkBasedShow = () => {
         },
     });
 
-    const cartMatch = cartItems?.map(cartit => cartit.ProductCode)
+    const cartMatch = cartItems?.map(cartit => cartit?.class)
+    const cartMatchsing = cartItems?.map(cartit => cartit?.ProductCode)
+
+
+    // class based product add to cart  
+
+    const handleclassbaseaddtocart = async () => {
+        if (!nursproduct.length) {
+            toast.error("No products available in this class");
+            return;
+        }
+
+        try {
+            // calculate total price
+            const productsWithPrice = nursproduct.map((p) => {
+                const finalPrice = p?.offerprice
+                    ? Math.round(Number(p.productPrice) - (Number(p.offerprice) * Number(p.productPrice)) / 100)
+                    : p.productPrice;
+
+                console.log(finalPrice)
+
+                return {
+                    productId: p._id,
+                    ProductCode: p.ProductCode,
+                    namebn: p.namebn,
+                    price: finalPrice,
+                    image: p.image,
+                };
+            });
+
+            const totalProductPrice = productsWithPrice.reduce(
+                (sum, p) => sum + Number(p.price),
+                0
+            );
+
+            console.log(totalProductPrice)
+
+            const classCartPayload = {
+                email: emaile,
+                type: "CLASS_BASED",
+                namebn: classicbooks?.[0]?.subCategory,
+                class: classicbooks?.[0]?.subCategory,
+                offer: totalProductPrice,
+                totalItems: productsWithPrice.length,
+                products: productsWithPrice,
+                // postDate: new Date(),
+            };
+
+            const res = await fetch(
+                `${process.env.REACT_APP_backendurl}/addedCart`,
+                {
+                    method: "POST",
+                    headers: { "content-type": "application/json" },
+                    body: JSON.stringify(classCartPayload),
+                }
+            );
+
+            const data = await res.json();
+
+            if (data?.acknowledged) {
+                toast.custom((t) => (
+                    <div
+                        className={`${t.visible ? "animate-custom-enter" : "animate-custom-leave"
+                            } max-w-md w-full bg-white shadow-lg rounded-xl pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+                    >
+                        <div className="flex-1 p-4">
+                            <div className="flex items-start">
+                                {/* ICON */}
+                                <div className="flex-shrink-0">
+                                    <CheckCircleIcon className="h-10 w-10 text-green-500" />
+                                </div>
+
+                                {/* TEXT */}
+                                <div className="ml-3">
+                                    <p className="text-sm font-semibold text-gray-900">
+                                        Success
+                                    </p>
+                                    <p className="text-sm text-gray-600">
+                                        Producte added to cart succesfully!!
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* CLOSE BUTTON */}
+                        <div className="flex border-l border-gray-200">
+                            <button
+                                onClick={() => toast.dismiss(t.id)}
+                                className="px-4 text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                            >
+                                ❌
+                            </button>
+                        </div>
+                    </div>
+                ));
+                queryClient.invalidateQueries(["cartItems"]);
+            } else {
+                toast.error("Failed to add class products");
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error("Server error while adding class products");
+        }
+
+    };
+
+
+    // Buy now purchase section
+
+    const [showbuyModal, setShowbuyModal] = useState(false);
+    const [buyNowProduct, setBuyNowProduct] = useState('');
+
+    const openBuyNownPurchase = () => {
+        // if (!user) {
+        //     toast.error("Please login first to buy now");
+        //     return;
+        // }
+
+        if (!nursproduct.length) {
+            toast.error("No products available in this class");
+            return;
+        }
+
+        try {
+            // calculate total price
+            const productsWithPrice = nursproduct.map((p) => {
+                const finalPrice = p?.offerprice
+                    ? Math.round(Number(p.productPrice) - (Number(p.offerprice) * Number(p.productPrice)) / 100)
+                    : p.productPrice;
+
+                return {
+                    price: finalPrice,
+                };
+            });
+
+            const totalProductPrice = productsWithPrice.reduce(
+                (sum, p) => sum + Number(p.price),
+                0
+            );
+
+            console.log(totalProductPrice)
+
+            const classCartPayload = {
+                email: emaile,
+                type: "CLASS_BASED",
+                namebn: classicbooks?.[0]?.subCategory,
+                class: classicbooks?.[0]?.subCategory,
+                offer: totalProductPrice,
+                totalItems: productsWithPrice.length,
+                products: productsWithPrice,
+                // postDate: new Date(),
+            };
+
+
+            setBuyNowProduct(classCartPayload);
+        } catch { }
+
+        setShowbuyModal(true);
+    }
+
+
     return (
-        <div className='w-10/12 mx-auto'>
-            <h1 className='font-semibold text-2xl'>{classicbooks?.[0]?.subCategory}</h1><button>সকল বই কার্টে যোগ করুন</button>
+        <div className='w-10/12 mx-auto mt-10'>
+            <div className='flex justify-between'>
+                <h1 className='font-semibold text-2xl'>{classicbooks?.[0]?.subCategory}</h1>
+
+
+                <div className='grid lg:flex md:flex gap-5'>
+                    {cartMatch?.some(c => c === classicbooks?.[0]?.subCategory) ? (
+
+                        <button className="px-56 btn bg-green-200 text-green-600 flex items-center justify-center font-semibold mr-5">Added</button>
+                    ) : (
+                        <button onClick={handleclassbaseaddtocart} className="btn bg-green-600 rounded-md text-white flex items-center text-md justify-center vibrate-button mr-5"><FaCartFlatbed className="w-8" />সকল বই একত্রে কার্টে যোগ করুন</button>
+                    )}
+
+                    <button onClick={openBuyNownPurchase} className="px-1 btn rounded-md bg-green-500 text-white flex items-center justify-center text-md bounce-button mb-4 flex"><FaShoppingBag className="w-10" />সকল বই একত্রে এখনই অর্ডার করুন</button>
+                </div>
+            </div>
+
             <div className=' grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-5 lg:gap-5 lg:gap-5 gap-2 py-6 mx-auto' style={{ color: "black" }}>
 
                 {nursproduct?.slice() // make a copy
@@ -215,7 +374,7 @@ const ClasslinkBasedShow = () => {
                                             <FcViewDetails className="w-5 h-5" />View Details
                                         </Link>
 
-                                        {cartMatch?.some(c => c === product.ProductCode) ? (
+                                        {cartMatchsing?.some(c => c === product.ProductCode) ? (
                                             <p className="p-2 w-1/2 bg-green-200 text-green-600 flex items-center justify-center font-semibold">
                                                 Added
                                             </p>
@@ -237,7 +396,11 @@ const ClasslinkBasedShow = () => {
                                         <div>
                                             <p className="lg:text-center md:text-center text-start text-md font-bold">{product.namebn}</p>
                                             <p className="lg:text-center md:text-center text-start text-lg">{product.category}</p>
-                                            <p className="lg:text-center md:text-center text-start text-sm">{product.subCategory}</p>
+                                            <p className="lg:text-center md:text-center text-start text-sm">
+                                                {Array.isArray(product?.subCategory)
+                                                    ? product.subCategory.join(", ")
+                                                    : String(product?.subCategory || "")}
+                                            </p>
                                         </div>
 
                                         <div className="flex justify-center items-center gap-2 mt-2">
@@ -267,22 +430,22 @@ const ClasslinkBasedShow = () => {
                                                 </div> */}
                                     </div>
                                 </div>
-
-                                {/* Modal */}
-                                {showModal && (
-                                    <div className="modal modal-open">
-                                        <div className="modal-box max-w-4xl bg-green-50" style={{ backgroundColor: "#baefba" }}>
-                                            <div className="modal-action">
-                                                <button className="btn" onClick={() => setShowModal(false)}>✕</button>
-                                            </div>
-                                            <BuyNowModal datas={buyNowProductId} />
-                                        </div>
-                                    </div>
-                                )}
                             </div>
                         );
                     })}
             </div>
+            {/* Buy Now Purchase Modal */}
+
+            {showbuyModal && (
+                <div className="modal modal-open">
+                    <div className="modal-box max-w-4xl bg-green-50" style={{ backgroundColor: "#baefba" }}>
+                        <div className="modal-action">
+                            <button className="text-black" onClick={() => setShowbuyModal(false)}>✕</button>
+                        </div>
+                        <BuyNowpdModa dataes={buyNowProduct} />
+                    </div>
+                </div>
+            )}
         </div>
 
     );

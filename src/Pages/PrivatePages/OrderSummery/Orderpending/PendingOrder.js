@@ -74,6 +74,7 @@ const PendingOrder = () => {
   const handlesetpenoffer = (id) => {
     setOpenoffermodal(true)
     setOrderoffer(id)
+    refetch()
 
   }
 
@@ -93,6 +94,7 @@ const PendingOrder = () => {
   
     res?.status ? toast.success('Offer Data Added Successfully') : toast.error('Something went wrong, please try again later');
     reset();
+    refetch();
     setOpenoffermodal(false)
     toast.success('Offer Set Successfully')
   }
@@ -331,7 +333,7 @@ const PendingOrder = () => {
                                     {prodata?.quantity}
                                   </td>
                                   <td className="border px-2 py-1 text-center">
-                                    {prodata?.productPrice}
+                                    {prodata?.offer}
                                   </td>
                                   <td className="border px-2 py-1 text-center">
                                     {prodata?.total}

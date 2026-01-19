@@ -132,6 +132,33 @@ const ProductsFilter = () => {
 
 
 
+
+  const { data: allcategory = [], isLoading } = useQuery({
+      queryKey: ["allcategory"],
+      queryFn: async () => {
+        const res = await fetch(`${process.env.REACT_APP_backendurl}/category`);
+        return res.json();
+      },
+    });
+
+ const subCategories = Array.isArray(allcategory)
+  ? [
+      ...new Set(
+        allcategory.flatMap((category) => {
+          if (!category?.subcategories) return [];
+
+          return category.subcategories
+            .split(",")
+            .map((s) => s.trim())
+            .filter((s) => s && s !== "stationery");
+        })
+      ),
+    ]
+  : [];
+
+
+
+
   const email = user?.email || localDeviceId();
   
       const { data: cartItems = [] } = useQuery({
@@ -169,20 +196,21 @@ const ProductsFilter = () => {
 
         {/* Subcategory */}
         <div>
-          <h3 className="font-medium mb-2">Sub Category</h3>
-          {subCategory?.map((sub, i) => (
-            <label key={i} className="flex items-center gap-2 mb-1">
-              <input
-                type="checkbox"
-                checked={selectedsubCategory.includes(sub)}
-                onChange={() =>
-                  toggleFilter(sub, selectedsubCategory, setSelectedsubCategory)
-                }
-              />
-              {sub}
-            </label>
-          ))}
-        </div>
+  <h3 className="font-medium mb-2">Sub Category</h3>
+
+  {subCategories.map((sub, i) => (
+    <label key={i} className="flex items-center gap-2 mb-1">
+      <input
+        type="checkbox"
+        checked={selectedsubCategory.includes(sub)}
+        onChange={() =>
+          toggleFilter(sub, selectedsubCategory, setSelectedsubCategory)
+        }
+      />
+      <span>{sub}</span>
+    </label>
+  ))}
+</div>
 
         {/* Author */}
         <div>

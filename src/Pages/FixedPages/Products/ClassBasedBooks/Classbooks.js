@@ -18,7 +18,7 @@ const Classbooks = () => {
      Unique Category Names
   ============================ */
   const categories = useMemo(() => {
-    return [...new Set(allcategory.map(c => c.categname))];
+    return [...new Set(allcategory?.map(c => c.categname))];
   }, [allcategory]);
 
   /* ===========================
@@ -111,7 +111,7 @@ const Classbooks = () => {
             </button> */}
             <button
               onClick={() => setActiveSub(sub)}
-              className={`px-6 py-2 rounded-full shadow-md text-black
+              className={`px-6 py-2 rounded-full shadow-md text-lg text-black
                 ${activeSub === sub
                   ? 'border-b-2 border-green-500 shadow-green-400'
                   : 'shadow-gray-300'}`}

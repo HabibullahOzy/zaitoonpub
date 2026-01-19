@@ -12,14 +12,23 @@ const InstitutOrder = () => {
     },
   });
 
+  const [notes, setNotes] = useState({});
+
+  const handleNoteChange = (id, value) => {
+    setNotes((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
+
   const [previewFile, setPreviewFile] = useState(null);
 
-  const handleActionOrder = async (id, newStatus) => {
+  const handleActionOrder = async (id, newStatus, note) => {
     try {
       const resp = await fetch(`${process.env.REACT_APP_backendurl}/instorderstatus/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus }),
+        body: JSON.stringify({ status: newStatus, note: note }),
       });
 
       const data = await resp.json();
@@ -54,6 +63,7 @@ const InstitutOrder = () => {
 
   return (
     <div className="overflow-x-auto p-4 min-h-screen">
+      <h1 className="text-center p-5 text-black text-2xl font-bold">Institutional Orders</h1>
       <table className="min-w-full border border-gray-200 rounded-lg">
         <thead className="bg-gray-100 text-black">
           <tr>
@@ -64,6 +74,7 @@ const InstitutOrder = () => {
             <th className="border px-3 py-2">Phone</th>
             <th className="border px-3 py-2">File</th>
             <th className="border px-3 py-2">Date</th>
+            <th className="border px-3 py-2">Note</th>
             <th className="border px-3 py-2">Action</th>
           </tr>
         </thead>
@@ -89,34 +100,57 @@ const InstitutOrder = () => {
                   </button>
                 </td>
 
-                <td className="border px-3 py-2">{order.createdAt}</td>
+                <td className="border px-3 py-2">{order?.createdAt}</td>
+                <td className="border px-3 py-2">{order?.note}</td>
 
                 <td className="border px-3 py-2 text-center">
                   {order?.status === "pending" ? (
-                    <div className="flex gap-2 justify-center">
-                      <button
-                        onClick={() => handleActionOrder(order._id, "accepted")}
-                        className="bg-green-300 px-2 rounded btn btn-sm"
-                      >
-                        Accept
-                      </button>
-                      <button
-                        onClick={() => handleActionOrder(order._id, "rejected")}
-                        className="bg-red-300 px-2 rounded btn btn-sm"
-                      >
-                        Reject
-                      </button>
-                      <button
-                        onClick={() => handleActionOrder(order._id, "delivered")}
-                        className="bg-blue-300 px-2 rounded btn btn-sm"
-                      >
-                        Delivered
-                      </button>
+                    <div className="flex flex-col gap-2 items-center">
+
+                      {/* 📝 NOTE INPUT */}
+                      <input
+                        type="text"
+                        placeholder="Write a note..."
+                        value={notes[order._id] || ""}
+                        onChange={(e) => handleNoteChange(order._id, e.target.value)}
+                        className="border rounded px-2 py-1 text-sm w-full max-w-[200px]"
+                      />
+
+                      {/* 🔘 ACTION BUTTONS */}
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() =>
+                            handleActionOrder(order._id, "accepted", notes[order._id])
+                          }
+                          className="bg-green-300 px-2 rounded btn btn-sm"
+                        >
+                          Accept
+                        </button>
+
+                        <button
+                          onClick={() =>
+                            handleActionOrder(order._id, "rejected", notes[order._id])
+                          }
+                          className="bg-red-300 px-2 rounded btn btn-sm"
+                        >
+                          Reject
+                        </button>
+
+                        <button
+                          onClick={() =>
+                            handleActionOrder(order._id, "delivered", notes[order._id])
+                          }
+                          className="bg-blue-300 px-2 rounded btn btn-sm"
+                        >
+                          Delivered
+                        </button>
+                      </div>
                     </div>
                   ) : (
                     <p className={`px-2 rounded ${className}`}>{text}</p>
                   )}
                 </td>
+
               </tr>
             );
           })}

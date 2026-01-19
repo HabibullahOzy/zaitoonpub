@@ -25,25 +25,25 @@ const CancelOrder = () => {
   };
 
 
-  const handleUpdateOrder = async (id) => {
-    const response = await axios.put(`${process.env.REACT_APP_backendurl}/orderStatus/${id}`);
+  // const handleUpdateOrder = async (id) => {
+  //   const response = await axios.put(`${process.env.REACT_APP_backendurl}/orderStatus/${id}`);
     
-    response?.status
-      ? toast.success("Paid Order Placed!")
-      : toast.error("Order not placed, please try again");
-    refetch();
-  };
+  //   response?.status
+  //     ? toast.success("Paid Order Placed!")
+  //     : toast.error("Order not placed, please try again");
+  //   refetch();
+  // };
 
 
 
-  const handleUpdateCODOrder = async (id) => {
-    const response = await axios.put(`${process.env.REACT_APP_backendurl}/orderCODStatus/${id}`);
+  // const handleUpdateCODOrder = async (id) => {
+  //   const response = await axios.put(`${process.env.REACT_APP_backendurl}/orderCODStatus/${id}`);
     
-    response?.status
-      ? toast.success("COD Order Placed!")
-      : toast.error("Order not placed, please try again");
-    refetch();
-  };
+  //   response?.status
+  //     ? toast.success("COD Order Placed!")
+  //     : toast.error("Order not placed, please try again");
+  //   refetch();
+  // };
 
   const handleDeleteOrder = async (id) => {
     const response = await axios.delete(`${process.env.REACT_APP_backendurl}/orderItem/delete/${id}`);
@@ -191,7 +191,7 @@ const CancelOrder = () => {
                               <td className="border px-2 py-1 text-center">{prodata?.authorName}</td>
                               <td className="border px-2 py-1 text-center">{prodata?.edition}</td>
                               <td className="border px-2 py-1 text-center">{prodata.quantity}</td>
-                              <td className="border px-2 py-1 text-center">{prodata.productPrice}</td>
+                              <td className="border px-2 py-1 text-center">{prodata.offer}</td>
                               <td className="border px-2 py-1 text-center">{prodata?.total}</td>
                             </tr>
                           ))}

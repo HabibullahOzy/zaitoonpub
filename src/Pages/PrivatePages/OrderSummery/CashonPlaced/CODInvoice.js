@@ -13,8 +13,9 @@ const CODInvoice = ({ codInvdata }) => {
   const subtotal = Number(codInvdata?.totalPrice || 0);
   const discountPercent = Number(codInvdata?.offer || 0);
   const discountAmount = (subtotal * discountPercent) / 100;
+  const specialdiscountAmount = Number(codInvdata?.specialoffer) || 0
   const deliveryCharge = Number(codInvdata?.delicharge || 0);
-  const grandTotal = subtotal - discountAmount + deliveryCharge;
+  const grandTotal = subtotal - discountAmount - specialdiscountAmount + deliveryCharge;
 
   const payments = codInvdata?.payments || [];
   const totalPaid = payments.reduce((sum, p) => sum + Number(p.amount || 0), 0);
@@ -71,7 +72,67 @@ const CODInvoice = ({ codInvdata }) => {
 //     return () => clearTimeout(timer);
 //   }, [codInvdata]);
 
-// ================= PDF DOWNLOAD (MULTI-PAGE, FAST & MARGINS) =================
+// // ================= PDF DOWNLOAD (MULTI-PAGE, FAST & MARGINS) =================
+//   const downloadPDF = async () => {
+//     if (!componentRef.current || isGenerating) return;
+
+//     try {
+//       setIsGenerating(true);
+      
+//       const canvas = await html2canvas(componentRef.current, {
+//         scale: 1.5,
+//         useCORS: true,
+//         logging: false,
+//         backgroundColor: "#ffffff",
+//         onclone: (clonedDoc) => {
+//           const elements = clonedDoc.getElementsByTagName("*");
+//           for (let el of elements) {
+//             el.style.colorScheme = "light";
+//             if (window.getComputedStyle(el).color.includes("oklch")) el.style.color = "#333";
+//             if (window.getComputedStyle(el).backgroundColor.includes("oklch")) el.style.backgroundColor = "#fff";
+//           }
+//         }
+//       });
+
+//       const imgData = canvas.toDataURL("image/jpeg", 0.7);
+//       const pdf = new jsPDF("p", "mm", "a4");
+
+//       // --- MARGIN CONFIGURATION ---
+//       const margin = 5; // 10mm standard margin
+//       const pageWidth = pdf.internal.pageSize.getWidth(); // 210
+//       const pageHeight = pdf.internal.pageSize.getHeight(); // 297
+      
+//       const contentWidth = pageWidth - (margin * 2); 
+//       const contentHeight = (canvas.height * contentWidth) / canvas.width - (margin * 2);
+//       const maxPageContentHeight = pageHeight;
+
+//       let heightLeft = contentHeight;
+//       let position = margin; // Start at the top margin
+
+//       // --- PAGE GENERATION ---
+//       // First Page
+//       pdf.addImage(imgData, "JPEG", margin, position, contentWidth, contentHeight, undefined, 'FAST');
+//       heightLeft -= maxPageContentHeight;
+
+//       // Subsequent Pages
+//       while (heightLeft > 0) {
+//         // Position is calculated relative to the full image height
+//         // We subtract the content height we've already shown
+//         position = (heightLeft - contentHeight) + margin; 
+//         pdf.addPage();
+//         pdf.addImage(imgData, "JPEG", margin, position, contentWidth, contentHeight, undefined, 'FAST');
+//         heightLeft -= maxPageContentHeight;
+//       }
+
+//       pdf.save(`ZP Invoice-${codInvdata?.orderId}_${codInvdata?.name}.pdf`);
+//     } catch (error) {
+//       console.error("PDF Error:", error);
+//     } finally {
+//       setIsGenerating(false);
+//     }
+//   };
+
+// ================= PDF DOWNLOAD (SAFE MARGINS & NO SPLIT CRASH) =================
   const downloadPDF = async () => {
     if (!componentRef.current || isGenerating) return;
 
@@ -84,46 +145,78 @@ const CODInvoice = ({ codInvdata }) => {
         logging: false,
         backgroundColor: "#ffffff",
         onclone: (clonedDoc) => {
+          // Fix oklch error causing crashes
           const elements = clonedDoc.getElementsByTagName("*");
           for (let el of elements) {
             el.style.colorScheme = "light";
-            if (window.getComputedStyle(el).color.includes("oklch")) el.style.color = "#333";
+            if (window.getComputedStyle(el).color.includes("oklch")) el.style.color = "#000";
             if (window.getComputedStyle(el).backgroundColor.includes("oklch")) el.style.backgroundColor = "#fff";
           }
         }
       });
 
-      const imgData = canvas.toDataURL("image/jpeg", 0.7);
+      const imgData = canvas.toDataURL("image/jpeg", 0.8);
       const pdf = new jsPDF("p", "mm", "a4");
 
-      // --- MARGIN CONFIGURATION ---
-      const margin = 5; // 10mm standard margin
-      const pageWidth = pdf.internal.pageSize.getWidth(); // 210
-      const pageHeight = pdf.internal.pageSize.getHeight(); // 297
+      // --- CONFIGURATION ---
+      const pageWidth = 210;
+      const pageHeight = 297;
+      const topMargin = 10;
+      const bottomMargin = 15;
+      const sideMargin = 0;
       
-      const contentWidth = pageWidth - (margin * 2); 
-      const contentHeight = (canvas.height * contentWidth) / canvas.width - (margin * 2);
-      const maxPageContentHeight = pageHeight;
+      // The height available for content on each page
+      const usableHeight = pageHeight - topMargin - bottomMargin; 
+      const contentWidth = pageWidth - (sideMargin * 2);
+      const imgHeight = (canvas.height * contentWidth) / canvas.width;
 
-      let heightLeft = contentHeight;
-      let position = margin; // Start at the top margin
+      let heightLeft = imgHeight;
+      let position = 0; // Tracks our progress through the canvas pixels
+      let pageNum = 1;
 
       // --- PAGE GENERATION ---
-      // First Page
-      pdf.addImage(imgData, "JPEG", margin, position, contentWidth, contentHeight, undefined, 'FAST');
-      heightLeft -= maxPageContentHeight;
-
-      // Subsequent Pages
       while (heightLeft > 0) {
-        // Position is calculated relative to the full image height
-        // We subtract the content height we've already shown
-        position = (heightLeft - contentHeight) + margin; 
-        pdf.addPage();
-        pdf.addImage(imgData, "JPEG", margin, position, contentWidth, contentHeight, undefined, 'FAST');
-        heightLeft -= maxPageContentHeight;
+        // If not the first page, add a new one
+        if (pageNum > 1) {
+          pdf.addPage();
+        }
+
+        /**
+         * addImage params: (data, format, x, y, width, height, alias, compression)
+         * We place the image at 'topMargin'. 
+         * The 'y' coordinate for the image source is adjusted by 'position'.
+         */
+        pdf.addImage(
+          imgData, 
+          "JPEG", 
+          sideMargin, 
+          topMargin - position, 
+          contentWidth, 
+          imgHeight, 
+          undefined, 
+          'FAST'
+        );
+
+        // --- WHITE MASK (CRITICAL) ---
+        // This hides the parts of the image that bleed into the margins
+        pdf.setFillColor(255, 255, 255);
+        // Cover Top Margin
+        pdf.rect(0, 0, pageWidth, topMargin, 'F'); 
+        // Cover Bottom Margin
+        pdf.rect(0, pageHeight - bottomMargin, pageWidth, bottomMargin, 'F');
+
+        // --- OPTIONAL: PAGE NUMBER & HEADER ---
+        pdf.setFontSize(9);
+        pdf.setTextColor(150);
+        pdf.text(`ZP-Invoice ${codInvdata?.orderId}`, sideMargin, 5);
+        pdf.text(`Page ${pageNum}`, pageWidth / 2, pageHeight - 7, { align: "center" });
+
+        heightLeft -= usableHeight;
+        position += usableHeight;
+        pageNum++;
       }
 
-      pdf.save(`ZP Invoice-${codInvdata?.orderId}_${codInvdata?.name}.pdf`);
+      pdf.save(`ZP_Invoice_${codInvdata?.orderId}_${codInvdata?.name}.pdf`);
     } catch (error) {
       console.error("PDF Error:", error);
     } finally {
@@ -146,8 +239,8 @@ const CODInvoice = ({ codInvdata }) => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        padding: "2rem",
-        backgroundColor: "#f3f4f6",
+        // padding: "2rem",
+        // backgroundColor: "#f3f4f6",
         minHeight: "100vh",
       }}
     >
@@ -212,7 +305,7 @@ const CODInvoice = ({ codInvdata }) => {
             <p><b>Date:</b> {codInvdata?.orderDate}</p>
             <p><b>Payment Status:</b> {dueAmount === 0 ? "Paid" : "Pending"}</p>
             <div style={{ marginTop: "0.1rem" }}>
-              <QRCodeCanvas value={"https://zaitoonpublication.com/"} size={40} />
+              <QRCodeCanvas value={"https://zaitoonpublication.com/"} size={40}/>
             </div>
           </div>
         </div>
@@ -234,7 +327,7 @@ const CODInvoice = ({ codInvdata }) => {
                 <td style={tdStyle}>{item?.namebn}</td>
                 <td style={tdStyle}>{item?.ProductCode}</td>
                 <td style={tdStyle}>{item?.quantity}</td>
-                <td style={tdStyle}>৳ {item?.productPrice}</td>
+                <td style={tdStyle}>৳ {item?.offer}</td>
                 <td style={tdStyle}>৳ {item?.total}</td>
               </tr>
             ))}
@@ -250,10 +343,14 @@ const CODInvoice = ({ codInvdata }) => {
             </tr>
             <tr>
               <td style={tdStyle}>Discount</td>
-              <td style={tdStyle}>- ৳ {discountAmount.toFixed(2)}</td>
+              <td style={tdStyle}>- ৳ {discountAmount.toFixed(2)} <span className="text-red-500">({discountPercent}%)</span></td>
             </tr>
             <tr>
-              <td style={tdStyle}>Delivery</td>
+              <td style={tdStyle}>Special Discount</td>
+              <td style={tdStyle}>- ৳ {specialdiscountAmount.toFixed(2)}</td>
+            </tr>
+            <tr>
+              <td style={tdStyle}>Delivery Charge</td>
               <td style={tdStyle}>৳ {deliveryCharge.toFixed(2)}</td>
             </tr>
             <tr style={{ fontWeight: "bold" }}>
@@ -338,7 +435,7 @@ const CODInvoice = ({ codInvdata }) => {
 
         {/* ===== FOOTER ===== */}
         <div style={{ textAlign: "center", marginTop: "0.5rem", fontSize: "12px", color: "#374151", borderTop: "1px dashed #9ca3af", paddingTop: "0.8rem" }}>
-          <p>This is a system generated invoice.</p>
+          <p>This is a Zaitoon Publication generated invoice.</p>
           <p>No GST / VAT applicable.</p>
         </div>
       </div>
