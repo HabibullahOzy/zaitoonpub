@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -11,7 +12,10 @@ const OrderPaymentmodal = ({ paydata }) => {
   // const [rating, setRating] = useState(0);
   // const [hover, setHover] = useState(null);
 
+  
   // const reviewData = paydata;
+
+  const queryClient =useQueryClient()
 
   const onSubmit = async (data) => {
     const rname = data.rname
@@ -36,6 +40,7 @@ const OrderPaymentmodal = ({ paydata }) => {
     if (res.data.success) {
       toast.success('Payment Data Added Successfully');
       reset();
+      queryClient.clear();
     } else {
       toast.error('Something went wrong');
     }
